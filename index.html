@@ -1,897 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ذكي - مساعدك الجامعي بالذكاء الاصطناعي</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            font-family: 'Cairo', sans-serif;
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .phone-frame {
-            width: 375px;
-            height: 812px;
-            border-radius: 50px;
-            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
-            overflow: hidden;
-            position: relative;
-        }
-        .phone-notch {
-            width: 150px;
-            height: 30px;
-            background: #000;
-            border-radius: 0 0 20px 20px;
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-        }
-        .tab-active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .typing-animation::after {
-            content: '|';
-            animation: blink 1s infinite;
-        }
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .slide-up {
-            animation: slideUp 0.3s ease-out;
-        }
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        .spin {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        input[type="file"] {
-            display: none;
-        }
-        .drag-over {
-            border-color: #667eea !important;
-            background: rgba(102, 126, 234, 0.1) !important;
-        }
-    </style>
-</head>
-<body class="bg-gray-900 min-h-screen flex items-center justify-center p-4">
-    
-    <!-- Desktop Info -->
-    <div class="hidden lg:block text-white text-center ml-12">
-        <h1 class="text-5xl font-bold mb-4">📱 تطبيق ذكي</h1>
-        <p class="text-xl text-gray-400 mb-8">مساعدك الجامعي بالذكاء الاصطناعي 🎓</p>
-        <div class="bg-gray-800 rounded-2xl p-6 text-right max-w-sm">
-            <h3 class="text-lg font-bold mb-4 text-purple-400">📊 إحصائياتك اليوم:</h3>
-            <div class="space-y-3 text-gray-300">
-                <div class="flex justify-between">
-                    <span id="desktop-photos">3/3</span>
-                    <span>صور متبقية</span>
-                </div>
-                <div class="flex justify-between">
-                    <span id="desktop-files">3/3</span>
-                    <span>ملفات متبقية</span>
-                </div>
-            </div>
-            <div class="mt-6 pt-4 border-t border-gray-700 space-y-3">
-                <p class="text-sm text-gray-500">جرّب التطبيق الآن! 👈</p>
-                <div class="flex flex-col gap-2 mt-4">
-                    <a href="gemini-api-guide.html" target="_blank" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-sm transition">
-                        🔗 دليل ربط API
-                    </a>
-                    <a href="privacy-policy.html" target="_blank" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-xl text-sm transition">
-                        📋 سياسة الخصوصية
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Phone Frame -->
-    <div class="phone-frame bg-gray-100 border-8 border-gray-900">
-        <div class="phone-notch"></div>
-        
-        <!-- App Content -->
-        <div class="h-full flex flex-col bg-gray-50 pt-8">
-            
-            <!-- Header -->
-            <div class="gradient-bg px-4 py-6 pt-8">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl">
-                            🧠
-                        </div>
-                        <div class="text-white">
-                            <h1 class="text-xl font-bold">ذكي</h1>
-                            <p class="text-white/70 text-xs">مساعدك الجامعي 🎓</p>
-                        </div>
-                    </div>
-                    <button onclick="showSubscription()" class="bg-yellow-400 text-purple-900 px-3 py-1 rounded-full text-sm font-bold">
-                        PRO 👑
-                    </button>
-                </div>
-                
-                <!-- Daily Usage -->
-                <div class="mt-4 bg-white/10 rounded-xl p-3 flex justify-around text-white text-center">
-                    <div>
-                        <div class="text-xl font-bold" id="photo-count">3</div>
-                        <div class="text-xs text-white/70">صور متبقية</div>
-                    </div>
-                    <div class="w-px bg-white/20"></div>
-                    <div>
-                        <div class="text-xl font-bold" id="file-count">3</div>
-                        <div class="text-xs text-white/70">ملفات متبقية</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tabs -->
-            <div class="flex bg-white shadow-sm">
-                <button onclick="switchTab('photo')" id="tab-photo" class="flex-1 py-3 text-center font-semibold tab-active rounded-none">
-                    📸 حل الصور
-                </button>
-                <button onclick="switchTab('file')" id="tab-file" class="flex-1 py-3 text-center font-semibold text-gray-500">
-                    📄 إنشاء ملف
-                </button>
-            </div>
-
-            <!-- Content Area -->
-            <div class="flex-1 overflow-y-auto p-4" id="content-area">
-                
-                <!-- Photo Tab Content -->
-                <div id="photo-content">
-                    <!-- Upload Area -->
-                    <div id="upload-area" class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center bg-white mb-4 cursor-pointer hover:border-purple-400 transition"
-                         onclick="document.getElementById('photo-input').click()"
-                         ondragover="handleDragOver(event)"
-                         ondragleave="handleDragLeave(event)"
-                         ondrop="handleDrop(event)">
-                        <input type="file" id="photo-input" accept="image/*" onchange="handlePhotoUpload(event)">
-                        <div class="text-5xl mb-3">📷</div>
-                        <h3 class="font-bold text-lg mb-1">ارفع صورة السؤال</h3>
-                        <p class="text-gray-500 text-sm">اضغط هنا أو اسحب الصورة</p>
-                    </div>
-
-                    <!-- Preview Area (hidden by default) -->
-                    <div id="preview-area" class="hidden">
-                        <div class="bg-white rounded-2xl overflow-hidden shadow-lg mb-4">
-                            <img id="preview-image" src="" class="w-full h-48 object-cover">
-                            <div class="p-3 flex justify-between items-center">
-                                <span class="text-sm text-gray-500">صورة السؤال</span>
-                                <button onclick="resetUpload()" class="text-red-500 text-sm">حذف ❌</button>
-                            </div>
-                        </div>
-                        <button onclick="solveQuestion()" class="w-full gradient-bg text-white py-4 rounded-xl font-bold text-lg pulse">
-                            حل السؤال 🚀
-                        </button>
-                    </div>
-
-                    <!-- Loading State -->
-                    <div id="loading-state" class="hidden text-center py-8">
-                        <div class="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full spin mx-auto mb-4"></div>
-                        <p class="text-gray-600 font-semibold">الذكاء الاصطناعي يحل السؤال...</p>
-                        <p class="text-gray-400 text-sm">انتظر ثواني</p>
-                    </div>
-
-                    <!-- Result Area -->
-                    <div id="result-area" class="hidden fade-in">
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                            <div class="gradient-bg p-4 text-white">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-2xl">🧠</span>
-                                    <span class="font-bold">الحل من ذكي</span>
-                                </div>
-                            </div>
-                            <div class="p-4">
-                                <div id="solution-text" class="text-gray-700 leading-relaxed"></div>
-                            </div>
-                        </div>
-                        <button onclick="resetAll()" class="w-full mt-4 border-2 border-purple-500 text-purple-600 py-3 rounded-xl font-bold">
-                            سؤال جديد 🔄
-                        </button>
-                    </div>
-
-                    <!-- Example Questions -->
-                    <div id="examples" class="mt-6">
-                        <h3 class="font-bold text-gray-700 mb-3">🎓 جرّب مواد الجامعة:</h3>
-                        <div class="space-y-2">
-                            <button onclick="tryExample('calculus')" class="w-full bg-white p-3 rounded-xl text-right shadow-sm hover:shadow-md transition flex items-center gap-3">
-                                <span class="text-2xl">📐</span>
-                                <div>
-                                    <span class="font-semibold">Calculus - تفاضل وتكامل</span>
-                                    <p class="text-xs text-gray-400">مشتقات، تكاملات، نهايات</p>
-                                </div>
-                            </button>
-                            <button onclick="tryExample('physics')" class="w-full bg-white p-3 rounded-xl text-right shadow-sm hover:shadow-md transition flex items-center gap-3">
-                                <span class="text-2xl">⚡</span>
-                                <div>
-                                    <span class="font-semibold">Physics - فيزياء</span>
-                                    <p class="text-xs text-gray-400">ميكانيكا، كهربائية، موجات</p>
-                                </div>
-                            </button>
-                            <button onclick="tryExample('programming')" class="w-full bg-white p-3 rounded-xl text-right shadow-sm hover:shadow-md transition flex items-center gap-3">
-                                <span class="text-2xl">💻</span>
-                                <div>
-                                    <span class="font-semibold">Programming - برمجة</span>
-                                    <p class="text-xs text-gray-400">Java, Python, C++</p>
-                                </div>
-                            </button>
-                            <button onclick="tryExample('statistics')" class="w-full bg-white p-3 rounded-xl text-right shadow-sm hover:shadow-md transition flex items-center gap-3">
-                                <span class="text-2xl">📊</span>
-                                <div>
-                                    <span class="font-semibold">Statistics - إحصاء</span>
-                                    <p class="text-xs text-gray-400">احتمالات، توزيعات، اختبارات</p>
-                                </div>
-                            </button>
-                            <button onclick="tryExample('accounting')" class="w-full bg-white p-3 rounded-xl text-right shadow-sm hover:shadow-md transition flex items-center gap-3">
-                                <span class="text-2xl">💰</span>
-                                <div>
-                                    <span class="font-semibold">Accounting - محاسبة</span>
-                                    <p class="text-xs text-gray-400">قيود، ميزانيات، تحليل مالي</p>
-                                </div>
-                            </button>
-                            <button onclick="tryExample('chemistry')" class="w-full bg-white p-3 rounded-xl text-right shadow-sm hover:shadow-md transition flex items-center gap-3">
-                                <span class="text-2xl">🧪</span>
-                                <div>
-                                    <span class="font-semibold">Chemistry - كيمياء</span>
-                                    <p class="text-xs text-gray-400">عضوية، تحليلية، حيوية</p>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- File Tab Content -->
-                <div id="file-content" class="hidden">
-                    <div class="bg-white rounded-2xl p-4 shadow-lg mb-4">
-                        <label class="font-bold text-gray-700 mb-2 block">شو نوع الملف؟</label>
-                        <div class="grid grid-cols-2 gap-2 mb-4">
-                            <button onclick="selectFileType('research')" class="file-type-btn p-3 rounded-xl border-2 border-gray-200 text-center hover:border-purple-400 transition" data-type="research">
-                                <div class="text-2xl mb-1">📝</div>
-                                <div class="text-sm">بحث</div>
-                            </button>
-                            <button onclick="selectFileType('report')" class="file-type-btn p-3 rounded-xl border-2 border-gray-200 text-center hover:border-purple-400 transition" data-type="report">
-                                <div class="text-2xl mb-1">📊</div>
-                                <div class="text-sm">تقرير</div>
-                            </button>
-                            <button onclick="selectFileType('summary')" class="file-type-btn p-3 rounded-xl border-2 border-gray-200 text-center hover:border-purple-400 transition" data-type="summary">
-                                <div class="text-2xl mb-1">📋</div>
-                                <div class="text-sm">ملخص</div>
-                            </button>
-                            <button onclick="selectFileType('essay')" class="file-type-btn p-3 rounded-xl border-2 border-gray-200 text-center hover:border-purple-400 transition" data-type="essay">
-                                <div class="text-2xl mb-1">✍️</div>
-                                <div class="text-sm">مقال</div>
-                            </button>
-                        </div>
-                        
-                        <label class="font-bold text-gray-700 mb-2 block">الموضوع:</label>
-                        <input type="text" id="topic-input" placeholder="مثال: تأثير التكنولوجيا على التعليم" 
-                               class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-purple-400 focus:outline-none mb-4">
-                        
-                        <label class="font-bold text-gray-700 mb-2 block">تفاصيل إضافية:</label>
-                        <textarea id="details-input" placeholder="أي متطلبات خاصة؟ عدد الصفحات؟ نقاط معينة؟" 
-                                  class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-purple-400 focus:outline-none h-24 resize-none"></textarea>
-                    </div>
-                    
-                    <button onclick="generateFile()" id="generate-btn" class="w-full gradient-bg text-white py-4 rounded-xl font-bold text-lg disabled:opacity-50" disabled>
-                        إنشاء الملف 📄
-                    </button>
-
-                    <!-- File Loading -->
-                    <div id="file-loading" class="hidden text-center py-8">
-                        <div class="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full spin mx-auto mb-4"></div>
-                        <p class="text-gray-600 font-semibold">جاري إنشاء الملف...</p>
-                        <p class="text-gray-400 text-sm" id="file-progress">تحليل الموضوع...</p>
-                    </div>
-
-                    <!-- File Result -->
-                    <div id="file-result" class="hidden fade-in mt-4">
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                            <div class="bg-red-500 p-4 text-white">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-2xl">📄</span>
-                                    <span class="font-bold">ملف PDF جاهز!</span>
-                                </div>
-                            </div>
-                            <div class="p-4">
-                                <div class="flex items-center justify-between mb-3">
-                                    <span class="text-gray-700 font-semibold" id="file-name">document.pdf</span>
-                                    <span class="text-gray-400 text-sm">2.3 MB</span>
-                                </div>
-                                <div id="file-preview" class="bg-gray-100 rounded-xl p-4 text-sm text-gray-600 max-h-40 overflow-y-auto">
-                                </div>
-                            </div>
-                            <div class="p-4 pt-0">
-                                <button onclick="downloadFile()" class="w-full gradient-bg text-white py-3 rounded-xl font-bold">
-                                    تحميل الملف ⬇️
-                                </button>
-                            </div>
-                        </div>
-                        <button onclick="resetFile()" class="w-full mt-4 border-2 border-purple-500 text-purple-600 py-3 rounded-xl font-bold">
-                            ملف جديد 🔄
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Bottom Navigation -->
-            <div class="bg-white border-t border-gray-200 px-6 py-3 flex justify-around">
-                <button class="text-center text-purple-600">
-                    <div class="text-2xl">🏠</div>
-                    <div class="text-xs font-semibold">الرئيسية</div>
-                </button>
-                <button onclick="showHistory()" class="text-center text-gray-400">
-                    <div class="text-2xl">📚</div>
-                    <div class="text-xs">السجل</div>
-                </button>
-                <button onclick="showSubscription()" class="text-center text-gray-400">
-                    <div class="text-2xl">👑</div>
-                    <div class="text-xs">اشتراك</div>
-                </button>
-                <button onclick="showSettings()" class="text-center text-gray-400">
-                    <div class="text-2xl">⚙️</div>
-                    <div class="text-xs">إعدادات</div>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Subscription Modal -->
-    <div id="subscription-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full slide-up">
-            <div class="text-center mb-6">
-                <div class="text-6xl mb-2">👑</div>
-                <h2 class="text-2xl font-bold">ذكي Premium</h2>
-                <p class="text-gray-500">استخدام لا محدود!</p>
-            </div>
-            
-            <div class="bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl p-4 text-white mb-4">
-                <div class="text-center">
-                    <div class="text-4xl font-bold">1 دينار</div>
-                    <div class="text-white/80">شهرياً فقط!</div>
-                </div>
-            </div>
-            
-            <ul class="space-y-3 mb-6">
-                <li class="flex items-center gap-2">
-                    <span class="text-green-500">✓</span>
-                    <span>صور لا محدودة</span>
-                </li>
-                <li class="flex items-center gap-2">
-                    <span class="text-green-500">✓</span>
-                    <span>ملفات لا محدودة</span>
-                </li>
-                <li class="flex items-center gap-2">
-                    <span class="text-green-500">✓</span>
-                    <span>بدون إعلانات</span>
-                </li>
-                <li class="flex items-center gap-2">
-                    <span class="text-green-500">✓</span>
-                    <span>أولوية بالسرعة</span>
-                </li>
-            </ul>
-            
-            <button onclick="subscribe()" class="w-full gradient-bg text-white py-4 rounded-xl font-bold text-lg mb-3">
-                اشترك الآن 🚀
-            </button>
-            <button onclick="closeSubscription()" class="w-full text-gray-500 py-2">
-                لاحقاً
-            </button>
-        </div>
-    </div>
-
-    <!-- No Credits Modal -->
-    <div id="no-credits-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full slide-up text-center">
-            <div class="text-6xl mb-4">😢</div>
-            <h2 class="text-2xl font-bold mb-2">انتهت المحاولات!</h2>
-            <p class="text-gray-500 mb-6">استخدمت كل المحاولات المجانية لليوم</p>
-            
-            <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
-                <p class="text-yellow-800">اشترك بـ <strong>1 دينار/شهر</strong> واحصل على استخدام لا محدود!</p>
-            </div>
-            
-            <button onclick="showSubscription(); closeNoCredits();" class="w-full gradient-bg text-white py-4 rounded-xl font-bold text-lg mb-3">
-                اشترك الآن 👑
-            </button>
-            <button onclick="closeNoCredits()" class="w-full text-gray-500 py-2">
-                انتظر لبكرة
-            </button>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg hidden">
-        <span id="toast-message"></span>
-    </div>
-
-    <script>
-        // State
-        let photoCredits = 3;
-        let fileCredits = 3;
-        let isPremium = false;
-        let selectedFileType = null;
-
-        // Sample solutions - University Level
-        const sampleSolutions = {
-            calculus: {
-                question: "أوجد مشتقة الدالة: f(x) = 3x⁴ - 2x³ + 5x² - 7x + 1",
-                solution: `<div class="space-y-3">
-                    <p class="font-bold text-purple-600">📝 السؤال:</p>
-                    <p class="bg-gray-100 p-2 rounded">f(x) = 3x⁴ - 2x³ + 5x² - 7x + 1</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">📐 القاعدة المستخدمة:</p>
-                    <p class="bg-yellow-50 p-2 rounded text-center">Power Rule: d/dx(xⁿ) = n·xⁿ⁻¹</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">💡 الحل خطوة بخطوة:</p>
-                    <p><strong>الحد 1:</strong> d/dx(3x⁴) = 3 × 4x³ = <span class="text-green-600">12x³</span></p>
-                    <p><strong>الحد 2:</strong> d/dx(-2x³) = -2 × 3x² = <span class="text-green-600">-6x²</span></p>
-                    <p><strong>الحد 3:</strong> d/dx(5x²) = 5 × 2x = <span class="text-green-600">10x</span></p>
-                    <p><strong>الحد 4:</strong> d/dx(-7x) = <span class="text-green-600">-7</span></p>
-                    <p><strong>الحد 5:</strong> d/dx(1) = <span class="text-green-600">0</span></p>
-                    
-                    <p class="text-xl font-bold text-green-600 mt-4 bg-green-50 p-3 rounded-xl">✅ f'(x) = 12x³ - 6x² + 10x - 7</p>
-                    
-                    <div class="bg-blue-50 p-3 rounded-xl mt-4">
-                        <p class="text-blue-700 text-sm">💡 <strong>للتحقق:</strong> يمكنك التكامل للعودة للدالة الأصلية!</p>
-                    </div>
-                </div>`
-            },
-            physics: {
-                question: "شحنة كهربائية q₁=4μC تبعد 30cm عن شحنة q₂=6μC، احسب القوة بينهما",
-                solution: `<div class="space-y-3">
-                    <p class="font-bold text-purple-600">📝 المعطيات:</p>
-                    <p>• q₁ = 4μC = 4 × 10⁻⁶ C</p>
-                    <p>• q₂ = 6μC = 6 × 10⁻⁶ C</p>
-                    <p>• r = 30cm = 0.3 m</p>
-                    <p>• k = 9 × 10⁹ N·m²/C²</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">📐 قانون كولوم:</p>
-                    <p class="bg-yellow-50 p-2 rounded text-center">F = k × (q₁ × q₂) / r²</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">💡 الحل:</p>
-                    <p>F = (9×10⁹) × (4×10⁻⁶ × 6×10⁻⁶) / (0.3)²</p>
-                    <p>F = (9×10⁹) × (24×10⁻¹²) / 0.09</p>
-                    <p>F = (216 × 10⁻³) / 0.09</p>
-                    <p>F = 0.216 / 0.09</p>
-                    
-                    <p class="text-xl font-bold text-green-600 mt-4 bg-green-50 p-3 rounded-xl">✅ F = 2.4 N (قوة تنافر)</p>
-                    
-                    <div class="bg-blue-50 p-3 rounded-xl mt-4">
-                        <p class="text-blue-700 text-sm">💡 <strong>ملاحظة:</strong> الشحنتان موجبتان لذا القوة تنافرية. لو كانتا مختلفتين لكانت تجاذبية!</p>
-                    </div>
-                </div>`
-            },
-            programming: {
-                question: "اكتب دالة بـ Python لإيجاد العدد الأكبر في مصفوفة",
-                solution: `<div class="space-y-3">
-                    <p class="font-bold text-purple-600">📝 المطلوب:</p>
-                    <p>دالة تجد أكبر عنصر في Array</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">💻 الحل 1 - بدون Built-in:</p>
-                    <pre class="bg-gray-900 text-green-400 p-3 rounded-xl text-sm overflow-x-auto">
-def find_max(arr):
-    if len(arr) == 0:
-        return None
-    
-    max_val = arr[0]
-    for num in arr:
-        if num > max_val:
-            max_val = num
-    return max_val
-
-# مثال
-numbers = [3, 7, 2, 9, 1, 5]
-print(find_max(numbers))  # 9</pre>
-                    
-                    <p class="font-bold text-purple-600 mt-4">💻 الحل 2 - Built-in:</p>
-                    <pre class="bg-gray-900 text-green-400 p-3 rounded-xl text-sm">
-max_value = max(numbers)  # 9</pre>
-                    
-                    <p class="font-bold text-purple-600 mt-4">⏱️ التعقيد الزمني:</p>
-                    <p class="bg-yellow-50 p-2 rounded">O(n) - لأننا نمر على كل العناصر مرة واحدة</p>
-                    
-                    <div class="bg-blue-50 p-3 rounded-xl mt-4">
-                        <p class="text-blue-700 text-sm">💡 <strong>للامتحان:</strong> غالباً يطلبون الحل الأول لإظهار فهمك للـ Algorithm!</p>
-                    </div>
-                </div>`
-            },
-            statistics: {
-                question: "مجموعة بيانات: 12, 15, 18, 22, 25, 28, 32. أوجد المتوسط والانحراف المعياري",
-                solution: `<div class="space-y-3">
-                    <p class="font-bold text-purple-600">📝 البيانات:</p>
-                    <p>X = {12, 15, 18, 22, 25, 28, 32}</p>
-                    <p>n = 7</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">📊 الخطوة 1 - المتوسط (μ):</p>
-                    <p>μ = ΣX / n</p>
-                    <p>μ = (12+15+18+22+25+28+32) / 7</p>
-                    <p>μ = 152 / 7</p>
-                    <p class="bg-green-50 p-2 rounded font-bold text-green-600">μ = 21.71</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">📊 الخطوة 2 - الانحراف المعياري (σ):</p>
-                    <p class="bg-yellow-50 p-2 rounded text-sm mb-2">σ = √[Σ(X-μ)² / n]</p>
-                    <table class="w-full text-xs bg-gray-50 rounded">
-                        <tr class="border-b"><td>X</td><td>X-μ</td><td>(X-μ)²</td></tr>
-                        <tr><td>12</td><td>-9.71</td><td>94.28</td></tr>
-                        <tr><td>15</td><td>-6.71</td><td>45.02</td></tr>
-                        <tr><td>18</td><td>-3.71</td><td>13.76</td></tr>
-                        <tr><td>22</td><td>0.29</td><td>0.08</td></tr>
-                        <tr><td>25</td><td>3.29</td><td>10.82</td></tr>
-                        <tr><td>28</td><td>6.29</td><td>39.56</td></tr>
-                        <tr><td>32</td><td>10.29</td><td>105.88</td></tr>
-                        <tr class="font-bold border-t"><td>Σ</td><td></td><td>309.4</td></tr>
-                    </table>
-                    <p class="mt-2">σ = √(309.4/7) = √44.2</p>
-                    <p class="text-xl font-bold text-green-600 mt-2 bg-green-50 p-3 rounded-xl">✅ σ = 6.65</p>
-                </div>`
-            },
-            accounting: {
-                question: "سجل القيد: اشترت الشركة بضاعة بـ 5000 دينار، دفعت 2000 نقداً والباقي على الحساب",
-                solution: `<div class="space-y-3">
-                    <p class="font-bold text-purple-600">📝 تحليل العملية:</p>
-                    <p>• شراء بضاعة = 5,000 د.أ</p>
-                    <p>• دفع نقدي = 2,000 د.أ</p>
-                    <p>• على الحساب (دائنون) = 3,000 د.أ</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">📐 تحديد طبيعة الحسابات:</p>
-                    <table class="w-full text-sm bg-gray-50 rounded">
-                        <tr class="border-b font-bold"><td>الحساب</td><td>النوع</td><td>التأثير</td></tr>
-                        <tr><td>المشتريات</td><td>مصروف</td><td>زيادة ← مدين</td></tr>
-                        <tr><td>النقدية</td><td>أصل</td><td>نقص ← دائن</td></tr>
-                        <tr><td>الدائنون</td><td>التزام</td><td>زيادة ← دائن</td></tr>
-                    </table>
-                    
-                    <p class="font-bold text-purple-600 mt-4">📒 القيد المحاسبي:</p>
-                    <div class="bg-gray-900 text-white p-3 rounded-xl text-sm">
-                        <p>5,000 &nbsp;&nbsp; من حـ/ المشتريات</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2,000 &nbsp;&nbsp; إلى حـ/ النقدية</p>
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3,000 &nbsp;&nbsp; إلى حـ/ الدائنون</p>
-                        <p class="text-gray-400 mt-2 text-xs">(شراء بضاعة نقداً وعلى الحساب)</p>
-                    </div>
-                    
-                    <p class="text-sm font-bold text-green-600 mt-4 bg-green-50 p-3 rounded-xl">✅ مجموع المدين = مجموع الدائن = 5,000 ✓</p>
-                </div>`
-            },
-            chemistry: {
-                question: "احسب pH لمحلول HCl تركيزه 0.001M",
-                solution: `<div class="space-y-3">
-                    <p class="font-bold text-purple-600">📝 المعطيات:</p>
-                    <p>• HCl = حمض قوي (يتأين كلياً)</p>
-                    <p>• التركيز [HCl] = 0.001 M = 10⁻³ M</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">🧪 معادلة التأين:</p>
-                    <p class="bg-gray-100 p-2 rounded text-center">HCl → H⁺ + Cl⁻</p>
-                    <p class="text-sm text-gray-500">بما أن HCl حمض قوي، [H⁺] = [HCl]</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">📐 القانون:</p>
-                    <p class="bg-yellow-50 p-2 rounded text-center">pH = -log[H⁺]</p>
-                    
-                    <p class="font-bold text-purple-600 mt-4">💡 الحل:</p>
-                    <p>[H⁺] = 0.001 = 10⁻³ M</p>
-                    <p>pH = -log(10⁻³)</p>
-                    <p>pH = -(-3)</p>
-                    
-                    <p class="text-xl font-bold text-green-600 mt-4 bg-green-50 p-3 rounded-xl">✅ pH = 3 (محلول حمضي)</p>
-                    
-                    <div class="bg-blue-50 p-3 rounded-xl mt-4">
-                        <p class="text-blue-700 text-sm">💡 <strong>تذكر:</strong> pH < 7 = حمضي، pH = 7 = متعادل، pH > 7 = قاعدي</p>
-                    </div>
-                </div>`
-            }
-        };
-
-        // File generation content
-        const fileContents = {
-            research: "بحث أكاديمي متكامل يتضمن مقدمة، إطار نظري، منهجية، نتائج، وخاتمة...",
-            report: "تقرير مفصّل يحتوي على ملخص تنفيذي، تحليل البيانات، والتوصيات...",
-            summary: "ملخص شامل للموضوع يغطي أهم النقاط والأفكار الرئيسية...",
-            essay: "مقال متكامل بمقدمة جذابة، عرض منظم للأفكار، وخاتمة مؤثرة..."
-        };
-
-        // Functions
-        function switchTab(tab) {
-            const photoTab = document.getElementById('tab-photo');
-            const fileTab = document.getElementById('tab-file');
-            const photoContent = document.getElementById('photo-content');
-            const fileContent = document.getElementById('file-content');
-            
-            if (tab === 'photo') {
-                photoTab.classList.add('tab-active');
-                photoTab.classList.remove('text-gray-500');
-                fileTab.classList.remove('tab-active');
-                fileTab.classList.add('text-gray-500');
-                photoContent.classList.remove('hidden');
-                fileContent.classList.add('hidden');
-            } else {
-                fileTab.classList.add('tab-active');
-                fileTab.classList.remove('text-gray-500');
-                photoTab.classList.remove('tab-active');
-                photoTab.classList.add('text-gray-500');
-                fileContent.classList.remove('hidden');
-                photoContent.classList.add('hidden');
-            }
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.currentTarget.classList.add('drag-over');
-        }
-
-        function handleDragLeave(e) {
-            e.currentTarget.classList.remove('drag-over');
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            e.currentTarget.classList.remove('drag-over');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                processImage(files[0]);
-            }
-        }
-
-        function handlePhotoUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                processImage(file);
-            }
-        }
-
-        function processImage(file) {
-            if (!isPremium && photoCredits <= 0) {
-                showNoCreditsModal();
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('preview-image').src = e.target.result;
-                document.getElementById('upload-area').classList.add('hidden');
-                document.getElementById('examples').classList.add('hidden');
-                document.getElementById('preview-area').classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function resetUpload() {
-            document.getElementById('preview-area').classList.add('hidden');
-            document.getElementById('upload-area').classList.remove('hidden');
-            document.getElementById('examples').classList.remove('hidden');
-            document.getElementById('photo-input').value = '';
-        }
-
-        function solveQuestion() {
-            if (!isPremium && photoCredits <= 0) {
-                showNoCreditsModal();
-                return;
-            }
-
-            document.getElementById('preview-area').classList.add('hidden');
-            document.getElementById('loading-state').classList.remove('hidden');
-
-            setTimeout(() => {
-                if (!isPremium) {
-                    photoCredits--;
-                    updateCreditsDisplay();
-                }
-                
-                document.getElementById('loading-state').classList.add('hidden');
-                document.getElementById('result-area').classList.remove('hidden');
-                document.getElementById('solution-text').innerHTML = sampleSolutions.math.solution;
-                
-                showToast('تم حل السؤال بنجاح! ✅');
-            }, 2500);
-        }
-
-        function tryExample(type) {
-            if (!isPremium && photoCredits <= 0) {
-                showNoCreditsModal();
-                return;
-            }
-
-            document.getElementById('upload-area').classList.add('hidden');
-            document.getElementById('examples').classList.add('hidden');
-            document.getElementById('loading-state').classList.remove('hidden');
-
-            setTimeout(() => {
-                if (!isPremium) {
-                    photoCredits--;
-                    updateCreditsDisplay();
-                }
-                
-                document.getElementById('loading-state').classList.add('hidden');
-                document.getElementById('result-area').classList.remove('hidden');
-                document.getElementById('solution-text').innerHTML = sampleSolutions[type].solution;
-                
-                showToast('تم حل السؤال بنجاح! ✅');
-            }, 2000);
-        }
-
-        function resetAll() {
-            document.getElementById('result-area').classList.add('hidden');
-            document.getElementById('upload-area').classList.remove('hidden');
-            document.getElementById('examples').classList.remove('hidden');
-            document.getElementById('photo-input').value = '';
-        }
-
-        function selectFileType(type) {
-            selectedFileType = type;
-            document.querySelectorAll('.file-type-btn').forEach(btn => {
-                btn.classList.remove('border-purple-500', 'bg-purple-50');
-                btn.classList.add('border-gray-200');
-            });
-            event.currentTarget.classList.remove('border-gray-200');
-            event.currentTarget.classList.add('border-purple-500', 'bg-purple-50');
-            checkFileFormValidity();
-        }
-
-        function checkFileFormValidity() {
-            const topic = document.getElementById('topic-input').value;
-            const btn = document.getElementById('generate-btn');
-            btn.disabled = !selectedFileType || !topic.trim();
-        }
-
-        document.getElementById('topic-input').addEventListener('input', checkFileFormValidity);
-
-        function generateFile() {
-            if (!isPremium && fileCredits <= 0) {
-                showNoCreditsModal();
-                return;
-            }
-
-            const topic = document.getElementById('topic-input').value;
-            
-            document.querySelector('#file-content > .bg-white').classList.add('hidden');
-            document.getElementById('generate-btn').classList.add('hidden');
-            document.getElementById('file-loading').classList.remove('hidden');
-
-            const progressTexts = ['تحليل الموضوع...', 'البحث عن المعلومات...', 'كتابة المحتوى...', 'إنشاء الملف...'];
-            let i = 0;
-            const interval = setInterval(() => {
-                i++;
-                if (i < progressTexts.length) {
-                    document.getElementById('file-progress').textContent = progressTexts[i];
-                }
-            }, 800);
-
-            setTimeout(() => {
-                clearInterval(interval);
-                
-                if (!isPremium) {
-                    fileCredits--;
-                    updateCreditsDisplay();
-                }
-                
-                document.getElementById('file-loading').classList.add('hidden');
-                document.getElementById('file-result').classList.remove('hidden');
-                document.getElementById('file-name').textContent = topic.substring(0, 20) + '.pdf';
-                document.getElementById('file-preview').innerHTML = `
-                    <p class="font-bold mb-2">📄 ${topic}</p>
-                    <p class="text-gray-500">المحتوى: ${fileContents[selectedFileType]}</p>
-                    <p class="mt-2 text-gray-400">عدد الصفحات: ${Math.floor(Math.random() * 5) + 3}</p>
-                `;
-                
-                showToast('تم إنشاء الملف بنجاح! 📄');
-            }, 3500);
-        }
-
-        function resetFile() {
-            document.getElementById('file-result').classList.add('hidden');
-            document.querySelector('#file-content > .bg-white').classList.remove('hidden');
-            document.getElementById('generate-btn').classList.remove('hidden');
-            document.getElementById('topic-input').value = '';
-            document.getElementById('details-input').value = '';
-            selectedFileType = null;
-            document.querySelectorAll('.file-type-btn').forEach(btn => {
-                btn.classList.remove('border-purple-500', 'bg-purple-50');
-                btn.classList.add('border-gray-200');
-            });
-            document.getElementById('generate-btn').disabled = true;
-        }
-
-        function downloadFile() {
-            showToast('جاري التحميل... ⬇️');
-            // In real app, this would download actual PDF
-        }
-
-        function updateCreditsDisplay() {
-            document.getElementById('photo-count').textContent = photoCredits;
-            document.getElementById('file-count').textContent = fileCredits;
-            document.getElementById('desktop-photos').textContent = photoCredits + '/3';
-            document.getElementById('desktop-files').textContent = fileCredits + '/3';
-        }
-
-        function showSubscription() {
-            document.getElementById('subscription-modal').classList.remove('hidden');
-            document.getElementById('subscription-modal').classList.add('flex');
-        }
-
-        function closeSubscription() {
-            document.getElementById('subscription-modal').classList.add('hidden');
-            document.getElementById('subscription-modal').classList.remove('flex');
-        }
-
-        function subscribe() {
-            isPremium = true;
-            showToast('🎉 مبروك! أنت الآن مشترك Premium');
-            closeSubscription();
-            // Update UI to show premium status
-            document.getElementById('photo-count').textContent = '∞';
-            document.getElementById('file-count').textContent = '∞';
-            document.getElementById('desktop-photos').textContent = '∞';
-            document.getElementById('desktop-files').textContent = '∞';
-        }
-
-        function showNoCreditsModal() {
-            document.getElementById('no-credits-modal').classList.remove('hidden');
-            document.getElementById('no-credits-modal').classList.add('flex');
-        }
-
-        function closeNoCredits() {
-            document.getElementById('no-credits-modal').classList.add('hidden');
-            document.getElementById('no-credits-modal').classList.remove('flex');
-        }
-
-        function showHistory() {
-            showToast('📚 السجل فارغ حالياً');
-        }
-
-        function showSettings() {
-            showToast('⚙️ الإعدادات قريباً');
-        }
-
-        function openPrivacyPolicy() {
-            window.open('privacy-policy.html', '_blank');
-        }
-
-        function openApiGuide() {
-            window.open('gemini-api-guide.html', '_blank');
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = message;
-            toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
-        }
-
-        // Close modals on outside click
-        document.getElementById('subscription-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeSubscription();
-        });
-        document.getElementById('no-credits-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeNoCredits();
-        });
-    </script>
-</body>
-</html>
