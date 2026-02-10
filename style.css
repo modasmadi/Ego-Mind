@@ -1,1 +1,15 @@
-body{margin:0;background:#111}canvas{display:block;margin:auto}
+body{
+margin:0;
+overflow:hidden;
+font-family:Arial;
+background:#0b0f14;
+}
+#ui{
+position:absolute;
+top:10px;
+left:10px;
+color:white;
+background:rgba(0,0,0,0.4);
+padding:10px;
+border-radius:8px;
+}
