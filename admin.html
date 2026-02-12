@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Million Logo Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .status-pending { background: #f59e0b; color: #000; }
+        .status-active { background: #10b981; }
+        .status-rejected { background: #ef4444; }
+        .loading-spinner {
+            border: 3px solid #374151;
+            border-top: 3px solid #e94560;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-gray-800 p-8 rounded-2xl max-w-md w-full border border-gray-700">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-3xl font-bold mx-auto mb-4">M</div>
+                <h1 class="text-2xl font-bold">Admin Panel</h1>
+                <p class="text-gray-400">Million Logo Page</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-gray-400 mb-2">Email</label>
+                    <input type="email" id="adminEmail" class="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 focus:border-pink-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-gray-400 mb-2">Password</label>
+                    <input type="password" id="adminPassword" class="w-full bg-gray-700 border border-gray-600 rounded-xl px-4 py-3 focus:border-pink-500 outline-none" onkeypress="if(event.key==='Enter')login()">
+                </div>
+                <button onclick="login()" id="loginBtn" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 py-4 rounded-xl font-bold text-lg hover:opacity-90 transition">
+                    Login
+                </button>
+            </div>
+            
+            <div id="loginError" class="hidden mt-4 bg-red-500/20 border border-red-500/50 text-red-400 p-3 rounded-xl text-center text-sm"></div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="hidden">
+        <!-- Header -->
+        <header class="bg-gray-800 border-b border-gray-700 px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg flex items-center justify-center text-xl font-bold">M</div>
+                    <div>
+                        <h1 class="font-bold">Million Logo Admin</h1>
+                        <p class="text-sm text-gray-400">Manage cells & payments</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" target="_blank" class="bg-gray-700 px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+                        🌐 View Site
+                    </a>
+                    <button onclick="logout()" class="bg-red-500/20 text-red-400 px-4 py-2 rounded-lg hover:bg-red-500/30 transition">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <div class="p-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                    <div class="text-3xl font-bold text-blue-400" id="statTotal">0</div>
+                    <div class="text-gray-400">Total Cells</div>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                    <div class="text-3xl font-bold text-yellow-400" id="statUnpaid">0</div>
+                    <div class="text-gray-400">⏳ Unpaid</div>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                    <div class="text-3xl font-bold text-green-400" id="statPaid">0</div>
+                    <div class="text-gray-400">💰 Paid</div>
+                </div>
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+                    <div class="text-3xl font-bold text-pink-400" id="statRevenue">0</div>
+                    <div class="text-gray-400">Revenue (JOD)</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex gap-2 mb-6 flex-wrap">
+                <button onclick="filterCells('all')" class="tab-btn bg-pink-500 px-6 py-2 rounded-lg font-bold" data-tab="all">
+                    All
+                </button>
+                <button onclick="filterCells('unpaid')" class="tab-btn bg-gray-700 px-6 py-2 rounded-lg font-bold" data-tab="unpaid">
+                    ⏳ Unpaid
+                </button>
+                <button onclick="filterCells('paid')" class="tab-btn bg-gray-700 px-6 py-2 rounded-lg font-bold" data-tab="paid">
+                    💰 Paid
+                </button>
+            </div>
+
+            <!-- Cells List -->
+            <div class="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+                <div id="cellsList" class="divide-y divide-gray-700"></div>
+                
+                <div id="noCells" class="hidden p-12 text-center text-gray-500">
+                    <div class="text-4xl mb-2">📭</div>
+                    <p>No cells found</p>
+                </div>
+                
+                <div id="loading" class="p-12 flex justify-center">
+                    <div class="loading-spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cell Details Modal -->
+    <div id="cellModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-gray-900 rounded-2xl max-w-2xl w-full p-6 border border-gray-700 relative my-8">
+            <button onclick="closeCellModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <div id="cellDetails"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <script>
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiIITaYLK6P4soMF0ThGcGRY3LQ9dQDY4",
+            authDomain: "million-logo-page.firebaseapp.com",
+            projectId: "million-logo-page",
+            storageBucket: "million-logo-page.firebasestorage.app",
+            messagingSenderId: "224485393689",
+            appId: "1:224485393689:web:85fa9f811071995cbef188",
+            measurementId: "G-TR1VSBG8LT"
+        };
+
+        let db, auth;
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        auth = firebase.auth();
+
+        let allCells = [];
+        let currentFilter = 'all';
+
+        // ========== Auth ==========
+        function login() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const btn = document.getElementById('loginBtn');
+            const error = document.getElementById('loginError');
+
+            btn.innerHTML = '<div class="loading-spinner mx-auto" style="width:24px;height:24px;border-width:2px;"></div>';
+            error.classList.add('hidden');
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then(() => showDashboard())
+                .catch(err => {
+                    error.textContent = err.message;
+                    error.classList.remove('hidden');
+                    btn.innerHTML = 'Login';
+                });
+        }
+
+        function logout() {
+            auth.signOut();
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            loadCells();
+        }
+
+        // ========== Load Cells ==========
+        async function loadCells() {
+            try {
+                const snapshot = await db.collection('cells').orderBy('createdAt', 'desc').get();
+                allCells = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                document.getElementById('loading').classList.add('hidden');
+                updateStats();
+                renderCells();
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').innerHTML = '<p class="text-red-400">Error loading</p>';
+            }
+        }
+
+        function updateStats() {
+            const total = allCells.length;
+            const unpaid = allCells.filter(c => !c.paid).length;
+            const paid = allCells.filter(c => c.paid === true).length;
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statUnpaid').textContent = unpaid;
+            document.getElementById('statPaid').textContent = paid;
+            document.getElementById('statRevenue').textContent = paid; // 1 JOD per cell
+        }
+
+        function filterCells(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-pink-500');
+                btn.classList.add('bg-gray-700');
+            });
+            document.querySelector(`[data-tab="${filter}"]`).classList.remove('bg-gray-700');
+            document.querySelector(`[data-tab="${filter}"]`).classList.add('bg-pink-500');
+            renderCells();
+        }
+
+        function renderCells() {
+            const list = document.getElementById('cellsList');
+            const noCells = document.getElementById('noCells');
+            
+            let cells = allCells;
+            if (currentFilter !== 'all') {
+                if (currentFilter === 'unpaid') {
+                    cells = allCells.filter(c => c.status === 'active' && !c.paid);
+                } else if (currentFilter === 'paid') {
+                    cells = allCells.filter(c => c.paid === true);
+                } else {
+                    cells = allCells.filter(c => c.status === currentFilter);
+                }
+            }
+
+            if (cells.length === 0) {
+                list.innerHTML = '';
+                noCells.classList.remove('hidden');
+                return;
+            }
+
+            noCells.classList.add('hidden');
+            
+            const now = new Date();
+            
+            list.innerHTML = cells.map(cell => {
+                const deadline = cell.deadline ? new Date(cell.deadline) : null;
+                const isExpired = deadline && now > deadline && !cell.paid;
+                const hoursLeft = deadline ? Math.max(0, Math.round((deadline - now) / (1000 * 60 * 60))) : 0;
+                
+                return `
+                <div class="p-4 hover:bg-gray-700/50 flex items-center gap-4 ${isExpired ? 'bg-red-900/20' : ''}">
+                    <div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                        ${cell.imageBase64 
+                            ? `<img src="${cell.imageBase64}" class="w-full h-full object-cover">`
+                            : `<div class="w-full h-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">🎯</div>`
+                        }
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-bold truncate">${cell.name || 'No name'}</div>
+                        <div class="text-sm text-gray-400">Cell #${cell.cellId}</div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                        ${cell.paid 
+                            ? '<span class="bg-green-600 px-3 py-1 rounded-full text-sm font-bold">💰 Paid</span>'
+                            : `<span class="bg-yellow-600 px-3 py-1 rounded-full text-sm font-bold text-black">⏳ Unpaid</span>`
+                        }
+                        ${!cell.paid && deadline 
+                            ? `<span class="text-xs ${isExpired ? 'text-red-400' : 'text-gray-400'}">${isExpired ? '⚠️ Expired!' : hoursLeft + 'h left'}</span>`
+                            : ''
+                        }
+                    </div>
+                    <div class="flex gap-2 flex-shrink-0">
+                        <button onclick="viewCell('${cell.id}')" class="bg-gray-700 px-3 py-1 rounded hover:bg-gray-600">View</button>
+                        ${!cell.paid ? `
+                            <button onclick="markAsPaid('${cell.id}')" class="bg-green-600 px-3 py-1 rounded hover:bg-green-700" title="Mark as Paid">💰</button>
+                        ` : ''}
+                        <button onclick="deleteCell('${cell.id}')" class="bg-red-600 px-3 py-1 rounded hover:bg-red-700" title="Delete">🗑️</button>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // ========== Cell Actions ==========
+        function viewCell(id) {
+            const cell = allCells.find(c => c.id === id);
+            if (!cell) return;
+
+            const dateStr = cell.specialDate ? new Date(cell.specialDate).toLocaleDateString() : 'Not set';
+            const createdAt = cell.createdAt?.toDate?.()?.toLocaleString() || 'Unknown';
+
+            document.getElementById('cellDetails').innerHTML = `
+                <h2 class="text-2xl font-bold mb-6">Cell #${cell.cellId}</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-bold mb-4">Image</h3>
+                        ${cell.imageBase64 
+                            ? `<img src="${cell.imageBase64}" class="w-full max-w-[200px] rounded-xl border border-gray-700">`
+                            : '<p class="text-gray-500">No image</p>'
+                        }
+                    </div>
+                    <div class="space-y-3">
+                        <div class="bg-gray-800 p-3 rounded-lg">
+                            <div class="text-xs text-gray-400">Name</div>
+                            <div class="font-bold">${cell.name || 'N/A'}</div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded-lg">
+                            <div class="text-xs text-gray-400">Email</div>
+                            <div>${cell.email || 'N/A'}</div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded-lg">
+                            <div class="text-xs text-gray-400">Special Date</div>
+                            <div>${dateStr}</div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded-lg">
+                            <div class="text-xs text-gray-400">Website</div>
+                            <div>${cell.website ? `<a href="${cell.website}" target="_blank" class="text-pink-400 hover:underline">${cell.website}</a>` : 'N/A'}</div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded-lg">
+                            <div class="text-xs text-gray-400">Status</div>
+                            <div><span class="status-${cell.status} px-3 py-1 rounded-full text-sm font-bold capitalize">${cell.status}</span></div>
+                        </div>
+                        <div class="bg-gray-800 p-3 rounded-lg">
+                            <div class="text-xs text-gray-400">Submitted</div>
+                            <div class="text-sm">${createdAt}</div>
+                        </div>
+                    </div>
+                </div>
+
+                ${cell.story ? `
+                <div class="bg-gray-800 p-4 rounded-lg mt-6">
+                    <div class="text-xs text-gray-400 mb-2">Story</div>
+                    <div>${cell.story}</div>
+                </div>
+                ` : ''}
+
+                ${cell.status === 'pending' ? `
+                <div class="flex gap-4 mt-6">
+                    <button onclick="approveCell('${cell.id}'); closeCellModal();" class="flex-1 bg-green-600 py-3 rounded-xl font-bold hover:bg-green-700">
+                        ✓ Approve
+                    </button>
+                    <button onclick="rejectCell('${cell.id}'); closeCellModal();" class="flex-1 bg-red-600 py-3 rounded-xl font-bold hover:bg-red-700">
+                        ✗ Reject
+                    </button>
+                </div>
+                ` : ''}
+            `;
+
+            document.getElementById('cellModal').classList.remove('hidden');
+            document.getElementById('cellModal').classList.add('flex');
+        }
+
+        function closeCellModal() {
+            document.getElementById('cellModal').classList.add('hidden');
+            document.getElementById('cellModal').classList.remove('flex');
+        }
+
+        async function markAsPaid(id) {
+            try {
+                await db.collection('cells').doc(id).update({ paid: true });
+                const cell = allCells.find(c => c.id === id);
+                if (cell) cell.paid = true;
+                updateStats();
+                renderCells();
+                showToast('Marked as Paid! 💰');
+            } catch (error) {
+                showToast('Error updating cell');
+            }
+        }
+
+        async function deleteCell(id) {
+            if (!confirm('Are you sure you want to DELETE this cell? This cannot be undone!')) return;
+            
+            try {
+                await db.collection('cells').doc(id).delete();
+                allCells = allCells.filter(c => c.id !== id);
+                updateStats();
+                renderCells();
+                showToast('Cell deleted! 🗑️');
+            } catch (error) {
+                showToast('Error deleting cell');
+            }
+        }
+
+        async function approveCell(id) {
+            try {
+                await db.collection('cells').doc(id).update({ status: 'active' });
+                const cell = allCells.find(c => c.id === id);
+                if (cell) cell.status = 'active';
+                updateStats();
+                renderCells();
+                showToast('Cell approved! ✓');
+            } catch (error) {
+                showToast('Error approving cell');
+            }
+        }
+
+        async function rejectCell(id) {
+            if (!confirm('Are you sure you want to reject this cell?')) return;
+            
+            try {
+                await db.collection('cells').doc(id).update({ status: 'rejected' });
+                const cell = allCells.find(c => c.id === id);
+                if (cell) cell.status = 'rejected';
+                updateStats();
+                renderCells();
+                showToast('Cell rejected');
+            } catch (error) {
+                showToast('Error rejecting cell');
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeCellModal();
+        });
+
+        document.getElementById('cellModal').addEventListener('click', (e) => {
+            if (e.target.id === 'cellModal') closeCellModal();
+        });
+
+        // Check auth state
+        auth.onAuthStateChanged(user => {
+            if (user) showDashboard();
+        });
+    </script>
+</body>
+</html>
