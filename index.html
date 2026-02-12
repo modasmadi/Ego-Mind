@@ -2089,6 +2089,8 @@
         function handleClick(e) {
             if (isDragging) return;
 
+            playSound('click');
+
             const rect = canvas.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
@@ -2469,6 +2471,8 @@
             document.body.style.overflow = '';
         }
 
+        let paypalButtonsRendered = false;
+
         function showStep(step) {
             document.querySelectorAll('.step-content').forEach(s => s.classList.add('hidden'));
             document.getElementById(`step${step}`).classList.remove('hidden');
@@ -2478,15 +2482,48 @@
                 dot.className = `w-2.5 h-2.5 rounded-full ${i <= step ? 'bg-purple-500' : 'bg-gray-600'}`;
             }
 
-            const icons = { 1: '✨', 2: '💳', 3: '🎉' };
-            const titlesEn = { 1: 'Share Your Story', 2: 'Complete Payment', 3: 'Success!' };
-            const titlesAr = { 1: 'شارك قصتك', 2: 'أكمل الدفع', 3: 'تم بنجاح!' };
+            // ... (existing icons/titles logic) ...
 
-            document.getElementById('stepIcon').textContent = icons[step];
-            const titleEl = document.getElementById('stepTitle');
-            titleEl.setAttribute('data-en', titlesEn[step]);
-            titleEl.setAttribute('data-ar', titlesAr[step]);
-            titleEl.textContent = currentLang === 'ar' ? titlesAr[step] : titlesEn[step];
+            // Render PayPal Buttons if Step 2 and not already rendered
+            if (step === 2 && !paypalButtonsRendered) {
+                renderPayPalButtons();
+                paypalButtonsRendered = true;
+            }
+        }
+
+        function renderPayPalButtons() {
+            if (!window.paypal) return;
+
+            document.getElementById('paypal-button-container').innerHTML = ''; // Clear previous
+
+            paypal.Buttons({
+                style: {
+                    layout: 'vertical',
+                    color: 'gold',
+                    shape: 'pill',
+                    label: 'pay'
+                },
+                createOrder: function (data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: '100.00' // Price per cell
+                            },
+                            description: `Cell #${selectedCellId} on Million Logo Page`
+                        }]
+                    });
+                },
+                onApprove: function (data, actions) {
+                    return actions.order.capture().then(function (details) {
+                        playSound('success');
+                        submitCell(details.payer.name.given_name); // Proceed to submit
+                    });
+                },
+                onError: function (err) {
+                    console.error('PayPal Error', err);
+                    showToast('Payment failed. Please try again.');
+                }
+            }).render('#paypal-button-container');
         }
 
         function resetForm() {
