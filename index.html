@@ -1686,6 +1686,25 @@
         let selectedCellId = null;
         let uploadedImageBase64 = null;
 
+        // Sound Effects
+        const sounds = {
+            click: new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.m4a'), // Soft click
+            success: new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.m4a'), // Success chime
+            hover: new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.m4a') // Subtle tick
+        };
+
+        // Lower volume
+        Object.values(sounds).forEach(s => s.volume = 0.2);
+
+        function playSound(type) {
+            try {
+                if (sounds[type]) {
+                    sounds[type].currentTime = 0;
+                    sounds[type].play().catch(e => { }); // Ignore autoplay errors
+                }
+            } catch (e) { }
+        }
+
         // Canvas variables
         const GRID_COLS = 1000;
         const GRID_ROWS = 1000;
@@ -1703,15 +1722,59 @@
         async function loadCells() {
             if (!db) return;
 
+            // 1. Try to load from cache first (Instant load)
+            const cachedData = localStorage.getItem('cellsData_v1');
+            const cachedTime = localStorage.getItem('cellsData_time');
+            const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+            if (cachedData) {
+                try {
+                    cellsData = JSON.parse(cachedData);
+                    initCanvas(); // Render immediately
+                } catch (e) {
+                    console.error('Cache parse error', e);
+                }
+            } else {
+                initCanvas(); // Initialize empty canvas first
+            }
+
+            // 2. Fetch fresh data from server (Background update)
             try {
+                // Check if we need to fetch
+                if (cachedTime && (Date.now() - parseInt(cachedTime) < CACHE_DURATION)) {
+                    console.log('Using cached data');
+                    return;
+                }
+
                 const snapshot = await db.collection('cells').get();
+                let hasUpdates = false;
+
                 snapshot.forEach(doc => {
-                    cellsData[doc.id] = doc.data();
+                    const data = doc.data();
+                    if (JSON.stringify(cellsData[doc.id]) !== JSON.stringify(data)) {
+                        cellsData[doc.id] = data;
+                        hasUpdates = true;
+                    }
                 });
-                initCanvas();
+
+                if (hasUpdates || !cachedData) {
+                    saveToCache();
+                    renderGrid();
+                    renderMiniMap();
+                    updateStats();
+                }
+
             } catch (error) {
                 console.error('Error loading cells:', error);
-                initCanvas();
+            }
+        }
+
+        function saveToCache() {
+            try {
+                localStorage.setItem('cellsData_v1', JSON.stringify(cellsData));
+                localStorage.setItem('cellsData_time', Date.now().toString());
+            } catch (e) {
+                console.log('Cache save failed (storage full?)', e);
             }
         }
 
@@ -1750,12 +1813,25 @@
             const container = document.getElementById('canvasContainer');
             const width = container.clientWidth;
             const height = Math.min(600, window.innerHeight * 0.6);
+            const dpr = window.devicePixelRatio || 1;
 
-            canvas.width = width;
-            canvas.height = height;
+            // Set actual size in memory (scaled to account for extra pixel density)
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
 
-            miniCanvas.width = 120;
-            miniCanvas.height = 120;
+            // Set visible size in CSS pixels
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+
+            // Normalize coordinate system to use css pixels.
+            ctx.scale(dpr, dpr);
+
+            // MiniMap
+            miniCanvas.width = 120 * dpr;
+            miniCanvas.height = 120 * dpr;
+            miniCanvas.style.width = '120px';
+            miniCanvas.style.height = '120px';
+            miniCtx.scale(dpr, dpr);
 
             renderGrid();
             renderMiniMap();
