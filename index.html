@@ -17,8 +17,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
-    <!-- PayPal SDK (Replace sb-XXXX with your actual Client ID) -->
-    <script src="https://www.paypal.com/sdk/js?client-id=ba&currency=USD"></script>
+    <!-- Gumroad Overlay Script (Smooth Payment) -->
+    <script src="https://gumroad.com/js/gumroad.js"></script>
 
     <style>
         :root {
@@ -717,8 +717,8 @@
                     <p class="font-semibold text-white text-sm sm:text-base"
                         data-en="Welcome! Want to be part of history?" data-ar="مرحباً! تريد أن تكون جزءاً من التاريخ؟">
                         Welcome! Want to be part of history?</p>
-                    <p class="text-gray-400 text-xs sm:text-sm" data-en="Get your cell for just 1 JOD - forever!"
-                        data-ar="احجز خانتك بدينار واحد فقط - للأبد!">Get your cell for just 1 JOD - forever!</p>
+                    <p class="text-gray-400 text-xs sm:text-sm" data-en="Get your cell for just $3.00 - forever!"
+                        data-ar="احجز خانتك بـ 3 دولار فقط - للأبد!">Get your cell for just $3.00 - forever!</p>
                 </div>
             </div>
             <button onclick="closeWelcome()" class="text-gray-400 hover:text-white text-xl">&times;</button>
@@ -773,7 +773,7 @@
                         Forever</span>
                 </h2>
                 <p class="text-2xl sm:text-3xl font-black gradient-text">
-                    <span data-en="Just 1 JOD!" data-ar="فقط 1 دينار!">Just 1 JOD!</span>
+                    <span data-en="Just $3.00!" data-ar="فقط 3 دولار!">Just $3.00!</span>
                 </p>
             </div>
 
@@ -793,7 +793,7 @@
                 </span>
                 <span
                     class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-xs sm:text-sm text-gray-300">
-                    🎂 <span data-en="Special Date" data-ar="تاريخ مهم">Special Date</span>
+                    🎂 <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
                 </span>
                 <span
                     class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-xs sm:text-sm text-gray-300">
@@ -813,8 +813,7 @@
                     <div class="text-xs sm:text-sm text-gray-400" data-en="Available" data-ar="متاحة">Available</div>
                 </div>
                 <div class="stat-card min-w-[130px]">
-                    <div class="text-3xl sm:text-4xl font-black text-white">1 <span
-                            class="text-lg text-purple-400">JOD</span></div>
+                    <div class="text-3xl sm:text-4xl font-black text-white">$3.00</div>
                     <div class="text-xs sm:text-sm text-gray-400" data-en="Per Cell Forever" data-ar="للخانة للأبد">Per
                         Cell Forever</div>
                 </div>
@@ -839,8 +838,8 @@
 
             <a href="#grid"
                 class="inline-block glow-btn px-8 sm:px-12 py-4 sm:py-5 rounded-full font-bold text-lg sm:text-xl shadow-2xl hover:scale-105 transition-transform">
-                🟢 <span data-en="Reserve Your Spot Now – 1 JOD" data-ar="مساهمة رمزية – 1 دينار">Reserve Your Spot Now
-                    – 1 JOD</span>
+                🟢 <span data-en="Reserve Your Spot Now – $3.00" data-ar="مساهمة رمزية – 3 دولار">Reserve Your Spot Now
+                    – $3.00</span>
             </a>
 
             <!-- عناصر الثقة -->
@@ -894,8 +893,8 @@
                     <p class="text-sm text-gray-300" data-en="A cool idea" data-ar="فكرة حلوة">A cool idea</p>
                 </div>
             </div>
-            <p class="text-center text-gray-500 text-sm mt-6" data-en="Join them with just 1 JOD!"
-                data-ar="انضم إليهم بدينار واحد فقط!">Join them with just 1 JOD!</p>
+            <p class="text-center text-gray-500 text-sm mt-6" data-en="Join them with just $3.00!"
+                data-ar="انضم إليهم بـ 3 دولار فقط!">Join them with just $3.00!</p>
         </div>
     </section>
 
@@ -929,10 +928,10 @@
                 </div>
                 <div class="glass-card p-6 text-center">
                     <div class="step-badge mx-auto mb-4">4</div>
-                    <h3 class="font-semibold mb-2 text-white" data-en="Pay & Go Live!" data-ar="ادفع وانطلق!">Pay & Go
-                        Live!</h3>
-                    <p class="text-gray-400 text-sm" data-en="Quick payment via CliQ or Bank transfer"
-                        data-ar="دفع سريع عبر كليك أو تحويل بنكي">Quick payment via CliQ or Bank transfer</p>
+                    <h3 class="font-semibold mb-2 text-white" data-en="Instant Payment" data-ar="دفع فوري">Instant
+                        Payment</h3>
+                    <p class="text-gray-400 text-sm" data-en="Quick payment via Card or Apple Pay"
+                        data-ar="دفع سريع عبر البطاقة أو أبل باي">Quick payment via Card or Apple Pay</p>
                 </div>
             </div>
         </div>
@@ -1086,8 +1085,8 @@
                 <div class="grid sm:grid-cols-2 gap-4">
                     <div class="charter-card">
                         <span class="text-3xl mb-3 block">💰</span>
-                        <h3 class="text-lg font-bold text-white" data-en="1 JOD Forever" data-ar="دينار واحد للأبد">1
-                            JOD Forever</h3>
+                        <h3 class="text-lg font-bold text-white" data-en="$3.00 Forever" data-ar="3 دولار للأبد">$3.00
+                            Forever</h3>
                         <p class="text-gray-400 mt-2 text-sm" data-en="Price never changes" data-ar="السعر لن يتغير">
                             Price never changes</p>
                     </div>
@@ -1149,10 +1148,10 @@
                     </div>
                     <div class="faq-answer">
                         <p class="px-5 pb-5 text-gray-400 text-sm"
-                            data-en="You can pay via CliQ (Alias: FVG) or bank transfer to Arab Bank. Payment is 1 JOD per cell, one time only - no subscriptions!"
-                            data-ar="يمكنك الدفع عبر كليك (الاسم المستعار: FVG) أو تحويل بنكي للبنك العربي. الدفع 1 دينار للخانة، مرة واحدة فقط - بدون اشتراكات!">
-                            You can pay via CliQ (Alias: FVG) or bank transfer to Arab Bank. Payment is 1 JOD per cell,
-                            one time only - no subscriptions!</p>
+                            data-en="You can pay instantly via Credit Card or Apple Pay using Gumroad. It's safe, fast, and automatic!"
+                            data-ar="يمكنك الدفع فوراً عبر البطاقة أو أبل باي باستخدام Gumroad. الطريقة آمنة وسريعة وتلقائية!">
+                            You can pay instantly via Credit Card or Apple Pay using Gumroad. It's safe, fast, and
+                            automatic!</p>
                     </div>
                 </div>
 
@@ -1222,7 +1221,7 @@
                             🔒 <span data-en="Secure & Safe" data-ar="آمن ومحمي">Secure & Safe</span>
                         </span>
                         <span class="flex items-center gap-2">
-                            💯 <span data-en="1 JOD = Forever" data-ar="1 دينار = للأبد">1 JOD = Forever</span>
+                            💯 <span data-en="$3.00 = Forever" data-ar="3 دولار = للأبد">$3.00 = Forever</span>
                         </span>
                         <span class="flex items-center gap-2">
                             🇯🇴 <span data-en="Made in Jordan" data-ar="صنع في الأردن">Made in Jordan</span>
@@ -1255,8 +1254,8 @@
 
                 <a href="#grid"
                     class="inline-block glow-btn px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg shadow-2xl hover:scale-105 transition-transform">
-                    🟢 <span data-en="Reserve Your Spot – 1 JOD" data-ar="مساهمة رمزية – 1 دينار">Reserve Your Spot – 1
-                        JOD</span>
+                    🟢 <span data-en="Reserve Your Spot – $3.00" data-ar="مساهمة رمزية – 3 دولار">Reserve Your Spot –
+                        $3.00</span>
                 </a>
 
                 <p class="text-gray-500 text-xs mt-6" data-en="A symbolic contribution • Your legacy forever"
@@ -1389,160 +1388,58 @@
                     </button>
                 </div>
 
-                <!-- Step 2: Payment -->
+                <!-- Step 2: Payment (Simplified) -->
                 <div id="step2" class="step-content hidden">
+                    <div class="text-center mb-6">
+                        <div class="inline-block p-3 rounded-full bg-green-500/10 mb-2">
+                            <span class="text-3xl">⚡</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-1" data-en="Instant Activation" data-ar="تفعيل فوري">
+                            Instant Activation</h3>
+                        <p class="text-gray-400 text-xs" data-en="Cell will be active immediately after payment"
+                            data-ar="سيتم تفعيل الخانة فوراً بعد الدفع">Cell will be active immediately after payment
+                        </p>
+                    </div>
+
                     <div
-                        class="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 p-4 sm:p-6 rounded-2xl mb-5 text-center">
-                        <div class="text-xs text-gray-400 mb-1" data-en="Total Amount" data-ar="المبلغ الإجمالي">Total
-                            Amount</div>
-                        <div class="text-4xl sm:text-5xl font-black gradient-text">1 JOD</div>
-                        <div class="text-xs text-gray-500 mt-1" data-en="Symbolic contribution • Forever yours"
-                            data-ar="مساهمة رمزية • للأبد">Symbolic contribution • Forever yours</div>
+                        class="bg-gradient-to-r from-purple-900/40 to-pink-900/40 border border-purple-500/30 rounded-xl p-6 relative overflow-hidden text-center group">
+                        <div class="text-4xl font-bold text-white mb-2">$3.00</div>
+                        <div class="text-xs text-purple-300 mb-6" data-en="One-time payment for lifetime ownership"
+                            data-ar="دفع لمرة واحدة لامتلاك الخانة للأبد">One-time payment for lifetime ownership</div>
+
+                        <a href="https://modasmadi.gumroad.com/l/kfrdjk" target="_blank"
+                            data-gumroad-single-product="true"
+                            class="block w-full bg-white text-purple-900 font-bold py-4 rounded-xl hover:scale-[1.02] transition shadow-[0_0_20px_rgba(255,255,255,0.3)] relative z-10 mb-4">
+                            <span data-en="Pay & Activate Now 🚀" data-ar="ادفع وفعل الآن 🚀">Pay & Activate Now
+                                🚀</span>
+                        </a>
+
+                        <p class="text-[10px] text-gray-400" data-en="Secure payment via Cards/Apple Pay"
+                            data-ar="دفع آمن عبر البطاقات أو أبل باي">Secure payment via Cards/Apple Pay</p>
                     </div>
 
-                    <div class="bg-green-500/10 border border-green-500/20 p-3 sm:p-4 rounded-xl mb-5">
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                                <span class="text-xl">⚡</span>
-                            </div>
-                            <div>
-                                <div class="font-semibold text-green-400 text-sm" data-en="Instant Activation!"
-                                    data-ar="تفعيل فوري!">Instant Activation!</div>
-                                <p class="text-xs text-green-200/70"
-                                    data-en="Your cell appears immediately after confirmation"
-                                    data-ar="خانتك تظهر فوراً بعد التأكيد">Your cell appears immediately after
-                                    confirmation</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <!-- CliQ - Jordan - الأول والأبرز -->
-                        <!-- Payment Method Toggle -->
-                        <div class="flex gap-2 mb-6 bg-black/20 p-1 rounded-xl">
-                            <button onclick="togglePaymentMethod('card')" id="btnCard"
-                                class="flex-1 py-2 rounded-lg text-sm font-bold transition bg-purple-600 text-white shadow-lg">
-                                <span data-en="💳 Card / PayPal" data-ar="💳 بطاقة / باي بال">💳 Card / PayPal</span>
-                            </button>
-                            <button onclick="togglePaymentMethod('manual')" id="btnManual"
-                                class="flex-1 py-2 rounded-lg text-sm font-bold transition text-gray-400 hover:text-white hover:bg-white/5">
-                                <span data-en="🏦 CliQ / Bank" data-ar="🏦 كليك / بنك">🏦 CliQ / Bank</span>
-                            </button>
-                        </div>
-
-                        <!-- Option 1: Instant Payment (PayPal) -->
-                        <div id="paymentCard" class="space-y-4">
-                            <div class="bg-purple-500/10 border border-purple-500/20 p-4 rounded-xl text-center">
-                                <p class="text-sm text-purple-200 mb-2" data-en="Instant Activation ⚡"
-                                    data-ar="تفعيل فوري ⚡">Instant Activation ⚡</p>
-                                <div class="text-3xl font-bold text-white mb-1">$100</div>
-                                <p class="text-xs text-gray-400" data-en="Secure payment via PayPal"
-                                    data-ar="دفع آمن عبر PayPal">Secure payment via PayPal</p>
-                            </div>
-
-                            <!-- PayPal Container -->
-                            <div id="paypal-button-container" class="mt-4"></div>
-                        </div>
-
-                        <!-- Option 2: Manual Transfer (CliQ) -->
-                        <div id="paymentManual" class="space-y-4 hidden">
-                            <div class="bg-green-500/10 border border-green-500/20 p-4 rounded-xl text-center">
-                                <div class="flex justify-between items-center bg-black/30 p-2 rounded-lg">
-                                    <span class="text-gray-500" data-en="Name:" data-ar="الاسم:">Name:</span>
-                                    <span class="text-gray-300 text-right text-xs">MAHMOUD OMAR HEIDER ALSMADI</span>
-                                </div>
-                                <div class="flex justify-between items-center bg-black/30 p-2 rounded-lg">
-                                    <span class="text-gray-500" data-en="Bank:" data-ar="البنك:">Bank:</span>
-                                    <span class="text-gray-300">Islamic Int'l Arab Bank</span>
-                                </div>
-                                <div class="bg-black/30 p-2 rounded-lg">
-                                    <div class="flex justify-between items-start gap-2">
-                                        <div class="flex-1">
-                                            <span class="text-gray-500 block">IBAN:</span>
-                                            <span
-                                                class="text-purple-400 font-mono text-xs break-all">JO83IIBA1480000001480019189500</span>
-                                        </div>
-                                        <button onclick="copyText('JO83IIBA1480000001480019189500')"
-                                            class="bg-white/10 hover:bg-white/20 px-2 py-1 rounded text-xs transition">📋</button>
-                                    </div>
-                                </div>
-                                <div class="flex justify-between items-center bg-black/30 p-2 rounded-lg">
-                                    <span class="text-gray-500">SWIFT:</span>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-purple-400 font-mono">IIBAJOAM</span>
-                                        <button onclick="copyText('IIBAJOAM')"
-                                            class="bg-white/10 hover:bg-white/20 px-2 py-1 rounded text-xs transition">📋</button>
-                                    </div>
-                                </div>
-                                <!-- CliQ Alias - كبير وواضح -->
-                                <div class="bg-black/40 p-4 rounded-xl mb-4 text-center">
-                                    <div class="text-xs text-gray-500 mb-1" data-en="CliQ Alias"
-                                        data-ar="اسم CliQ المستعار">CliQ Alias</div>
-                                    <div class="text-4xl font-mono text-green-400 font-black tracking-widest">TOJ</div>
-                                    <button onclick="copyText('TOJ')"
-                                        class="mt-3 bg-green-500 hover:bg-green-600 text-black px-6 py-2 rounded-lg text-sm font-bold transition">
-                                        📋 <span data-en="Copy Alias" data-ar="نسخ الاسم">Copy Alias</span>
-                                    </button>
-                                </div>
-                                <div class="text-3xl font-bold text-white mb-1">1 JOD</div>
-                                <p class="text-xs text-gray-400" data-en="Manual Verification (Wait)"
-                                    data-ar="تفعيل يدوي (انتظار)">Manual Verification (Wait)</p>
-                            </div>
-
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs text-gray-400">CliQ Alias</span>
-                                <button onclick="copyText('FVG')"
-                                    class="text-green-400 text-xs hover:underline">Copy</button>
-                            </div>
-                            <div
-                                class="text-xl font-mono font-bold text-white text-center tracking-wider bg-black/30 p-2 rounded-lg">
-                                FVG</div>
-                            <div class="text-center text-xs text-gray-500 mt-2">Recipient: MAHMOUD AL SMADI</div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2"
-                                data-en="Upload Receipt" data-ar="ارفق الإيصال">Upload Receipt</label>
-                            <div class="relative group">
-                                <input type="file" id="receiptUpload"
-                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                    onchange="handleReceiptUpload(this)">
-                                <div class="border-2 border-dashed border-gray-600 rounded-xl p-4 text-center group-hover:border-purple-500 transition"
-                                    id="receiptZone">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-10 h-10 rounded-full bg-black/30 flex items-center justify-center text-xl">
-                                                🛒</div>
-                                            <div>
-                                                <div class="font-bold text-white">Purchase Key</div>
-                                                <div class="text-xs text-purple-300">$3.00 / Cell</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="https://modasmadi.gumroad.com/l/kfrdjk" target="_blank"
-                                        class="block w-full bg-white text-purple-900 font-bold py-3 rounded-lg text-center hover:scale-[1.02] transition shadow-lg relative z-10">
-                                        <span data-en="Buy License Key ↗" data-ar="شراء مفتاح تفعيل ↗">Buy License Key
-                                            ↗</span>
-                                    </a>
-                                    <div class="text-2xl mb-2">📎</div>
-                                    <div class="text-xs text-gray-400" id="receiptText"
-                                        data-en="Click to upload receipt" data-ar="اضغط لرفع صورة التحويل">Click to
-                                        upload receipt</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button type="button" onclick="goBack()"
-                            class="w-full mt-4 text-gray-500 text-xs hover:text-white transition">
-                            <span id="backBtn" data-en="← Back" data-ar="← رجوع">← Back</span>
+                    <div class="mt-6 border-t border-white/10 pt-4">
+                        <button onclick="document.getElementById('manualKeyArea').classList.toggle('hidden')"
+                            class="text-xs text-gray-500 hover:text-white underline w-full text-center mb-4">
+                            <span data-en="I already have a key?" data-ar="لدي مفتاح تفعيل بالفعل؟">I already have a
+                                key?</span>
                         </button>
+
+                        <div id="manualKeyArea" class="hidden animate-fade-in space-y-3">
+                            <input type="text" id="licenseKeyInput"
+                                class="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-center font-mono text-lg tracking-widest text-purple-400 focus:border-purple-500 focus:outline-none placeholder-gray-700 transition"
+                                placeholder="XXXX-XXXX-XXXX-XXXX">
+
+                            <button type="button" onclick="verifyAndSubmit()" id="activateBtn"
+                                class="w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 rounded-lg transition text-sm">
+                                <span data-en="Activate Key" data-ar="تفعيل المفتاح">Activate Key</span>
+                            </button>
+                        </div>
                     </div>
 
                     <button type="button" onclick="goBack()"
-                        class="w-full mt-4 text-gray-500 text-xs hover:text-white transition">
-                        <span id="backBtn" data-en="← Back" data-ar="← رجوع">← Back</span>
+                        class="w-full mt-2 text-gray-500 text-xs hover:text-white transition py-2">
+                        <span data-en="← Back" data-ar="← رجوع">← Back</span>
                     </button>
                 </div>
 
