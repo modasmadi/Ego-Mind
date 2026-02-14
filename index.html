@@ -1315,76 +1315,78 @@
             </div>
 
             <div class="p-4 sm:p-6">
-                <!-- Step 1: Your Story -->
+                <!-- Step 1: Your Story (Redesigned) -->
                 <div id="step1" class="step-content">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="flex items-center gap-2 text-gray-300 mb-2 text-sm font-medium">
-                                <span
-                                    class="w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center text-xs">👤</span>
-                                <span data-en="Your Name / Company *" data-ar="اسمك / شركتك *">Your Name / Company
-                                    *</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                        <!-- Name Input -->
+                        <div
+                            class="bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition group focus-within:border-purple-500/50">
+                            <label
+                                class="flex items-center gap-2 text-purple-300 mb-2 text-xs font-bold uppercase tracking-wider">
+                                <span>👤</span>
+                                <span data-en="Name / Company" data-ar="الاسم / الشركة">Name / Company</span>
                             </label>
                             <input type="text" id="userName"
-                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-purple-500 focus:bg-white/10 outline-none transition-all text-sm text-white placeholder-gray-500"
-                                placeholder="John Doe or Acme Inc.">
+                                class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-base font-medium"
+                                placeholder="Your Name Here">
                         </div>
 
-                        <div>
-                            <label class="flex items-center gap-2 text-gray-300 mb-2 text-sm font-medium">
-                                <span
-                                    class="w-6 h-6 bg-pink-500/20 rounded-full flex items-center justify-center text-xs">📅</span>
-                                <span data-en="Special Date" data-ar="تاريخ مهم">Special Date</span>
-                                <span class="text-gray-600 text-xs" data-en="(optional)"
-                                    data-ar="(اختياري)">(optional)</span>
+                        <!-- Date Input -->
+                        <div
+                            class="bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition group focus-within:border-pink-500/50">
+                            <label
+                                class="flex items-center gap-2 text-pink-300 mb-2 text-xs font-bold uppercase tracking-wider">
+                                <span>📅</span>
+                                <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
                             </label>
                             <input type="date" id="specialDate"
-                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-purple-500 focus:bg-white/10 outline-none transition-all text-sm text-white">
+                                class="w-full bg-transparent border-none p-0 text-white focus:ring-0 text-base font-medium opacity-90">
                         </div>
+                    </div>
 
-                        <div>
-                            <label class="flex items-center gap-2 text-gray-300 mb-2 text-sm font-medium">
-                                <span
-                                    class="w-6 h-6 bg-yellow-500/20 rounded-full flex items-center justify-center text-xs">📖</span>
-                                <span data-en="Your Story *" data-ar="قصتك *">Your Story *</span>
-                            </label>
-                            <textarea id="userStory"
-                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-purple-500 focus:bg-white/10 outline-none transition-all h-24 resize-none text-sm text-white placeholder-gray-500"
-                                placeholder="Why do you want to be part of history?"></textarea>
-                        </div>
+                    <!-- Story Input -->
+                    <div
+                        class="bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition mb-4 group focus-within:border-yellow-500/50">
+                        <label
+                            class="flex items-center gap-2 text-yellow-300 mb-2 text-xs font-bold uppercase tracking-wider">
+                            <span>📖</span>
+                            <span data-en="Your Story" data-ar="قصتك">Your Story</span>
+                        </label>
+                        <textarea id="userStory"
+                            class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-sm leading-relaxed resize-none h-20"
+                            placeholder="Write something that will last forever..."></textarea>
+                    </div>
 
-                        <div>
-                            <label class="flex items-center gap-2 text-gray-300 mb-2 text-sm font-medium">
-                                <span
-                                    class="w-6 h-6 bg-green-500/20 rounded-full flex items-center justify-center text-xs">📷</span>
-                                <span data-en="Your Photo / Logo *" data-ar="صورتك / شعارك *">Your Photo / Logo *</span>
-                            </label>
-                            <div id="uploadZone" class="upload-zone p-4 sm:p-6 text-center"
-                                onclick="document.getElementById('imageInput').click()">
-                                <input type="file" id="imageInput" accept="image/*" class="hidden"
-                                    onchange="handleImageUpload(this)">
-                                <div id="uploadPlaceholder" class="space-y-2">
-                                    <div
-                                        class="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-white/5 rounded-2xl flex items-center justify-center">
-                                        <span class="text-2xl sm:text-3xl">🖼️</span>
-                                    </div>
-                                    <p class="text-gray-400 text-sm" data-en="Click to upload" data-ar="اضغط للرفع">
-                                        Click to upload</p>
-                                    <p class="text-gray-600 text-xs">PNG, JPG, GIF • Max 500KB</p>
-                                </div>
-                                <div id="uploadPreview" class="hidden">
-                                    <img id="previewImage"
-                                        class="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-xl object-cover border-2 border-green-500/50">
-                                    <p class="text-green-400 text-sm mt-2">✓ <span data-en="Ready!"
-                                            data-ar="جاهزة!">Ready!</span></p>
-                                </div>
+                    <!-- Image Upload -->
+                    <div class="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-dashed border-purple-500/30 rounded-2xl p-4 text-center cursor-pointer hover:border-purple-400 transition relative group overflow-hidden"
+                        onclick="document.getElementById('imageInput').click()">
+                        <input type="file" id="imageInput" accept="image/*" class="hidden"
+                            onchange="handleImageUpload(this)">
+
+                        <div id="uploadPlaceholder" class="py-2">
+                            <div
+                                class="w-12 h-12 mx-auto bg-purple-500/20 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition">
+                                <span class="text-xl">📷</span>
                             </div>
+                            <p class="text-white font-semibold text-sm" data-en="Upload Photo or Logo"
+                                data-ar="رفع صورة أو شعار">Upload Photo or Logo</p>
+                            <p class="text-xs text-gray-500 mt-1">JPG, PNG, GIF</p>
+                        </div>
+
+                        <div id="uploadPreview"
+                            class="hidden h-full absolute inset-0 bg-black/50 z-10 flex items-center justify-center backdrop-blur-sm">
+                            <img id="previewImage"
+                                class="w-20 h-20 rounded-full object-cover border-2 border-white shadow-xl">
+                            <div
+                                class="absolute bottom-2 right-2 bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full font-bold">
+                                ✓ Ready</div>
                         </div>
                     </div>
 
                     <button onclick="goToPayment()"
-                        class="w-full mt-6 glow-btn py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base">
-                        <span data-en="Continue to Payment →" data-ar="متابعة للدفع →">Continue to Payment →</span>
+                        class="w-full mt-6 glow-btn py-4 rounded-xl font-bold text-base tracking-wide shadow-lg hover:shadow-purple-500/25 transition-all active:scale-[0.98]">
+                        <span data-en="Continue to Payment →" data-ar="التالي: الدفع والتفعيل →">Continue to Payment
+                            →</span>
                     </button>
                 </div>
 
