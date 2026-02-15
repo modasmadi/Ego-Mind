@@ -1445,14 +1445,14 @@
                                 data-en="Total Investment" data-ar="الاستثمار الكلي">Total Investment</div>
                             <div class="flex justify-center items-baseline gap-1 mb-2">
                                 <span
-                                    class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">$3.00</span>
+                                    class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">$2.00</span>
                                 <span class="text-xl text-gray-500 font-bold">USD</span>
                             </div>
                             <div class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-6"
                                 data-en="One Time • Forever" data-ar="مرة واحدة • للأبد">One Time • Forever</div>
 
                             <a href="https://modasmadi.gumroad.com/l/kfrdjk" target="_blank"
-                                data-gumroad-single-product="true"
+                                data-gumroad-single-product="true" onclick="startAutoActivationPolling()"
                                 class="block w-full group relative px-8 py-5 font-bold text-white transition-all duration-200 bg-white text-black rounded-2xl hover:bg-gray-100 focus:outline-none transform active:scale-[0.98] shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.5)] overflow-hidden">
                                 <div
                                     class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:animate-shimmer">
@@ -2441,41 +2441,327 @@
 
 
 
-        async function verifyAndSubmit() {
-            const keyInput = document.getElementById('licenseKeyInput');
-            const key = keyInput.value.trim();
-            const btn = document.getElementById('activateBtn');
 
-            if (!key) {
-                showToast(currentLang === 'ar' ? 'الرجاء إدخال المفتاح' : 'Please enter license key');
-                return;
-            }
+        // ═══════════════════════════════════════════════════════════
+        // Auto-Activation System (Gumroad Webhook)
+        // ═══════════════════════════════════════════════════════════
 
-            btn.disabled = true;
-            btn.innerHTML = '<span class="animate-spin text-xl">↻</span>';
+        let activationPollingInterval = null;
+        let pollingAttempts = 0;
+        const MAX_POLLING_ATTEMPTS = 60; // 60 attempts × 2 seconds = 2 minutes
 
-            // Simulate Verification (Since we don't have a backend proxy to call Gumroad API securely without exposing tokens)
-            // In a real seamless setup, you would call: await fetch('https://api.gumroad.com/v2/licenses/verify', ...)
-            // Here we trust the input for the MVP or check a pattern.
-            // PRO TIP: You can hardcode a "Master Key" for yourself to test: 'MASTER-123'
+        /**
+         * Start auto-polling after payment button click
+         * يبدأ الفحص التلقائي بعد الضغط على زر الدفع
+         */
+        async function startAutoActivationPolling() {
+            // Save cell data before payment
+            await savePendingCellData();
 
-            // Artificial delay for realism
-            await new Promise(r => setTimeout(r, 1500));
+            // Wait 3 seconds for Gumroad overlay to open
+            setTimeout(() => {
+                showWaitingScreen();
+                startPolling();
+            }, 3000);
+        }
 
-            // Basic Format Validation (Gumroad keys are typically blocks of chars)
-            // We accept any non-empty key for now to ensure the user isn't blocked by CORS issues on the client side.
-            // The "Manual Verification" happens if the key turns out fake later.
-            // BUT, to make it "Perfect", we assume the key is valid.
+        /**
+         * Save cell data in localStorage before redirect (FREE METHOD)
+         * حفظ بيانات الخانة في localStorage قبل التحويل
+         */
+        async function savePendingCellData() {
+            try {
+                const cellData = {
+                    cellId: selectedCellId,
+                    name: document.getElementById('userName').value.trim(),
+                    specialDate: document.getElementById('specialDate').value,
+                    story: document.getElementById('userStory').value.trim(),
+                    imageBase64: uploadedImageBase64,
+                    timestamp: Date.now()
+                };
 
-            if (key.length > 5) {
-                playSound('success');
-                submitCell('Gumroad Buyer', 'gumroad', key);
-            } else {
-                showToast(currentLang === 'ar' ? 'مفتاح غير صالح' : 'Invalid License Key');
-                btn.disabled = false;
-                btn.innerHTML = '<span data-en="Verify & Activate 🚀" data-ar="تحقق وتفعيل 🚀">Verify & Activate 🚀</span>';
+                // Save to localStorage (FREE - doesn't need Blaze Plan)
+                localStorage.setItem(`pending_cell_${selectedCellId}`, JSON.stringify(cellData));
+                console.log(`📝 Cell #${selectedCellId} saved to localStorage`);
+            } catch (error) {
+                console.error('Error saving pending cell:', error);
             }
         }
+
+
+        /**
+         * Show waiting screen in Step 2
+         * عرض شاشة الانتظار
+         */
+        function showWaitingScreen() {
+            // Update Step 2 content to show waiting state
+            const step2 = document.getElementById('step2');
+            const originalContent = step2.innerHTML;
+
+            step2.innerHTML = `
+                <div class="text-center py-12">
+                    <div class="relative mb-8">
+                        <div class="inline-block p-6 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 backdrop-blur-md animate-pulse">
+                            <span class="text-6xl">⏳</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-3xl font-black text-white mb-3" data-en="Verifying Payment..." data-ar="جاري التحقق من الدفع...">
+                        ${currentLang === 'ar' ? 'جاري التحقق من الدفع...' : 'Verifying Payment...'}
+                    </h3>
+                    <p class="text-gray-400 mb-8" data-en="This usually takes 5-15 seconds" data-ar="عادة يأخذ 5-15 ثانية">
+                        ${currentLang === 'ar' ? 'عادة يأخذ 5-15 ثانية' : 'This usually takes 5-15 seconds'}
+                    </p>
+                    
+                    <div class="bg-white/5 rounded-2xl p-6 max-w-md mx-auto">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="animate-spin text-2xl">↻</span>
+                            <span class="text-sm text-gray-300" id="pollingStatus">
+                                ${currentLang === 'ar' ? 'فحص رقم 1...' : 'Check #1...'}
+                            </span>
+                        </div>
+                        <div class="w-full bg-white/10 rounded-full h-2">
+                            <div id="pollingProgress" class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="cancelPolling()" class="mt-6 text-xs text-gray-500 hover:text-white transition">
+                        ${currentLang === 'ar' ? '← إلغاء' : '← Cancel'}
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Start polling to check if cell is activated
+         * بدء الفحص الدوري للتحقق من تفعيل الخانة
+         */
+        function startPolling() {
+            pollingAttempts = 0;
+
+            activationPollingInterval = setInterval(async () => {
+                pollingAttempts++;
+
+                // Update UI
+                const statusEl = document.getElementById('pollingStatus');
+                const progressEl = document.getElementById('pollingProgress');
+                if (statusEl) {
+                    statusEl.textContent = currentLang === 'ar'
+                        ? `فحص رقم ${pollingAttempts}...`
+                        : `Check #${pollingAttempts}...`;
+                }
+                if (progressEl) {
+                    const progress = (pollingAttempts / MAX_POLLING_ATTEMPTS) * 100;
+                    progressEl.style.width = progress + '%';
+                }
+
+                // Check if cell is activated
+                const isActivated = await checkCellActivation();
+
+                if (isActivated) {
+                    clearInterval(activationPollingInterval);
+                    await uploadImageAndFinalize();
+                    showSuccessStep();
+                } else if (pollingAttempts >= MAX_POLLING_ATTEMPTS) {
+                    clearInterval(activationPollingInterval);
+                    showPollingTimeout();
+                }
+            }, 2000); // Check every 2 seconds
+        }
+
+        /**
+         * Check if the cell has been activated by webhook
+         * التحقق من تفعيل الخانة بواسطة الـ webhook
+         */
+        async function checkCellActivation() {
+            if (!db) return false;
+
+            try {
+                const docRef = db.collection('cells').doc(selectedCellId.toString());
+                const doc = await docRef.get();
+
+                if (doc.exists) {
+                    const data = doc.data();
+                    return data.status === 'active' && data.paid === true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking activation:', error);
+                return false;
+            }
+        }
+
+        /**
+         * Upload image to Firebase Storage after activation
+         * رفع الصورة إلى Firebase Storage بعد التفعيل
+         */
+        async function uploadImageAndFinalize() {
+            if (!uploadedImageBase64 || !storage) return;
+
+            try {
+                const storageRef = storage.ref();
+                const imageRef = storageRef.child(`cells/${selectedCellId}_${Date.now()}.jpg`);
+                const snapshot = await imageRef.putString(uploadedImageBase64, 'data_url');
+                const imageUrl = await snapshot.ref.getDownloadURL();
+
+                // Update cell with image URL
+                await db.collection('cells').doc(selectedCellId.toString()).update({
+                    imageUrl: imageUrl,
+                    imageBase64: imageUrl // For compatibility
+                });
+
+                // Update local state
+                cellsData[selectedCellId.toString()].imageUrl = imageUrl;
+                cellsData[selectedCellId.toString()].imageBase64 = imageUrl;
+                loadImageAsync(selectedCellId.toString(), imageUrl);
+
+                console.log('✅ Image uploaded successfully');
+            } catch (error) {
+                console.error('Error uploading image:', error);
+            }
+        }
+
+        /**
+         * Show success step after activation
+         * عرض شاشة النجاح بعد التفعيل
+         */
+        function showSuccessStep() {
+            playSound('success');
+            showStep(3);
+            document.getElementById('confirmedCellId').textContent = selectedCellId;
+            launchConfetti();
+            loadRecentActivity();
+        }
+
+        /**
+         * Show timeout message if polling failed
+         * عرض رسالة انتهاء المهلة
+         */
+        function showPollingTimeout() {
+            const step2 = document.getElementById('step2');
+            step2.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="text-6xl mb-4">⚠️</div>
+                    <h3 class="text-2xl font-bold text-white mb-3">
+                        ${currentLang === 'ar' ? 'لم نتمكن من التحقق تلقائياً' : 'Auto-verification timeout'}
+                    </h3>
+                    <p class="text-gray-400 mb-6 max-w-md mx-auto">
+                        ${currentLang === 'ar'
+                    ? 'الدفع قد يستغرق بضع دقائق. يرجى التحقق من بريدك الإلكتروني أو المحاولة لاحقاً.'
+                    : 'Payment may take a few minutes to process. Please check your email or try again later.'}
+                    </p>
+                    <button onclick="closeClaimModal()" class="glow-btn px-8 py-3 rounded-xl">
+                        ${currentLang === 'ar' ? 'حسناً' : 'OK'}
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Cancel polling
+         * إلغاء الفحص
+         */
+        function cancelPolling() {
+            if (activationPollingInterval) {
+                clearInterval(activationPollingInterval);
+            }
+            showStep(2);
+        }
+
+        /**
+         * Check URL for license key and auto-activate (FREE METHOD)
+         * التحقق من وجود مفتاح في الرابط وتفعيل تلقائي - الطريقة المجانية
+         */
+        async function checkURLForActivation() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const licenseKey = urlParams.get('key') || urlParams.get('license_key');
+            const cellId = urlParams.get('cell') || urlParams.get('cell_id');
+
+            if (licenseKey && cellId) {
+                console.log('🔑 License key detected in URL, auto-activating...');
+
+                // Get pending cell data from localStorage
+                const pendingData = localStorage.getItem(`pending_cell_${cellId}`);
+
+                if (pendingData) {
+                    const cellData = JSON.parse(pendingData);
+                    selectedCellId = parseInt(cellId);
+                    uploadedImageBase64 = cellData.imageBase64;
+
+                    // Show loading toast
+                    showToast(currentLang === 'ar' ? '⏳ جاري التفعيل...' : '⏳ Activating your cell...');
+
+                    // Activate automatically
+                    await activateCellWithKey(cellData, licenseKey);
+
+                    // Clean up
+                    localStorage.removeItem(`pending_cell_${cellId}`);
+
+                    // Remove parametersfrom URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } else {
+                    console.warn('⚠️ No pending data found for cell:', cellId);
+                }
+            }
+        }
+
+        /**
+         * Activate cell with license key (used by redirect method)
+         * تفعيل الخانة بالمفتاح
+         */
+        async function activateCellWithKey(cellData, licenseKey) {
+            try {
+                // Upload image to Firebase Storage
+                let imageUrl = null;
+                if (uploadedImageBase64 && storage) {
+                    const storageRef = storage.ref();
+                    const imageRef = storageRef.child(`cells/${selectedCellId}_${Date.now()}.jpg`);
+                    const snapshot = await imageRef.putString(uploadedImageBase64, 'data_url');
+                    imageUrl = await snapshot.ref.getDownloadURL();
+                }
+
+                // Save to Firestore as ACTIVE
+                const activeCellData = {
+                    cellId: selectedCellId,
+                    name: cellData.name,
+                    specialDate: cellData.specialDate,
+                    story: cellData.story,
+                    imageUrl: imageUrl,
+                    imageBase64: imageUrl,
+                    status: 'active',
+                    paid: true,
+                    paymentMethod: 'gumroad',
+                    licenseKey: licenseKey,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    likes: 0,
+                    comments: []
+                };
+
+                if (db) {
+                    await db.collection('cells').doc(selectedCellId.toString()).set(activeCellData);
+                }
+
+                // Update local state
+                cellsData[selectedCellId.toString()] = activeCellData;
+                if (imageUrl) loadImageAsync(selectedCellId.toString(), imageUrl);
+                requestRender();
+                loadRecentActivity();
+
+                // Show success modal
+                openClaimModal(selectedCellId);
+                showStep(3);
+                document.getElementById('confirmedCellId').textContent = selectedCellId;
+                launchConfetti();
+                playSound('success');
+
+                console.log('✅ Cell activated successfully via redirect!');
+            } catch (error) {
+                console.error('❌ Error activating cell:', error);
+                showToast(currentLang === 'ar' ? 'خطأ في التفعيل' : 'Activation error');
+            }
+        }
+
+
         function resetForm() {
             document.getElementById('userName').value = '';
             document.getElementById('specialDate').value = '';
@@ -3104,6 +3390,9 @@
         loadRecentActivity();
         showWelcome();
         initParticles();
+
+        // Check URL for auto-activation (redirect method)
+        checkURLForActivation();
     </script>
 </body>
 
