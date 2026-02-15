@@ -1316,77 +1316,107 @@
 
             <div class="p-4 sm:p-6">
                 <!-- Step 1: Your Story (Redesigned) -->
+                <!-- Step 1: Your Story (Perfected) -->
                 <div id="step1" class="step-content">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                         <!-- Name Input -->
-                        <div
-                            class="bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition group focus-within:border-purple-500/50">
-                            <label
-                                class="flex items-center gap-2 text-purple-300 mb-2 text-xs font-bold uppercase tracking-wider">
-                                <span>👤</span>
-                                <span data-en="Name / Company" data-ar="الاسم / الشركة">Name / Company</span>
-                            </label>
-                            <input type="text" id="userName"
-                                class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-base font-medium"
-                                placeholder="Your Name Here">
+                        <div class="group relative">
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
+                            </div>
+                            <div class="relative bg-[#16162a] rounded-2xl p-4 h-full">
+                                <label
+                                    class="flex items-center gap-2 text-purple-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                    <span class="text-lg">👤</span>
+                                    <span data-en="Who are you?" data-ar="من أنت؟">Who are you?</span>
+                                </label>
+                                <input type="text" id="userName"
+                                    class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-lg font-semibold tracking-wide"
+                                    placeholder="Name or Brand">
+                            </div>
                         </div>
 
                         <!-- Date Input -->
-                        <div
-                            class="bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition group focus-within:border-pink-500/50">
-                            <label
-                                class="flex items-center gap-2 text-pink-300 mb-2 text-xs font-bold uppercase tracking-wider">
-                                <span>📅</span>
-                                <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
-                            </label>
-                            <input type="date" id="specialDate"
-                                class="w-full bg-transparent border-none p-0 text-white focus:ring-0 text-base font-medium opacity-90">
+                        <div class="group relative">
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-orange-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
+                            </div>
+                            <div class="relative bg-[#16162a] rounded-2xl p-4 h-full">
+                                <label
+                                    class="flex items-center gap-2 text-pink-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                    <span class="text-lg">📅</span>
+                                    <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
+                                </label>
+                                <input type="date" id="specialDate"
+                                    class="w-full bg-transparent border-none p-0 text-white focus:ring-0 text-lg font-semibold tracking-wide cursor-pointer opacity-90 hover:opacity-100 transition">
+                            </div>
                         </div>
                     </div>
 
                     <!-- Story Input -->
-                    <div
-                        class="bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition mb-4 group focus-within:border-yellow-500/50">
-                        <label
-                            class="flex items-center gap-2 text-yellow-300 mb-2 text-xs font-bold uppercase tracking-wider">
-                            <span>📖</span>
-                            <span data-en="Your Story" data-ar="قصتك">Your Story</span>
-                        </label>
-                        <textarea id="userStory"
-                            class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-sm leading-relaxed resize-none h-20"
-                            placeholder="Write something that will last forever..."></textarea>
+                    <div class="group relative mb-5">
+                        <div
+                            class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
+                        </div>
+                        <div class="relative bg-[#16162a] rounded-2xl p-4">
+                            <label
+                                class="flex items-center gap-2 text-blue-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                <span class="text-lg">✍️</span>
+                                <span data-en="Your Legacy Message" data-ar="رسالتك للتاريخ">Your Legacy Message</span>
+                            </label>
+                            <textarea id="userStory"
+                                class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-sm leading-relaxed resize-none h-24 scrollbar-hide"
+                                placeholder="What do you want the world to know?"></textarea>
+                        </div>
                     </div>
 
-                    <!-- Image Upload -->
-                    <div class="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-dashed border-purple-500/30 rounded-2xl p-4 text-center cursor-pointer hover:border-purple-400 transition relative group overflow-hidden"
-                        onclick="document.getElementById('imageInput').click()">
-                        <input type="file" id="imageInput" accept="image/*" class="hidden"
-                            onchange="handleImageUpload(this)">
-
-                        <div id="uploadPlaceholder" class="py-2">
-                            <div
-                                class="w-12 h-12 mx-auto bg-purple-500/20 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition">
-                                <span class="text-xl">📷</span>
-                            </div>
-                            <p class="text-white font-semibold text-sm" data-en="Upload Photo or Logo"
-                                data-ar="رفع صورة أو شعار">Upload Photo or Logo</p>
-                            <p class="text-xs text-gray-500 mt-1">JPG, PNG, GIF</p>
+                    <!-- Image Upload (Premium Area) -->
+                    <div class="group relative cursor-pointer" onclick="document.getElementById('imageInput').click()">
+                        <div
+                            class="absolute -inset-0.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl opacity-30 group-hover:opacity-100 transition duration-500 blur-[2px]">
                         </div>
+                        <div class="relative bg-[#16162a] rounded-2xl p-1 overflow-hidden">
+                            <div id="uploadZone"
+                                class="bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] p-6 text-center transition-all group-hover:bg-[#1a1a35]">
+                                <input type="file" id="imageInput" accept="image/*" class="hidden"
+                                    onchange="handleImageUpload(this)">
 
-                        <div id="uploadPreview"
-                            class="hidden h-full absolute inset-0 bg-black/50 z-10 flex items-center justify-center backdrop-blur-sm">
-                            <img id="previewImage"
-                                class="w-20 h-20 rounded-full object-cover border-2 border-white shadow-xl">
-                            <div
-                                class="absolute bottom-2 right-2 bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full font-bold">
-                                ✓ Ready</div>
+                                <div id="uploadPlaceholder" class="space-y-3">
+                                    <div
+                                        class="w-16 h-16 mx-auto bg-gradient-to-tr from-green-500/20 to-emerald-500/20 rounded-full flex items-center justify-center border border-green-500/30 group-hover:scale-110 transition duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                                        <span class="text-2xl">📸</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-bold text-sm tracking-wide" data-en="Upload Photo"
+                                            data-ar="ارفع صورتك">Upload Photo</h4>
+                                        <p class="text-green-400/60 text-[10px] mt-1 tracking-wider uppercase">PNG, JPG
+                                            • Max 2MB</p>
+                                    </div>
+                                </div>
+
+                                <div id="uploadPreview" class="hidden relative h-32 flex items-center justify-center">
+                                    <img id="previewImage"
+                                        class="h-28 w-28 rounded-full object-cover border-4 border-[#16162a] shadow-2xl relative z-10">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="w-28 h-28 bg-green-500/20 rounded-full blur-xl animate-pulse"></div>
+                                    </div>
+                                    <div
+                                        class="absolute bottom-0 bg-green-500 text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-lg z-20">
+                                        ✓ <span data-en="UPLOADED" data-ar="تم الرفع">UPLOADED</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <button onclick="goToPayment()"
-                        class="w-full mt-6 glow-btn py-4 rounded-xl font-bold text-base tracking-wide shadow-lg hover:shadow-purple-500/25 transition-all active:scale-[0.98]">
-                        <span data-en="Continue to Payment →" data-ar="التالي: الدفع والتفعيل →">Continue to Payment
-                            →</span>
+                        class="w-full mt-8 group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-200 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-600 transform active:scale-[0.98]">
+                        <span
+                            class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                        <span class="text-lg mr-2">✨</span>
+                        <span class="relative text-lg" data-en="Lock It In" data-ar="تأكيد وحجز الخانة">Lock It
+                            In</span>
+                        <span class="ml-2 transition-transform group-hover:translate-x-1">→</span>
                     </button>
                 </div>
 
