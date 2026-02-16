@@ -2773,7 +2773,11 @@
                                 value: '2.00'
                             },
                             description: `Million Dollar Cell #${selectedCellId}`
-                        }]
+                        }],
+                        application_context: {
+                            shipping_preference: 'NO_SHIPPING',
+                            user_action: 'PAY_NOW'
+                        }
                     });
                 },
                 onApprove: function (data, actions) {
