@@ -1455,7 +1455,7 @@
                                 data-en="One Time • Forever" data-ar="مرة واحدة • للأبد">One Time • Forever</div>
 
                             <a href="https://modasmadi.gumroad.com/l/kfrdjk" target="_blank"
-                                data-gumroad-single-product="true" onclick="savePendingCellData()"
+                                data-gumroad-single-product="true"
                                 class="block w-full group relative px-8 py-6 font-bold text-white transition-all duration-300 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl hover:scale-[1.05] active:scale-[0.98] shadow-[0_15px_35px_rgba(139,92,246,0.4)] hover:shadow-[0_20px_45px_rgba(139,92,246,0.6)] overflow-hidden">
                                 <span class="relative flex items-center justify-center gap-3 text-xl">
                                     <span data-en="Pay & Claim Forever" data-ar="ادفع واحجز للأبد الآن">Pay & Claim
@@ -2761,13 +2761,71 @@
         function goToPayment() {
             const name = document.getElementById('userName').value.trim();
             const story = document.getElementById('userStory').value.trim();
+            const date = document.getElementById('specialDate').value;
 
             if (!name) { showToast(currentLang === 'ar' ? 'أدخل اسمك' : 'Please enter your name'); return; }
             if (!story) { showToast(currentLang === 'ar' ? 'شارك قصتك' : 'Please share your story'); return; }
             if (!uploadedImageBase64) { showToast(currentLang === 'ar' ? 'ارفع صورة' : 'Please upload an image'); return; }
 
+            // Save data for auto-activation
+            savePendingCellData(name, story, date);
+
             showStep(2);
         }
+
+        /**
+         * Save pending cell data to localStorage for auto-activation
+         */
+        function savePendingCellData(name, story, date) {
+            const pendingData = {
+                name: name,
+                story: story,
+                specialDate: date || '',
+                imageBase64: uploadedImageBase64,
+                timestamp: Date.now()
+            };
+            localStorage.setItem(`pending_cell_${selectedCellId}`, JSON.stringify(pendingData));
+            console.log(`💾 Saved pending data for cell ${selectedCellId}`);
+        }
+
+        /**
+         * LISTEN FOR GUMROAD OVERLAY EVENTS (THE SIMPLEST SOLUTION)
+         * This detects when a sale is completed in the popup automatically.
+         */
+        window.addEventListener('message', async (event) => {
+            // Gumroad sends messages to the parent window
+            if (event.data && event.data.post_message_name === 'sale') {
+                console.log('🎉 Gumroad Sale Detected via Overlay event!');
+
+                const licenseKey = event.data.license_key || 'OVERLAY-SUCCESS';
+
+                // Get the pending data
+                const pendingData = localStorage.getItem(`pending_cell_${selectedCellId}`);
+                if (pendingData) {
+                    const cellData = JSON.parse(pendingData);
+
+                    // Show loading in the modal immediately
+                    const step2 = document.getElementById('step2');
+                    if (step2) {
+                        step2.innerHTML = `
+                            <div class="text-center py-12">
+                                <div class="loading-spinner mb-6"></div>
+                                <h3 class="text-2xl font-bold text-white mb-2">${currentLang === 'ar' ? 'تم الدفع! جاري التفعيل...' : 'Paid! Activating your cell...'}</h3>
+                                <p class="text-gray-400">${currentLang === 'ar' ? 'ثواني وتظهر خانتك للجميع' : 'Just a few seconds and you will be live...'}</p>
+                            </div>
+                        `;
+                    }
+
+                    // Activate
+                    await activateCellWithKey(cellData, licenseKey);
+
+                    // Cleanup
+                    localStorage.removeItem(`pending_cell_${selectedCellId}`);
+
+                    console.log('✅ Auto-activation complete via Overlay event!');
+                }
+            }
+        });
 
         function goBack() { showStep(1); }
 
