@@ -1471,6 +1471,32 @@
                                 <span class="text-xl" title="Mastercard">💳</span>
                                 <span class="text-xl" title="Secure">🔒</span>
                             </div>
+
+                            <!-- Fallback Manual Activation -->
+                            <div class="mt-8 pt-6 border-t border-white/5">
+                                <button
+                                    onclick="document.getElementById('manualKeyFallback').classList.toggle('hidden')"
+                                    class="text-xs text-purple-400 hover:text-purple-300 transition font-medium">
+                                    <span data-en="Already paid? Enter key manually"
+                                        data-ar="هل دفعت؟ أدخل المفتاح يدوياً">Already paid? Enter key manually</span>
+                                </button>
+
+                                <div id="manualKeyFallback" class="hidden mt-4 animate-fadeIn">
+                                    <p class="text-[10px] text-gray-500 mb-2"
+                                        data-en="Paste the license key from your email/receipt"
+                                        data-ar="أدخل مفتاح الترخيص الموجود في إيميلك أو الوصل">Paste the license key
+                                        from your email/receipt</p>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="fallbackKeyInput"
+                                            class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-purple-500 outline-none"
+                                            placeholder="XXXX-XXXX-...">
+                                        <button onclick="activateWithFallbackKey()"
+                                            class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition">
+                                            <span data-en="Activate" data-ar="تفعيل">Activate</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -2826,6 +2852,34 @@
                 }
             }
         });
+
+        /**
+         * Manual Fallback Activation Logic
+         */
+        async function activateWithFallbackKey() {
+            const key = document.getElementById('fallbackKeyInput').value.trim();
+            if (!key) {
+                showToast(currentLang === 'ar' ? 'يرجى إدخال المفتاح' : 'Please enter the key');
+                return;
+            }
+
+            const pendingData = localStorage.getItem(`pending_cell_${selectedCellId}`);
+            if (!pendingData) {
+                showToast(currentLang === 'ar' ? 'فترة الجلسة انتهت، املأ البيانات مجدداً' : 'Session expired, please fill the data again');
+                showStep(1);
+                return;
+            }
+
+            const cellData = JSON.parse(pendingData);
+
+            // Show loading
+            showToast(currentLang === 'ar' ? '⏳ جاري التحقق...' : '⏳ Verifying...');
+
+            await activateCellWithKey(cellData, key);
+
+            // Cleanup
+            localStorage.removeItem(`pending_cell_${selectedCellId}`);
+        }
 
         function goBack() { showStep(1); }
 
