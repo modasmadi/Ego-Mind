@@ -17,8 +17,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
-    <!-- Gumroad Overlay Script (Smooth Payment) -->
-    <script src="https://gumroad.com/js/gumroad.js"></script>
+    <!-- PayPal SDK -->
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=AaukcvHIwLUXFIfjiSD-65xXRRAuBl95FBrPuN2jWr_xGhG4oV0p14Lb6SMj2mdJNGqWOZWCyByYnRJ8&currency=USD"></script>
 
     <style>
         :root {
@@ -1454,51 +1455,11 @@
                             <div class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-6"
                                 data-en="One Time • Forever" data-ar="مرة واحدة • للأبد">One Time • Forever</div>
 
-                            <a href="https://modasmadi.gumroad.com/l/kfrdjk" target="_blank"
-                                data-gumroad-single-product="true"
-                                class="block w-full group relative px-8 py-6 font-bold text-white transition-all duration-300 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl hover:scale-[1.05] active:scale-[0.98] shadow-[0_15px_35px_rgba(139,92,246,0.4)] hover:shadow-[0_20px_45px_rgba(139,92,246,0.6)] overflow-hidden">
-                                <span class="relative flex items-center justify-center gap-3 text-xl">
-                                    <span data-en="Pay & Claim Forever" data-ar="ادفع واحجز للأبد الآن">Pay & Claim
-                                        Forever</span>
-                                    <span class="text-2xl animate-bounce">🚀</span>
-                                </span>
-                            </a>
-
-                            <div
-                                class="flex justify-center gap-4 mt-4 opacity-50 grayscale hover:grayscale-0 transition duration-500">
-                                <span class="text-xl" title="Apple Pay">🍎</span>
-                                <span class="text-xl" title="Visa">💳</span>
-                                <span class="text-xl" title="Mastercard">💳</span>
-                                <span class="text-xl" title="Secure">🔒</span>
-                            </div>
-
-                            <!-- Fallback Manual Activation -->
-                            <div class="mt-8 pt-6 border-t border-white/5">
-                                <button
-                                    onclick="document.getElementById('manualKeyFallback').classList.toggle('hidden')"
-                                    class="text-xs text-purple-400 hover:text-purple-300 transition font-medium">
-                                    <span data-en="Already paid? Enter key manually"
-                                        data-ar="هل دفعت؟ أدخل المفتاح يدوياً">Already paid? Enter key manually</span>
-                                </button>
-
-                                <div id="manualKeyFallback" class="hidden mt-4 animate-fadeIn">
-                                    <p class="text-[10px] text-gray-500 mb-2"
-                                        data-en="Paste the license key from your email/receipt"
-                                        data-ar="أدخل مفتاح الترخيص الموجود في إيميلك أو الوصل">Paste the license key
-                                        from your email/receipt</p>
-                                    <div class="flex gap-2">
-                                        <input type="text" id="fallbackKeyInput"
-                                            class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-purple-500 outline-none"
-                                            placeholder="XXXX-XXXX-...">
-                                        <button onclick="activateWithFallbackKey()"
-                                            class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition">
-                                            <span data-en="Activate" data-ar="تفعيل">Activate</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- PayPal Button Container -->
+                            <div id="paypal-button-container" class="w-full mt-2 relative z-10"></div>
                         </div>
                     </div>
+
 
                     <div class="mt-8 text-center">
                         <button type="button" onclick="goBack()"
@@ -2797,6 +2758,56 @@
             savePendingCellData(name, story, date);
 
             showStep(2);
+            renderPayPalButtons();
+        }
+
+        let paypalRendered = false;
+        function renderPayPalButtons() {
+            if (paypalRendered) return;
+
+            paypal.Buttons({
+                createOrder: function (data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: '3.00'
+                            },
+                            description: `Million Dollar Cell #${selectedCellId}`
+                        }]
+                    });
+                },
+                onApprove: function (data, actions) {
+                    return actions.order.capture().then(async function (details) {
+                        console.log('✅ PayPal Payment Successful:', details);
+
+                        // Show loading state
+                        const step2 = document.getElementById('step2');
+                        if (step2) {
+                            step2.innerHTML = `
+                                <div class="text-center py-12">
+                                    <div class="loading-spinner mb-6"></div>
+                                    <h3 class="text-2xl font-bold text-white mb-2">${currentLang === 'ar' ? 'تم الدفع! جاري التفعيل...' : 'Paid! Activating your cell...'}</h3>
+                                    <p class="text-gray-400">${currentLang === 'ar' ? 'ثواني وتظهر خانتك للجميع' : 'Just a few seconds and you will be live...'}</p>
+                                </div>
+                            `;
+                        }
+
+                        // Activation
+                        const pendingData = localStorage.getItem(`pending_cell_${selectedCellId}`);
+                        if (pendingData) {
+                            const cellData = JSON.parse(pendingData);
+                            await activateCellWithKey(cellData, details.id);
+                            localStorage.removeItem(`pending_cell_${selectedCellId}`);
+                        }
+                    });
+                },
+                onError: function (err) {
+                    console.error('❌ PayPal Error:', err);
+                    showToast(currentLang === 'ar' ? 'حدث خطأ في الدفع' : 'Payment error occurred');
+                }
+            }).render('#paypal-button-container');
+
+            paypalRendered = true;
         }
 
         /**
@@ -2814,44 +2825,7 @@
             console.log(`💾 Saved pending data for cell ${selectedCellId}`);
         }
 
-        /**
-         * LISTEN FOR GUMROAD OVERLAY EVENTS (THE SIMPLEST SOLUTION)
-         * This detects when a sale is completed in the popup automatically.
-         */
-        window.addEventListener('message', async (event) => {
-            // Gumroad sends messages to the parent window
-            if (event.data && event.data.post_message_name === 'sale') {
-                console.log('🎉 Gumroad Sale Detected via Overlay event!');
 
-                const licenseKey = event.data.license_key || 'OVERLAY-SUCCESS';
-
-                // Get the pending data
-                const pendingData = localStorage.getItem(`pending_cell_${selectedCellId}`);
-                if (pendingData) {
-                    const cellData = JSON.parse(pendingData);
-
-                    // Show loading in the modal immediately
-                    const step2 = document.getElementById('step2');
-                    if (step2) {
-                        step2.innerHTML = `
-                            <div class="text-center py-12">
-                                <div class="loading-spinner mb-6"></div>
-                                <h3 class="text-2xl font-bold text-white mb-2">${currentLang === 'ar' ? 'تم الدفع! جاري التفعيل...' : 'Paid! Activating your cell...'}</h3>
-                                <p class="text-gray-400">${currentLang === 'ar' ? 'ثواني وتظهر خانتك للجميع' : 'Just a few seconds and you will be live...'}</p>
-                            </div>
-                        `;
-                    }
-
-                    // Activate
-                    await activateCellWithKey(cellData, licenseKey);
-
-                    // Cleanup
-                    localStorage.removeItem(`pending_cell_${selectedCellId}`);
-
-                    console.log('✅ Auto-activation complete via Overlay event!');
-                }
-            }
-        });
 
         /**
          * Manual Fallback Activation Logic
