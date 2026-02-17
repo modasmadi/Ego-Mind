@@ -1322,6 +1322,56 @@
                 <!-- Step 1: Your Story (Redesigned) -->
                 <!-- Step 1: Your Story (Perfected) -->
                 <div id="step1" class="step-content">
+                    <!-- Live Preview Title -->
+                    <div class="flex items-center gap-2 mb-4 px-1">
+                        <span class="text-lg">👀</span>
+                        <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-purple-400/80"
+                            data-en="Live Preview" data-ar="معاينة مباشرة">Live Preview</h4>
+                    </div>
+
+                    <!-- Live Preview Box -->
+                    <div
+                        class="glass-card p-4 mb-6 border-dashed border-purple-500/30 bg-purple-500/5 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-50">
+                        </div>
+
+                        <div class="relative z-10 flex items-center gap-5">
+                            <!-- Grid Cell Preview -->
+                            <div class="flex-shrink-0">
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest mb-2 text-center"
+                                    data-en="On Grid" data-ar="على الشبكة">On Grid</p>
+                                <div id="previewGridCell"
+                                    class="w-12 h-12 rounded-lg bg-[#1e1e3f] border-2 border-purple-500/30 flex items-center justify-center shadow-lg transform transition-transform duration-300 group-hover:scale-110 overflow-hidden">
+                                    <span class="text-xl opacity-20">🎯</span>
+                                </div>
+                            </div>
+
+                            <!-- Tooltip Preview -->
+                            <div class="flex-grow">
+                                <p class="text-[9px] text-gray-500 uppercase tracking-widest mb-2"
+                                    data-en="Tooltip View" data-ar="شكل التفاصيل">Tooltip View</p>
+                                <div class="bg-[#0f0f1a] border border-white/10 rounded-xl p-3 shadow-2xl">
+                                    <div class="flex items-center gap-3">
+                                        <div id="previewTooltipAvatar"
+                                            class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex-shrink-0">
+                                        </div>
+                                        <div class="overflow-hidden">
+                                            <div id="previewName" class="text-xs font-bold text-white truncate"
+                                                data-en="Your Name" data-ar="اسمك هنا">Your Name</div>
+                                            <div id="previewDate"
+                                                class="text-[9px] text-pink-400 uppercase font-bold mt-0.5">📅
+                                                2026-02-17</div>
+                                        </div>
+                                    </div>
+                                    <div id="previewStory" class="text-[10px] text-gray-400 mt-2 line-clamp-1 italic"
+                                        data-en="Your amazing story will appear here..."
+                                        data-ar="قصتك الرائعة ستظهر هنا...">"Your amazing story will appear here..."
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                         <!-- Name Input -->
                         <div class="group relative">
@@ -2375,6 +2425,7 @@
             document.body.style.overflow = 'hidden';
             showStep(1);
             resetForm();
+            updateLivePreview(); // Initialize preview
         }
 
         function closeClaimModal() {
@@ -2743,6 +2794,7 @@
             document.getElementById('uploadPreview').classList.add('hidden');
             document.getElementById('uploadZone').classList.remove('has-image');
             uploadedImageBase64 = null;
+            updateLivePreview(); // Clear preview
         }
 
         function goToPayment() {
@@ -2995,8 +3047,65 @@
             document.getElementById('uploadPlaceholder').classList.add('hidden');
             document.getElementById('uploadPreview').classList.remove('hidden');
             document.getElementById('uploadZone').classList.add('has-image');
+
+            // Update Live Preview Cell
+            const previewCell = document.getElementById('previewGridCell');
+            previewCell.innerHTML = `<img src="${src}" class="w-full h-full object-cover">`;
+            previewCell.classList.remove('border-dashed');
+            previewCell.classList.add('border-solid', 'border-purple-500');
+
+            // Update Tooltip Avatar
+            document.getElementById('previewTooltipAvatar').style.background = `url(${src})`;
+            document.getElementById('previewTooltipAvatar').style.backgroundSize = 'cover';
+
             showToast(currentLang === 'ar' ? 'تم رفع الصورة ✓' : 'Image uploaded! ✓');
+            updateLivePreview();
         }
+
+        function updateLivePreview() {
+            const name = document.getElementById('userName').value.trim();
+            const story = document.getElementById('userStory').value.trim();
+            const date = document.getElementById('specialDate').value;
+
+            // Name
+            const previewName = document.getElementById('previewName');
+            previewName.textContent = name || (currentLang === 'ar' ? 'اسمك هنا' : 'Your Name');
+
+            // Date
+            const previewDate = document.getElementById('previewDate');
+            if (date) {
+                previewDate.textContent = `📅 ${date}`;
+                previewDate.classList.remove('hidden');
+            } else {
+                previewDate.classList.add('hidden');
+            }
+
+            // Story
+            const previewStory = document.getElementById('previewStory');
+            const defaultText = currentLang === 'ar' ? 'قصتك الرائعة ستظهر هنا...' : 'Your amazing story will appear here...';
+            previewStory.textContent = story ? `"${story}"` : `"${defaultText}"`;
+
+            // Avatar fallback if no image
+            if (!uploadedImageBase64) {
+                const avatar = document.getElementById('previewTooltipAvatar');
+                avatar.style.background = 'linear-gradient(135deg, #8b5cf6, #ec4899)';
+
+                const previewCell = document.getElementById('previewGridCell');
+                previewCell.innerHTML = '<span class="text-xl opacity-20">🎯</span>';
+                previewCell.classList.add('border-purple-500/30');
+            }
+        }
+
+        // Attach listeners for live preview
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = ['userName', 'userStory', 'specialDate'];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', updateLivePreview);
+                }
+            });
+        });
 
         // Submit Cell
         async function submitCell(payerName = null, paymentMethod = 'manual', licenseKey = null) {
