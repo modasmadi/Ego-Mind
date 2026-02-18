@@ -811,13 +811,17 @@
                     <div class="text-xs sm:text-sm text-purple-300" data-en="Stories Shared" data-ar="قصة مشاركة">
                         Stories Shared</div>
                 </div>
-                <div class="stat-card min-w-[130px]">
-                    <div class="text-3xl sm:text-4xl font-black text-green-400" id="availableCount">1,000,000</div>
-                    <div class="text-xs sm:text-sm text-gray-400" data-en="Available" data-ar="متاحة">Available</div>
+                <div class="stat-card min-w-[130px] border-green-500/20 bg-green-500/5">
+                    <div class="text-3xl sm:text-4xl font-black text-green-400 flex items-center justify-center gap-1">
+                        <span>$</span><span id="totalInvestment">0.00</span>
+                    </div>
+                    <div class="text-xs sm:text-sm text-green-300/70 font-bold uppercase tracking-tighter"
+                        data-en="Total Investment" data-ar="إجمالي الاستثمار">Total Investment</div>
                 </div>
-                <div class="stat-card min-w-[130px]">
+                <!-- Available (Hidden on small screens to make room if needed) -->
+                <div class="stat-card min-w-[130px] hidden sm:block">
                     <div class="text-3xl sm:text-4xl font-black text-white">$2.00</div>
-                    <div class="text-xs sm:text-sm text-gray-400" data-en="Per Cell Forever" data-ar="للخانة للأبد">Per
+                    <div class="text-xs sm:text-sm text-gray-400" data-en="One Cell Forever" data-ar="للخانة للأبد">One
                         Cell Forever</div>
                 </div>
             </div>
@@ -1279,8 +1283,8 @@
                     <span class="text-lg font-bold text-white">Million Logo</span>
                 </div>
                 <div class="text-gray-500 text-sm">
-                    <span data-en="An idea by Mahmoud AL Smadi 🇯🇴" data-ar="فكرة Mahmoud AL Smadi 🇯🇴">An idea by
-                        Mahmoud AL Smadi 🇯🇴</span>
+                    <span data-en="An idea by SMADI 🇯🇴" data-ar="فكرة SMADI 🇯🇴">An idea by
+                        SMADI 🇯🇴</span>
                 </div>
                 <div class="flex gap-4">
                     <a href="https://wa.me/962775925599" target="_blank"
@@ -1982,8 +1986,13 @@
 
         function updateStats() {
             const soldCount = Object.values(cellsData).filter(c => c.status === 'active').length;
+            const currentTotal = parseFloat(document.getElementById('totalInvestment').textContent) || 0;
+            const targetTotal = soldCount * 2.00;
+
             document.getElementById('soldCount').textContent = soldCount.toLocaleString();
-            document.getElementById('availableCount').textContent = (TOTAL_CELLS - soldCount).toLocaleString();
+
+            // Animate Total Investment
+            animateValue("totalInvestment", currentTotal, targetTotal, 1500);
 
             // Update progress bar
             const percent = (soldCount / TOTAL_CELLS) * 100;
@@ -2000,6 +2009,23 @@
             if (soldCountSmall) {
                 soldCountSmall.textContent = soldCount.toLocaleString();
             }
+        }
+
+        function animateValue(id, start, end, duration) {
+            if (start === end) return;
+            const obj = document.getElementById(id);
+            const range = end - start;
+            let current = start;
+            const increment = end > start ? 0.01 : -0.01;
+            const stepTime = Math.abs(Math.floor(duration / (range * 100)));
+            const timer = setInterval(() => {
+                current += increment;
+                obj.textContent = current.toFixed(2);
+                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                    obj.textContent = end.toFixed(2);
+                    clearInterval(timer);
+                }
+            }, Math.max(stepTime, 10));
         }
 
         // Mouse handlers
