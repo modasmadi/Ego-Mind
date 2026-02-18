@@ -64,6 +64,10 @@
             overflow-x: hidden;
             width: 100vw;
             position: relative;
+            /* Fix mobile dimensions */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         body[dir="rtl"] {
@@ -738,8 +742,45 @@
         @media (max-width: 640px) {
             .hero-bg {
                 min-height: auto;
-                padding-top: 80px;
-                padding-bottom: 40px;
+                padding-top: 100px;
+                padding-bottom: 30px;
+            }
+
+            nav {
+                height: 70px !important;
+                padding: 0 !important;
+            }
+
+            nav .max-w-7xl {
+                padding: 0 12px !important;
+                height: 100%;
+            }
+
+            nav button {
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+                border-radius: 10px !important;
+                height: 40px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 5px !important;
+            }
+
+            nav #langIcon {
+                font-size: 16px !important;
+            }
+
+            nav #langText {
+                font-size: 12px !important;
+                font-weight: 800 !important;
+            }
+
+            nav .w-10.h-10 {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 14px !important;
+                border-radius: 8px !important;
             }
 
             .stat-card {
@@ -1328,47 +1369,18 @@
                     museum's expansion.</p>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-10">
-                <!-- Leaderboard Card -->
+            <div class="max-w-4xl mx-auto">
+                <!-- Leaderboard Card (Now centered and elegant) -->
                 <div class="cyber-card p-8">
-                    <h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+                    <h3 class="text-xl font-bold mb-8 flex items-center justify-center gap-3">
                         🏆 <span data-en="Top Regions" data-ar="أكثر المناطق نشاطاً">Top Regions</span>
                     </h3>
-                    <div id="leaderboardList" class="space-y-6">
+                    <div id="leaderboardList" class="space-y-6 max-w-2xl mx-auto">
                         <!-- Loading State -->
                         <div class="animate-pulse space-y-4">
                             <div class="h-4 bg-white/5 rounded w-3/4"></div>
                             <div class="h-4 bg-white/5 rounded w-1/2"></div>
                             <div class="h-4 bg-white/5 rounded w-2/3"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- AR Promo Card -->
-                <div class="cyber-card p-8 relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-transparent opacity-50"></div>
-                    <div class="relative z-10">
-                        <div
-                            class="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition duration-500">
-                            📱
-                        </div>
-                        <h3 class="text-2xl font-black text-white mb-4" data-en="Augmented Reality (AR)"
-                            data-ar="الواقع المعزز (AR)">Augmented Reality (AR)</h3>
-                        <p class="text-gray-400 mb-8 max-w-md"
-                            data-en="Scan the QR or click below to see the Million Logo Grid in your physical space. A museum on your desk!"
-                            data-ar="امسح الرمز أو اضغط بالأسفل لترى شبكة المليون في مساحتك الخاصة. متحف على مكتبك!">
-                            Scan the QR or click below to see the Million Logo Grid in your physical space. A museum on
-                            your desk!</p>
-
-                        <div class="flex items-center gap-8">
-                            <div
-                                class="p-3 bg-white rounded-xl shadow-2xl scale-100 group-hover:scale-105 transition duration-500">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://modasmadi.github.io/Ego-Mind/ar-viewer.html"
-                                    alt="AR QR Code" class="w-24 h-24">
-                            </div>
-                            <button onclick="openAR()" class="glow-btn px-6 py-3 rounded-xl font-bold text-sm">
-                                🚀 <span data-en="Launch AR" data-ar="ابدأ التجربة">Launch AR</span>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -3974,11 +3986,6 @@
             }).join('');
         }
 
-        function openAR() {
-            showToast(currentLang === 'ar' ? 'جاري تجهيز تجربة الواقع المعزز...' : 'Preparing AR Experience...');
-            // In a real scenario, this would link to a .reality or .glb file for Safari/Chrome
-            window.location.href = "https://modasmadi.github.io/Ego-Mind/ar-viewer";
-        }
 
         async function loadFoundingWall() {
             if (!db) return;
