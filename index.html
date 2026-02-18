@@ -785,8 +785,9 @@
             }
 
             .stat-card {
-                padding: 10px 15px !important;
-                margin-bottom: 8px !important;
+                padding: 8px 12px !important;
+                margin-bottom: 6px !important;
+                min-height: auto !important;
             }
 
             .stat-card .text-3xl {
@@ -829,6 +830,12 @@
 
             .glass-card {
                 border-radius: 0.75rem;
+            }
+
+            .modal-content-scroll {
+                max-height: 60vh;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
             }
 
             .modal-overlay {
@@ -1013,25 +1020,25 @@
             </div>
 
             <!-- أمثلة على الاستخدامات -->
-            <div class="flex flex-wrap justify-center gap-3 mb-10 max-w-2xl mx-auto">
+            <div class="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-2 sm:gap-3 mb-8 max-w-2xl mx-auto">
                 <span
-                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
-                    💼 <span data-en="Your Company Logo" data-ar="شعار شركتك">Your Company Logo</span>
+                    class="bg-[#0f0f24] border border-white/10 px-3 py-2 rounded-xl text-[10px] sm:text-sm text-gray-300 shadow-lg flex items-center justify-center gap-2">
+                    💼 <span data-en="Company Logo" data-ar="شعار شركتك">Company Logo</span>
                 </span>
                 <span
-                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
+                    class="bg-[#0f0f24] border border-white/10 px-3 py-2 rounded-xl text-[10px] sm:text-sm text-gray-300 shadow-lg flex items-center justify-center gap-2">
                     👤 <span data-en="Your Name" data-ar="اسمك">Your Name</span>
                 </span>
                 <span
-                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
-                    ❤️ <span data-en="Memory of Someone" data-ar="ذكرى شخص">Memory of Someone</span>
+                    class="bg-[#0f0f24] border border-white/10 px-3 py-2 rounded-xl text-[10px] sm:text-sm text-gray-300 shadow-lg flex items-center justify-center gap-2">
+                    ❤️ <span data-en="Memory" data-ar="ذكرى شخص">Memory</span>
                 </span>
                 <span
-                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
+                    class="bg-[#0f0f24] border border-white/10 px-3 py-2 rounded-xl text-[10px] sm:text-sm text-gray-300 shadow-lg flex items-center justify-center gap-2">
                     🎂 <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
                 </span>
                 <span
-                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
+                    class="bg-[#0f0f24] border border-white/10 px-3 py-2 rounded-xl text-[10px] sm:text-sm text-gray-300 shadow-lg flex items-center justify-center gap-2 col-span-2 sm:col-auto">
                     ⭐ <span data-en="Digital Legacy" data-ar="أثر رقمي دائم">Digital Legacy</span>
                 </span>
             </div>
@@ -1625,8 +1632,8 @@
     <div id="claimModal"
         class="fixed inset-0 modal-overlay z-50 hidden items-center justify-center p-2 sm:p-4 overflow-y-auto">
         <div
-            class="bg-[#0f0f24] border border-purple-500/30 w-full max-w-md sm:max-w-lg relative my-4 sm:my-8 rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.8),0_0_20px_rgba(139,92,246,0.1)]">
-            <div class="p-4 sm:p-6 border-b border-white/5">
+            class="bg-[#0f0f24] border border-purple-500/30 w-full max-w-md sm:max-w-lg relative rounded-2xl shadow-[0_30px_100px_rgba(0,0,0,0.8),0_0_20px_rgba(139,92,246,0.1)] overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
+            <div class="p-3 sm:p-6 border-b border-white/5 flex-shrink-0 relative">
                 <button onclick="closeClaimModal()"
                     class="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 bg-black/40 hover:bg-white/10 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition border border-white/5">✕</button>
 
@@ -1649,314 +1656,331 @@
                 </div>
             </div>
 
-            <div class="p-4 sm:p-6">
-                <!-- Step 1: Your Story (Redesigned) -->
-                <!-- Step 1: Your Story (Perfected) -->
-                <div id="step1" class="step-content">
-                    <!-- Live Preview Title -->
-                    <div class="flex items-center gap-2 mb-4 px-1">
-                        <span class="text-lg">👀</span>
-                        <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-purple-400/80"
-                            data-en="Live Preview" data-ar="معاينة مباشرة">Live Preview</h4>
-                    </div>
-
-                    <!-- Enhanced Live Preview Box -->
-                    <div
-                        class="bg-[#050510] border border-purple-500/30 rounded-2xl mb-6 relative overflow-hidden group p-5 shadow-inner">
-                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-30">
+            <div class="flex-1 overflow-hidden flex flex-col">
+                <div class="flex-1 overflow-y-auto p-4 sm:p-6 scrollbar-hide modal-content-scroll">
+                    <!-- Step 1: Your Story (Redesigned) -->
+                    <!-- Step 1: Your Story (Perfected) -->
+                    <div id="step1" class="step-content">
+                        <!-- Live Preview Title -->
+                        <div class="flex items-center gap-2 mb-4 px-1">
+                            <span class="text-lg">👀</span>
+                            <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-purple-400/80"
+                                data-en="Live Preview" data-ar="معاينة مباشرة">Live Preview</h4>
                         </div>
 
-                        <div class="relative z-10 text-center">
-                            <!-- Mini Grid Simulation -->
-                            <p class="text-[10px] text-purple-300/60 uppercase font-black tracking-[0.2em] mb-3"
-                                data-en="Your spot in the crowd" data-ar="موقعك بين الجميع">Your spot in the crowd</p>
-                            <div class="flex justify-center mb-8">
-                                <div
-                                    class="grid grid-cols-3 gap-1.5 p-2 bg-[#0f0f1a] rounded-xl border border-white/5 shadow-2xl scale-110 sm:scale-125 transition-transform duration-500 hover:scale-[1.3]">
-                                    <!-- Row 1 -->
-                                    <div class="w-8 h-8 rounded-sm bg-purple-500/10 border border-white/5 opacity-40">
-                                    </div>
-                                    <div class="w-8 h-8 rounded-sm bg-pink-500/10 border border-white/5 opacity-30">
-                                    </div>
-                                    <div class="w-8 h-8 rounded-sm bg-blue-500/10 border border-white/5 opacity-40">
-                                    </div>
-                                    <!-- Row 2 -->
-                                    <div class="w-8 h-8 rounded-sm bg-[#1a1a35] border border-white/5 opacity-50">
-                                    </div>
-                                    <!-- USER CELL (CENTER) -->
-                                    <div id="previewGridCell"
-                                        class="w-8 h-8 rounded-sm bg-gradient-to-br from-purple-600 to-pink-600 shadow-[0_0_15px_rgba(139,92,246,0.6)] border-2 border-white ring-2 ring-purple-600/50 flex items-center justify-center overflow-hidden transition-all duration-300">
-                                        <span class="text-white text-xs font-bold">🎯</span>
-                                    </div>
-                                    <div class="w-8 h-8 rounded-sm bg-[#12122b] border border-white/5 opacity-30">
-                                    </div>
-                                    <!-- Row 3 -->
-                                    <div class="w-8 h-8 rounded-sm bg-[#241a35] border border-white/5 opacity-40">
-                                    </div>
-                                    <div class="w-8 h-8 rounded-sm bg-[#1a1a35] border border-white/5 opacity-30">
-                                    </div>
-                                    <div class="w-8 h-8 rounded-sm bg-[#12122b] border border-white/5 opacity-50">
-                                    </div>
-                                </div>
+                        <!-- Enhanced Live Preview Box -->
+                        <div
+                            class="bg-[#050510] border border-purple-500/30 rounded-2xl mb-4 relative overflow-hidden group p-3 sm:p-5 shadow-inner">
+                            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-30">
                             </div>
 
-                            <!-- High-Fidelity Tooltip Preview -->
-                            <div class="max-w-[240px] mx-auto transform hover:scale-[1.02] transition-all duration-300">
-                                <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-3 text-center"
-                                    data-en="How others will see it" data-ar="كيف سيراك الآخرون">How others will see it
+                            <div class="relative z-10 text-center">
+                                <!-- Mini Grid Simulation -->
+                                <p class="text-[10px] text-purple-300/60 uppercase font-black tracking-[0.2em] mb-3"
+                                    data-en="Your spot in the crowd" data-ar="موقعك بين الجميع">Your spot in the crowd
                                 </p>
-                                <div
-                                    class="relative p-4 rounded-2xl bg-[#16162a]/95 border border-purple-500/40 shadow-[0_15px_50px_rgba(0,0,0,0.6),0_0_20px_rgba(139,92,246,0.2)] backdrop-blur-xl">
-                                    <div id="previewTooltipAvatar"
-                                        class="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 mx-auto mb-3 border-2 border-white/10 shadow-lg flex items-center justify-center overflow-hidden">
-                                        <span class="text-2xl opacity-50">✨</span>
-                                    </div>
-                                    <div id="previewName"
-                                        class="text-sm font-black text-white text-center mb-1 truncate flex items-center justify-center gap-2">
-                                        <span id="previewFlag">🇯🇴</span>
-                                        <span id="previewNameText">Your Name</span>
-                                    </div>
+                                <div class="flex justify-center mb-4 sm:mb-8">
                                     <div
-                                        class="text-[9px] text-purple-400 font-bold text-center mb-2 tracking-tighter uppercase">
-                                        Cell #<span id="previewCellIdDisplay">0</span></div>
-                                    <div id="previewDateWrapper"
-                                        class="flex items-center justify-center gap-1.5 mb-3 text-pink-400">
-                                        <span class="text-[10px]">📅</span>
-                                        <span id="previewDate" class="text-[10px] font-bold">2026-02-18</span>
-                                    </div>
-                                    <div class="border-t border-white/10 pt-3 text-center">
-                                        <div id="previewStory"
-                                            class="text-[11px] text-gray-400 leading-relaxed italic line-clamp-2"
-                                            data-en="Your amazing story will appear here..."
-                                            data-ar="قصتك الرائعة ستظهر هنا...">"Your amazing story will appear here..."
+                                        class="grid grid-cols-3 gap-1 p-1 sm:p-2 bg-[#0f0f1a] rounded-lg border border-white/5 shadow-2xl scale-[0.85] sm:scale-125 transition-transform duration-500">
+                                        <!-- Row 1 -->
+                                        <div
+                                            class="w-8 h-8 rounded-sm bg-purple-500/10 border border-white/5 opacity-40">
+                                        </div>
+                                        <div class="w-8 h-8 rounded-sm bg-pink-500/10 border border-white/5 opacity-30">
+                                        </div>
+                                        <div class="w-8 h-8 rounded-sm bg-blue-500/10 border border-white/5 opacity-40">
+                                        </div>
+                                        <!-- Row 2 -->
+                                        <div class="w-8 h-8 rounded-sm bg-[#1a1a35] border border-white/5 opacity-50">
+                                        </div>
+                                        <!-- USER CELL (CENTER) -->
+                                        <div id="previewGridCell"
+                                            class="w-8 h-8 rounded-sm bg-gradient-to-br from-purple-600 to-pink-600 shadow-[0_0_15px_rgba(139,92,246,0.6)] border-2 border-white ring-2 ring-purple-600/50 flex items-center justify-center overflow-hidden transition-all duration-300">
+                                            <span class="text-white text-xs font-bold">🎯</span>
+                                        </div>
+                                        <div class="w-8 h-8 rounded-sm bg-[#12122b] border border-white/5 opacity-30">
+                                        </div>
+                                        <!-- Row 3 -->
+                                        <div class="w-8 h-8 rounded-sm bg-[#241a35] border border-white/5 opacity-40">
+                                        </div>
+                                        <div class="w-8 h-8 rounded-sm bg-[#1a1a35] border border-white/5 opacity-30">
+                                        </div>
+                                        <div class="w-8 h-8 rounded-sm bg-[#12122b] border border-white/5 opacity-50">
                                         </div>
                                     </div>
-                                    <div class="flex justify-center gap-4 mt-3 pt-3 border-t border-white/5 opacity-60">
-                                        <div class="flex items-center gap-1 text-[10px] text-pink-400">❤️ 0</div>
-                                        <div class="flex items-center gap-1 text-[10px] text-blue-400">💬 0</div>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-                        <!-- Name Input -->
-                        <div class="group relative">
-                            <div
-                                class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
-                            </div>
-                            <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5">
-                                <label
-                                    class="flex items-center gap-2 text-purple-400 mb-2 text-xs font-bold uppercase tracking-widest">
-                                    <span class="text-lg">👤</span>
-                                    <span data-en="Who are you?" data-ar="من أنت؟">Who are you?</span>
-                                </label>
-                                <input type="text" id="userName"
-                                    class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-lg font-semibold tracking-wide"
-                                    placeholder="Name or Brand">
-                            </div>
-                        </div>
-
-                        <!-- Country Select (Searchable) -->
-                        <div class="group relative">
-                            <div
-                                class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl opacity-50 group-hover:opacity-100 transition duration-500 blur-[2px]">
-                            </div>
-                            <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5 cursor-pointer"
-                                onclick="openFlagSelector()">
-                                <label
-                                    class="flex items-center gap-2 text-cyan-400 mb-2 text-xs font-bold uppercase tracking-widest pointer-events-none">
-                                    <span class="text-lg">🌍</span>
-                                    <span data-en="Your Origin" data-ar="موطنك">Your Origin</span>
-                                </label>
-                                <div id="selectedCountryDisplay" class="flex items-center gap-3">
-                                    <span id="currentFlagDisplay" class="text-2xl">🇯🇴</span>
-                                    <span id="currentCountryName" class="text-lg font-semibold text-white">Jordan</span>
-                                </div>
-                                <input type="hidden" id="userCountry" value="JO">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-1 gap-5 mb-5">
-                        <!-- Date Input -->
-                        <div class="group relative">
-                            <div
-                                class="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-orange-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
-                            </div>
-                            <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5">
-                                <label
-                                    class="flex items-center gap-2 text-pink-400 mb-2 text-xs font-bold uppercase tracking-widest">
-                                    <span class="text-lg">📅</span>
-                                    <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
-                                </label>
-                                <input type="date" id="specialDate"
-                                    class="w-full bg-transparent border-none p-0 text-white focus:ring-0 text-lg font-semibold tracking-wide cursor-pointer opacity-90 hover:opacity-100 transition">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Story Input -->
-                    <div class="group relative mb-5">
-                        <div
-                            class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
-                        </div>
-                        <div class="relative bg-[#16162a] rounded-2xl p-4">
-                            <label
-                                class="flex items-center gap-2 text-blue-400 mb-2 text-xs font-bold uppercase tracking-widest">
-                                <span class="text-lg">✍️</span>
-                                <span data-en="Your Legacy Message" data-ar="رسالتك للتاريخ">Your Legacy Message</span>
-                            </label>
-                            <textarea id="userStory"
-                                class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-sm leading-relaxed resize-none h-24 scrollbar-hide"
-                                placeholder="What do you want the world to know?"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Image Upload (Premium Area) -->
-                    <div class="group relative cursor-pointer" onclick="document.getElementById('imageInput').click()">
-                        <div
-                            class="absolute -inset-0.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl opacity-30 group-hover:opacity-100 transition duration-500 blur-[2px]">
-                        </div>
-                        <div class="relative bg-[#16162a] rounded-2xl p-1 overflow-hidden">
-                            <div id="uploadZone"
-                                class="bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] p-6 text-center transition-all group-hover:bg-[#1a1a35]">
-                                <input type="file" id="imageInput" accept="image/*" class="hidden"
-                                    onchange="handleImageUpload(this)">
-
-                                <div id="uploadPlaceholder" class="space-y-3">
+                                <!-- High-Fidelity Tooltip Preview -->
+                                <div
+                                    class="max-w-[240px] mx-auto transform hover:scale-[1.02] transition-all duration-300">
+                                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-3 text-center"
+                                        data-en="How others will see it" data-ar="كيف سيراك الآخرون">How others will see
+                                        it
+                                    </p>
                                     <div
-                                        class="w-16 h-16 mx-auto bg-gradient-to-tr from-green-500/20 to-emerald-500/20 rounded-full flex items-center justify-center border border-green-500/30 group-hover:scale-110 transition duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                                        <span class="text-2xl">📸</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="text-white font-bold text-sm tracking-wide" data-en="Upload Photo"
-                                            data-ar="ارفع صورتك">Upload Photo</h4>
-                                        <p class="text-green-400/60 text-[10px] mt-1 tracking-wider uppercase">PNG, JPG
-                                            • Max 2MB</p>
-                                    </div>
-                                </div>
-
-                                <div id="uploadPreview" class="hidden relative h-32 flex items-center justify-center">
-                                    <img id="previewImage"
-                                        class="h-28 w-28 rounded-full object-cover border-4 border-[#16162a] shadow-2xl relative z-10">
-                                    <div class="absolute inset-0 flex items-center justify-center">
-                                        <div class="w-28 h-28 bg-green-500/20 rounded-full blur-xl animate-pulse"></div>
-                                    </div>
-                                    <div
-                                        class="absolute bottom-0 bg-green-500 text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-lg z-20">
-                                        ✓ <span data-en="UPLOADED" data-ar="تم الرفع">UPLOADED</span>
+                                        class="relative p-4 rounded-2xl bg-[#16162a]/95 border border-purple-500/40 shadow-[0_15px_50px_rgba(0,0,0,0.6),0_0_20px_rgba(139,92,246,0.2)] backdrop-blur-xl">
+                                        <div id="previewTooltipAvatar"
+                                            class="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 mx-auto mb-3 border-2 border-white/10 shadow-lg flex items-center justify-center overflow-hidden">
+                                            <span class="text-2xl opacity-50">✨</span>
+                                        </div>
+                                        <div id="previewName"
+                                            class="text-sm font-black text-white text-center mb-1 truncate flex items-center justify-center gap-2">
+                                            <span id="previewFlag">🇯🇴</span>
+                                            <span id="previewNameText">Your Name</span>
+                                        </div>
+                                        <div
+                                            class="text-[9px] text-purple-400 font-bold text-center mb-2 tracking-tighter uppercase">
+                                            Cell #<span id="previewCellIdDisplay">0</span></div>
+                                        <div id="previewDateWrapper"
+                                            class="flex items-center justify-center gap-1.5 mb-3 text-pink-400">
+                                            <span class="text-[10px]">📅</span>
+                                            <span id="previewDate" class="text-[10px] font-bold">2026-02-18</span>
+                                        </div>
+                                        <div class="border-t border-white/10 pt-3 text-center">
+                                            <div id="previewStory"
+                                                class="text-[11px] text-gray-400 leading-relaxed italic line-clamp-2"
+                                                data-en="Your amazing story will appear here..."
+                                                data-ar="قصتك الرائعة ستظهر هنا...">"Your amazing story will appear
+                                                here..."
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="flex justify-center gap-4 mt-3 pt-3 border-t border-white/5 opacity-60">
+                                            <div class="flex items-center gap-1 text-[10px] text-pink-400">❤️ 0</div>
+                                            <div class="flex items-center gap-1 text-[10px] text-blue-400">💬 0</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <button onclick="goToPayment()"
-                        class="w-full mt-8 group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-200 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-600 transform active:scale-[0.98]">
-                        <span
-                            class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
-                        <span class="text-lg mr-2">✨</span>
-                        <span class="relative text-lg" data-en="Lock It In" data-ar="تأكيد وحجز الخانة">Lock It
-                            In</span>
-                        <span class="ml-2 transition-transform group-hover:translate-x-1">→</span>
-                    </button>
-                </div>
-
-                <!-- Step 2: Payment (Perfected) -->
-                <div id="step2" class="step-content hidden">
-                    <div class="text-center mb-8 relative">
-                        <div class="absolute inset-0 bg-green-500/20 blur-3xl rounded-full opacity-20"></div>
-                        <div
-                            class="relative inline-block p-4 rounded-full bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20 mb-3 backdrop-blur-md shadow-[0_0_30px_rgba(16,185,129,0.2)]">
-                            <span class="text-4xl filter drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">⚡</span>
-                        </div>
-                        <h3 class="text-2xl font-black text-white mb-2 tracking-tight" data-en="Instant Activation"
-                            data-ar="تفعيل فوري">Instant Activation</h3>
-                        <p class="text-gray-400 text-sm font-medium" data-en="Your legacy goes live immediately"
-                            data-ar="إرثك سيظهر أمام العالم فوراً">Your legacy goes live immediately</p>
-                    </div>
-
-                    <div
-                        class="group relative overflow-hidden rounded-3xl mb-8 transform transition-all hover:scale-[1.02] duration-500">
-                        <div
-                            class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 rounded-3xl opacity-75 blur-md group-hover:opacity-100 transition duration-500 animate-pulse">
-                        </div>
-                        <div class="relative bg-[#050510] rounded-3xl p-8 text-center border border-purple-500/30">
-                            <div class="text-purple-300 text-xs font-bold uppercase tracking-widest mb-2"
-                                data-en="Total Investment" data-ar="الاستثمار الكلي">Total Investment</div>
-                            <div class="flex justify-center items-baseline gap-1 mb-2">
-                                <span
-                                    class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">$2.00</span>
-                                <span class="text-xl text-gray-500 font-bold">USD</span>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                            <!-- Name Input -->
+                            <div class="group relative">
+                                <div
+                                    class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
+                                </div>
+                                <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5">
+                                    <label
+                                        class="flex items-center gap-2 text-purple-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                        <span class="text-lg">👤</span>
+                                        <span data-en="Who are you?" data-ar="من أنت؟">Who are you?</span>
+                                    </label>
+                                    <input type="text" id="userName"
+                                        class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-lg font-semibold tracking-wide"
+                                        placeholder="Name or Brand">
+                                </div>
                             </div>
-                            <div class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-6"
-                                data-en="One Time • Forever" data-ar="مرة واحدة • للأبد">One Time • Forever</div>
 
-                            <!-- PayPal Button Container -->
-                            <div id="paypal-button-container" class="w-full mt-2 relative z-10"></div>
+                            <!-- Country Select (Searchable) -->
+                            <div class="group relative">
+                                <div
+                                    class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl opacity-50 group-hover:opacity-100 transition duration-500 blur-[2px]">
+                                </div>
+                                <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5 cursor-pointer"
+                                    onclick="openFlagSelector()">
+                                    <label
+                                        class="flex items-center gap-2 text-cyan-400 mb-2 text-xs font-bold uppercase tracking-widest pointer-events-none">
+                                        <span class="text-lg">🌍</span>
+                                        <span data-en="Your Origin" data-ar="موطنك">Your Origin</span>
+                                    </label>
+                                    <div id="selectedCountryDisplay" class="flex items-center gap-3">
+                                        <span id="currentFlagDisplay" class="text-2xl">🇯🇴</span>
+                                        <span id="currentCountryName"
+                                            class="text-lg font-semibold text-white">Jordan</span>
+                                    </div>
+                                    <input type="hidden" id="userCountry" value="JO">
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
+                        <div class="grid grid-cols-1 md:grid-cols-1 gap-3 mb-3">
+                            <!-- Date Input -->
+                            <div class="group relative">
+                                <div
+                                    class="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-orange-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
+                                </div>
+                                <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5">
+                                    <label
+                                        class="flex items-center gap-2 text-pink-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                        <span class="text-lg">📅</span>
+                                        <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
+                                    </label>
+                                    <input type="date" id="specialDate"
+                                        class="w-full bg-transparent border-none p-0 text-white focus:ring-0 text-lg font-semibold tracking-wide cursor-pointer opacity-90 hover:opacity-100 transition">
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="mt-8 text-center">
-                        <button type="button" onclick="goBack()"
-                            class="text-xs text-gray-500 hover:text-white transition py-2 px-4 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/5">
-                            ← <span data-en="Back to Edit" data-ar="العودة للتعديل">Back to Edit</span>
+                        <!-- Story Input -->
+                        <div class="group relative mb-5">
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
+                            </div>
+                            <div class="relative bg-[#16162a] rounded-2xl p-4">
+                                <label
+                                    class="flex items-center gap-2 text-blue-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                    <span class="text-lg">✍️</span>
+                                    <span data-en="Your Legacy Message" data-ar="رسالتك للتاريخ">Your Legacy
+                                        Message</span>
+                                </label>
+                                <textarea id="userStory"
+                                    class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-sm leading-relaxed resize-none h-24 scrollbar-hide"
+                                    placeholder="What do you want the world to know?"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Image Upload (Premium Area) -->
+                        <div class="group relative cursor-pointer"
+                            onclick="document.getElementById('imageInput').click()">
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl opacity-30 group-hover:opacity-100 transition duration-500 blur-[2px]">
+                            </div>
+                            <div class="relative bg-[#16162a] rounded-2xl p-1 overflow-hidden">
+                                <div id="uploadZone"
+                                    class="bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] p-6 text-center transition-all group-hover:bg-[#1a1a35]">
+                                    <input type="file" id="imageInput" accept="image/*" class="hidden"
+                                        onchange="handleImageUpload(this)">
+
+                                    <div id="uploadPlaceholder" class="space-y-3">
+                                        <div
+                                            class="w-16 h-16 mx-auto bg-gradient-to-tr from-green-500/20 to-emerald-500/20 rounded-full flex items-center justify-center border border-green-500/30 group-hover:scale-110 transition duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                                            <span class="text-2xl">📸</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-white font-bold text-sm tracking-wide"
+                                                data-en="Upload Photo" data-ar="ارفع صورتك">Upload Photo</h4>
+                                            <p class="text-green-400/60 text-[10px] mt-1 tracking-wider uppercase">PNG,
+                                                JPG
+                                                • Max 2MB</p>
+                                        </div>
+                                    </div>
+
+                                    <div id="uploadPreview"
+                                        class="hidden relative h-32 flex items-center justify-center">
+                                        <img id="previewImage"
+                                            class="h-28 w-28 rounded-full object-cover border-4 border-[#16162a] shadow-2xl relative z-10">
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <div class="w-28 h-28 bg-green-500/20 rounded-full blur-xl animate-pulse">
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="absolute bottom-0 bg-green-500 text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-lg z-20">
+                                            ✓ <span data-en="UPLOADED" data-ar="تم الرفع">UPLOADED</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button onclick="goToPayment()"
+                            class="w-full mt-6 group relative inline-flex items-center justify-center px-6 py-3.5 sm:px-8 sm:py-4 font-bold text-white transition-all duration-200 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-600 transform active:scale-[0.98]">
+                            <span
+                                class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                            <span class="text-base sm:text-lg mr-2">✨</span>
+                            <span class="relative text-base sm:text-lg" data-en="Lock It In"
+                                data-ar="تأكيد وحجز الخانة">Lock It
+                                In</span>
+                            <span class="ml-2 transition-transform group-hover:translate-x-1">→</span>
                         </button>
                     </div>
-                </div>
 
-                <!-- Step 3: Success (Perfected) -->
-                <div id="step3" class="step-content hidden">
-                    <div class="text-center py-8 relative">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-b from-purple-600/20 to-pink-600/20 blur-3xl rounded-full opacity-30">
-                        </div>
-
-                        <div class="relative mb-8">
+                    <!-- Step 2: Payment (Perfected) -->
+                    <div id="step2" class="step-content hidden">
+                        <div class="text-center mb-8 relative">
+                            <div class="absolute inset-0 bg-green-500/20 blur-3xl rounded-full opacity-20"></div>
                             <div
-                                class="text-7xl mb-4 animate-bounce-slow filter drop-shadow-[0_0_30px_rgba(236,72,153,0.5)]">
-                                🎉</div>
-                            <h3 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-white mb-2"
-                                data-en="You're In History!" data-ar="دخلت التاريخ!">You're In History!</h3>
-                            <p class="text-gray-400 font-medium" data-en="Your cell is now live on the grid forever."
-                                data-ar="خانتك الآن مباشرة على الشبكة للأبد.">Your cell is now live on the grid forever.
-                            </p>
+                                class="relative inline-block p-4 rounded-full bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20 mb-3 backdrop-blur-md shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                                <span class="text-4xl filter drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">⚡</span>
+                            </div>
+                            <h3 class="text-2xl font-black text-white mb-2 tracking-tight" data-en="Instant Activation"
+                                data-ar="تفعيل فوري">Instant Activation</h3>
+                            <p class="text-gray-400 text-sm font-medium" data-en="Your legacy goes live immediately"
+                                data-ar="إرثك سيظهر أمام العالم فوراً">Your legacy goes live immediately</p>
                         </div>
 
                         <div
-                            class="bg-[#16162a]/80 backdrop-blur-xl border border-purple-500/30 p-8 rounded-3xl relative overflow-hidden group shadow-2xl">
+                            class="group relative overflow-hidden rounded-3xl mb-8 transform transition-all hover:scale-[1.02] duration-500">
                             <div
-                                class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition duration-700">
+                                class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 rounded-3xl opacity-75 blur-md group-hover:opacity-100 transition duration-500 animate-pulse">
+                            </div>
+                            <div class="relative bg-[#050510] rounded-3xl p-8 text-center border border-purple-500/30">
+                                <div class="text-purple-300 text-xs font-bold uppercase tracking-widest mb-2"
+                                    data-en="Total Investment" data-ar="الاستثمار الكلي">Total Investment</div>
+                                <div class="flex justify-center items-baseline gap-1 mb-2">
+                                    <span
+                                        class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">$2.00</span>
+                                    <span class="text-xl text-gray-500 font-bold">USD</span>
+                                </div>
+                                <div class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-6"
+                                    data-en="One Time • Forever" data-ar="مرة واحدة • للأبد">One Time • Forever</div>
+
+                                <!-- PayPal Button Container -->
+                                <div id="paypal-button-container" class="w-full mt-2 relative z-10"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="mt-8 text-center">
+                            <button type="button" onclick="goBack()"
+                                class="text-xs text-gray-500 hover:text-white transition py-2 px-4 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/5">
+                                ← <span data-en="Back to Edit" data-ar="العودة للتعديل">Back to Edit</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Success (Perfected) -->
+                    <div id="step3" class="step-content hidden">
+                        <div class="text-center py-8 relative">
+                            <div
+                                class="absolute inset-0 bg-gradient-to-b from-purple-600/20 to-pink-600/20 blur-3xl rounded-full opacity-30">
                             </div>
 
-                            <div class="relative z-10">
-                                <div class="text-xs text-purple-300 font-bold uppercase tracking-widest mb-2"
-                                    data-en="Your Cell ID" data-ar="رقم خانتك">Your Cell ID</div>
-                                <div class="text-6xl font-black text-white tracking-tighter mb-6 font-mono">#<span
-                                        id="confirmedCellId">0</span></div>
+                            <div class="relative mb-8">
+                                <div
+                                    class="text-7xl mb-4 animate-bounce-slow filter drop-shadow-[0_0_30px_rgba(236,72,153,0.5)]">
+                                    🎉</div>
+                                <h3 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-white mb-2"
+                                    data-en="You're In History!" data-ar="دخلت التاريخ!">You're In History!</h3>
+                                <p class="text-gray-400 font-medium"
+                                    data-en="Your cell is now live on the grid forever."
+                                    data-ar="خانتك الآن مباشرة على الشبكة للأبد.">Your cell is now live on the grid
+                                    forever.
+                                </p>
+                            </div>
 
-                                <div class="flex justify-center gap-3">
-                                    <div
-                                        class="bg-green-500/10 border border-green-500/20 px-4 py-2 rounded-xl flex items-center gap-2">
-                                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                                        <span class="text-green-400 text-xs font-bold uppercase">Live</span>
-                                    </div>
-                                    <div
-                                        class="bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-xl flex items-center gap-2">
-                                        <span class="text-xl">🌍</span>
-                                        <span class="text-blue-400 text-xs font-bold uppercase">Public</span>
+                            <div
+                                class="bg-[#16162a]/80 backdrop-blur-xl border border-purple-500/30 p-8 rounded-3xl relative overflow-hidden group shadow-2xl">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition duration-700">
+                                </div>
+
+                                <div class="relative z-10">
+                                    <div class="text-xs text-purple-300 font-bold uppercase tracking-widest mb-2"
+                                        data-en="Your Cell ID" data-ar="رقم خانتك">Your Cell ID</div>
+                                    <div class="text-6xl font-black text-white tracking-tighter mb-6 font-mono">#<span
+                                            id="confirmedCellId">0</span></div>
+
+                                    <div class="flex justify-center gap-3">
+                                        <div
+                                            class="bg-green-500/10 border border-green-500/20 px-4 py-2 rounded-xl flex items-center gap-2">
+                                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                            <span class="text-green-400 text-xs font-bold uppercase">Live</span>
+                                        </div>
+                                        <div
+                                            class="bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-xl flex items-center gap-2">
+                                            <span class="text-xl">🌍</span>
+                                            <span class="text-blue-400 text-xs font-bold uppercase">Public</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <button onclick="closeClaimModal()"
-                            class="w-full mt-8 glow-btn py-5 rounded-2xl font-bold text-lg shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:shadow-[0_0_50px_rgba(139,92,246,0.5)] transition-all transform hover:scale-[1.02]">
-                            <span data-en="Go To My Cell 🎯" data-ar="اذهب لخانتي 🎯">Go To My Cell 🎯</span>
-                        </button>
+                            <button onclick="closeClaimModal()"
+                                class="w-full mt-8 glow-btn py-5 rounded-2xl font-bold text-lg shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:shadow-[0_0_50px_rgba(139,92,246,0.5)] transition-all transform hover:scale-[1.02]">
+                                <span data-en="Go To My Cell 🎯" data-ar="اذهب لخانتي 🎯">Go To My Cell 🎯</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
