@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -56,6 +57,13 @@
             font-family: var(--font-en);
             background: var(--dark);
             color: #fff;
+            touch-action: pan-x pan-y;
+            /* Prevent pinch zoom but allow scrolling */
+            user-select: none;
+            -webkit-user-select: none;
+            overflow-x: hidden;
+            width: 100vw;
+            position: relative;
         }
 
         body[dir="rtl"] {
@@ -77,6 +85,61 @@
         ::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 4px;
+        }
+
+        /* Ticker Animation */
+        .ticker-container {
+            background: rgba(139, 92, 246, 0.05);
+            border-top: 1px solid rgba(139, 92, 246, 0.1);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 12px 0;
+            user-select: none;
+            position: relative;
+            z-index: 10;
+        }
+
+        .ticker-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 40s linear infinite;
+        }
+
+        @keyframes ticker {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 50px;
+            color: #a78bfa;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Mobile Fixes - Force Fixed Dimensions */
+        nav {
+            height: 72px;
+        }
+
+        .hero-bg {
+            padding-top: 80px;
+        }
+
+        #canvasContainer {
+            overflow: hidden;
+            touch-action: none;
         }
 
         /* Grid Cells - Optimized */
@@ -980,6 +1043,19 @@
                 </span>
             </div>
 
+            <!-- Hall of Fame Ticker -->
+            <div class="ticker-container">
+                <div id="recentTicker" class="ticker-content">
+                    <!-- Items injected via JS -->
+                    <div class="ticker-item">🚀 <span data-en="Museum Opening Soon..."
+                            data-ar="المتحف سيفتح قريباً...">Museum Opening Soon...</span></div>
+                    <div class="ticker-item">✨ <span data-en="Join the Pioneers" data-ar="انضم إلى الرواد">Join the
+                            Pioneers</span></div>
+                    <div class="ticker-item">💎 <span data-en="Your Legacy Forever" data-ar="إرثك للأبد">Your Legacy
+                            Forever</span></div>
+                </div>
+            </div>
+
             <div class="mt-12">
                 <svg class="w-6 h-6 mx-auto text-purple-500/50 animate-bounce" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
@@ -1287,7 +1363,7 @@
                         <div class="flex items-center gap-8">
                             <div
                                 class="p-3 bg-white rounded-xl shadow-2xl scale-100 group-hover:scale-105 transition duration-500">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://modasmadi.github.io/Ego-Mind/ar-viewer"
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://modasmadi.github.io/Ego-Mind/ar-viewer.html"
                                     alt="AR QR Code" class="w-24 h-24">
                             </div>
                             <button onclick="openAR()" class="glow-btn px-6 py-3 rounded-xl font-bold text-sm">
@@ -1473,6 +1549,30 @@
         </div>
     </footer>
 
+    <!-- Flag Selector Modal (Searchable) -->
+    <div id="flagSelectorModal" class="fixed inset-0 modal-overlay z-[60] hidden items-center justify-center p-4">
+        <div
+            class="bg-[#0f0f24] border border-purple-500/30 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
+            <div class="p-4 border-b border-white/5 flex justify-between items-center">
+                <h3 class="text-white font-bold" data-en="Select Country" data-ar="اختر الدولة">Select Country</h3>
+                <button onclick="closeFlagSelector()" class="text-gray-400 hover:text-white">✕</button>
+            </div>
+            <div class="p-4">
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                        <span class="text-gray-500">🔍</span>
+                    </div>
+                    <input type="text" id="flagSearchInput" oninput="filterCountries()"
+                        class="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-white focus:outline-none focus:border-purple-500 transition"
+                        placeholder="Search country... / ابحث عن دولة...">
+                </div>
+            </div>
+            <div id="countryList" class="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-hide">
+                <!-- Countries will be injected here -->
+            </div>
+        </div>
+    </div>
+
     <!-- Claim Cell Modal -->
     <div id="claimModal"
         class="fixed inset-0 modal-overlay z-50 hidden items-center justify-center p-2 sm:p-4 overflow-y-auto">
@@ -1610,32 +1710,23 @@
                             </div>
                         </div>
 
-                        <!-- Country Select -->
+                        <!-- Country Select (Searchable) -->
                         <div class="group relative">
                             <div
-                                class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
+                                class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl opacity-50 group-hover:opacity-100 transition duration-500 blur-[2px]">
                             </div>
-                            <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5">
+                            <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5 cursor-pointer"
+                                onclick="openFlagSelector()">
                                 <label
-                                    class="flex items-center gap-2 text-cyan-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                    class="flex items-center gap-2 text-cyan-400 mb-2 text-xs font-bold uppercase tracking-widest pointer-events-none">
                                     <span class="text-lg">🌍</span>
                                     <span data-en="Your Origin" data-ar="موطنك">Your Origin</span>
                                 </label>
-                                <select id="userCountry" onchange="updateLivePreview()"
-                                    class="w-full bg-transparent border-none p-0 text-white focus:ring-0 text-lg font-semibold tracking-wide cursor-pointer appearance-none">
-                                    <option value="JO" class="bg-[#0f0f24]">🇯🇴 Jordan</option>
-                                    <option value="SA" class="bg-[#0f0f24]">🇸🇦 Saudi Arabia</option>
-                                    <option value="AE" class="bg-[#0f0f24]">🇦🇪 UAE</option>
-                                    <option value="KW" class="bg-[#0f0f24]">🇰🇼 Kuwait</option>
-                                    <option value="QA" class="bg-[#0f0f24]">🇶🇦 Qatar</option>
-                                    <option value="EG" class="bg-[#0f0f24]">🇪🇬 Egypt</option>
-                                    <option value="IQ" class="bg-[#0f0f24]">🇮🇶 Iraq</option>
-                                    <option value="PS" class="bg-[#0f0f24]">🇵🇸 Palestine</option>
-                                    <option value="LB" class="bg-[#0f0f24]">🇱🇧 Lebanon</option>
-                                    <option value="US" class="bg-[#0f0f24]">🇺🇸 USA</option>
-                                    <option value="GB" class="bg-[#0f0f24]">🇬🇧 UK</option>
-                                    <option value="OTHER" class="bg-[#0f0f24]">🌐 Other</option>
-                                </select>
+                                <div id="selectedCountryDisplay" class="flex items-center gap-3">
+                                    <span id="currentFlagDisplay" class="text-2xl">🇯🇴</span>
+                                    <span id="currentCountryName" class="text-lg font-semibold text-white">Jordan</span>
+                                </div>
+                                <input type="hidden" id="userCountry" value="JO">
                             </div>
                         </div>
                     </div>
@@ -1941,6 +2032,89 @@
         let loadedImages = {};
         let hoveredCell = null;
 
+        // Comprehensive Country Dataset
+        const countries = [
+            { code: 'JO', nameEn: 'Jordan', nameAr: 'الأردن', flag: '🇯🇴' },
+            { code: 'SA', nameEn: 'Saudi Arabia', nameAr: 'السعودية', flag: '🇸🇦' },
+            { code: 'AE', nameEn: 'UAE', nameAr: 'الإمارات', flag: '🇦🇪' },
+            { code: 'KW', nameEn: 'Kuwait', nameAr: 'الكويت', flag: '🇰🇼' },
+            { code: 'QA', nameEn: 'Qatar', nameAr: 'قطر', flag: '🇶🇦' },
+            { code: 'BH', nameEn: 'Bahrain', nameAr: 'البحرين', flag: '🇧🇭' },
+            { code: 'OM', nameEn: 'Oman', nameAr: 'عمان', flag: '🇴🇲' },
+            { code: 'EG', nameEn: 'Egypt', nameAr: 'مصر', flag: '🇪🇬' },
+            { code: 'PS', nameEn: 'Palestine', nameAr: 'فلسطين', flag: '🇵🇸' },
+            { code: 'LB', nameEn: 'Lebanon', nameAr: 'لبنان', flag: '🇱🇧' },
+            { code: 'IQ', nameEn: 'Iraq', nameAr: 'العراق', flag: '🇮🇶' },
+            { code: 'SY', nameEn: 'Syria', nameAr: 'سوريا', flag: '🇸🇾' },
+            { code: 'LY', nameEn: 'Libya', nameAr: 'ليبيا', flag: '🇱🇾' },
+            { code: 'SD', nameEn: 'Sudan', nameAr: 'السودان', flag: '🇸🇩' },
+            { code: 'MA', nameEn: 'Morocco', nameAr: 'المغرب', flag: '🇲🇦' },
+            { code: 'DZ', nameEn: 'Algeria', nameAr: 'الجزائر', flag: '🇩🇿' },
+            { code: 'TN', nameEn: 'Tunisia', nameAr: 'تونس', flag: '🇹🇳' },
+            { code: 'YE', nameEn: 'Yemen', nameAr: 'اليمن', flag: '🇾🇪' },
+            { code: 'US', nameEn: 'USA', nameAr: 'أمريكا', flag: '🇺🇸' },
+            { code: 'GB', nameEn: 'UK', nameAr: 'بريطانيا', flag: '🇬🇧' },
+            { code: 'TR', nameEn: 'Turkey', nameAr: 'تركيا', flag: '🇹🇷' },
+            { code: 'DE', nameEn: 'Germany', nameAr: 'ألمانيا', flag: '🇩🇪' },
+            { code: 'FR', nameEn: 'France', nameAr: 'فرنسا', flag: '🇫🇷' },
+            { code: 'ES', nameEn: 'Spain', nameAr: 'إسبانيا', flag: '🇪🇸' },
+            { code: 'IT', nameEn: 'Italy', nameAr: 'إيطاليا', flag: '🇮🇹' },
+            { code: 'CA', nameEn: 'Canada', nameAr: 'كندا', flag: '🇨🇦' },
+            { code: 'AU', nameEn: 'Australia', nameAr: 'أستراليا', flag: '🇦🇺' },
+            { code: 'CN', nameEn: 'China', nameAr: 'الصين', flag: '🇨🇳' },
+            { code: 'JP', nameEn: 'Japan', nameAr: 'اليابان', flag: '🇯🇵' },
+            { code: 'KR', nameEn: 'South Korea', nameAr: 'كوريا الجنوبية', flag: '🇰🇷' },
+            { code: 'OTHER', nameEn: 'Other', nameAr: 'دولة أخرى', flag: '🌐' }
+            // More can be added as needed
+        ];
+
+        function openFlagSelector() {
+            document.getElementById('flagSelectorModal').classList.remove('hidden');
+            document.getElementById('flagSelectorModal').classList.add('flex');
+            renderCountryList(countries);
+            document.getElementById('flagSearchInput').value = '';
+            document.getElementById('flagSearchInput').focus();
+        }
+
+        function closeFlagSelector() {
+            document.getElementById('flagSelectorModal').classList.add('hidden');
+            document.getElementById('flagSelectorModal').classList.remove('flex');
+        }
+
+        function renderCountryList(list) {
+            const container = document.getElementById('countryList');
+            container.innerHTML = list.map(c => `
+                <div onclick="selectCountry('${c.code}')" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl cursor-pointer transition">
+                    <span class="text-2xl">${c.flag}</span>
+                    <div class="flex-1">
+                        <div class="text-white font-bold text-sm">${currentLang === 'ar' ? c.nameAr : c.nameEn}</div>
+                        <div class="text-gray-500 text-[10px] uppercase tracking-widest">${c.code}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCountries() {
+            const query = document.getElementById('flagSearchInput').value.toLowerCase().trim();
+            const filtered = countries.filter(c =>
+                c.nameEn.toLowerCase().includes(query) ||
+                c.nameAr.includes(query) ||
+                c.code.toLowerCase().includes(query)
+            );
+            renderCountryList(filtered);
+        }
+
+        function selectCountry(code) {
+            const country = countries.find(c => c.code === code);
+            if (country) {
+                document.getElementById('userCountry').value = country.code;
+                document.getElementById('currentFlagDisplay').textContent = country.flag;
+                document.getElementById('currentCountryName').textContent = currentLang === 'ar' ? country.nameAr : country.nameEn;
+                updateLivePreview();
+                closeFlagSelector();
+            }
+        }
+
         async function loadCells() {
             if (!db) return;
 
@@ -2030,6 +2204,7 @@
             renderGrid();
             renderMiniMap();
             updateStats();
+            updateTicker();
         }
 
         function resizeCanvas() {
@@ -2229,6 +2404,34 @@
 
             // Sync Leaderboard
             updateLeaderboard();
+            updateTicker();
+        }
+
+        function updateTicker() {
+            const tickerContainer = document.getElementById('recentTicker');
+            if (!tickerContainer) return;
+
+            // Get last 20 active cells sorted by something (e.g. ID or pseudo-random if no timestamp)
+            const activeCells = Object.entries(cellsData)
+                .filter(([id, data]) => data.status === 'active')
+                .reverse()
+                .slice(0, 20);
+
+            if (activeCells.length === 0) return;
+
+            const items = activeCells.map(([id, data]) => {
+                const flag = getCountryFlag(data.country);
+                return `
+                    <div class="ticker-item" onclick="showCellDetails(cellsData['${id}'], ${id})" style="cursor:pointer">
+                        <span class="text-white">#${id}</span>
+                        <span>${flag} ${data.name || 'Anonymous'}</span>
+                        <span class="text-gray-500">•</span>
+                    </div>
+                `;
+            }).join('');
+
+            // Duplicate items for seamless scrolling
+            tickerContainer.innerHTML = items + items;
         }
 
         function animateValue(id, start, end, duration, isCurrency) {
@@ -2549,12 +2752,8 @@
         }
 
         function getCountryFlag(code) {
-            const flags = {
-                'JO': '🇯🇴', 'SA': '🇸🇦', 'AE': '🇦🇪', 'KW': '🇰🇼',
-                'QA': '🇶🇦', 'EG': '🇪🇬', 'IQ': '🇮🇶', 'PS': '🇵🇸',
-                'LB': '🇱🇧', 'US': '🇺🇸', 'GB': '🇬🇧', 'OTHER': '🌐'
-            };
-            return flags[code] || '🌐';
+            const country = countries.find(c => c.code === code);
+            return country ? country.flag : '🌐';
         }
 
         let lastTappedCell = null;
