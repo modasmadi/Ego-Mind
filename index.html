@@ -28,9 +28,14 @@
             --primary: #8b5cf6;
             --primary-light: #a78bfa;
             --secondary: #ec4899;
-            --dark: #0f0f1a;
-            --dark-light: #1a1a2e;
-            --dark-card: #16162a;
+            --dark: #050510;
+            /* Deeper midnight black */
+            --dark-light: #0d0d1a;
+            --dark-card: #0f0f24;
+            /* Solid, deep surface */
+            --neon-glow: 0 0 20px rgba(139, 92, 246, 0.4);
+            --neon-green: #10b981;
+            --neon-pink: #ec4899;
         }
 
         body {
@@ -117,26 +122,32 @@
 
         .glow-btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .glow-btn:hover {
-            box-shadow: 0 6px 25px rgba(139, 92, 246, 0.6);
-            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+            transform: translateY(-2px) scale(1.02);
         }
 
         .glass-card {
-            background: rgba(26, 26, 46, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(139, 92, 246, 0.1);
-            border-radius: 1rem;
+            background: var(--dark-card);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), var(--neon-glow);
         }
 
         .hero-bg {
             background:
-                radial-gradient(ellipse at top, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at bottom, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% -20%, rgba(139, 92, 246, 0.15), transparent 60%),
                 var(--dark);
         }
 
@@ -188,26 +199,29 @@
         }
 
         .founder-card {
-            background: rgba(26, 26, 46, 0.6);
+            background: var(--dark-card);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 1rem;
+            border-radius: 1.5rem;
             padding: 1.5rem;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .founder-card:hover {
-            border-color: rgba(139, 92, 246, 0.2);
-            transform: translateY(-3px);
+            border-color: var(--primary);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(139, 92, 246, 0.2);
         }
 
         .founder-avatar {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             object-fit: cover;
             margin: 0 auto;
-            border: 2px solid rgba(139, 92, 246, 0.3);
+            border: 3px solid var(--dark);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
         }
 
         .founder-rank {
@@ -240,16 +254,72 @@
         }
 
         .stat-card {
-            background: rgba(26, 26, 46, 0.6);
+            background: var(--dark-card);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 1rem;
-            padding: 1.5rem;
+            border-radius: 1.5rem;
+            padding: 2rem;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .stat-card.primary {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%), var(--dark-card);
             border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.15);
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            transform: rotate(45deg);
+            transition: 0.8s;
+            pointer-events: none;
+        }
+
+        .stat-card:hover::after {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 15px currentColor;
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card {
+            animation: cardEntrance 0.8s ease backwards;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.2s;
         }
 
         .line-clamp-2 {
@@ -266,16 +336,19 @@
         }
 
         .charter-card {
-            background: rgba(26, 26, 46, 0.6);
+            background: var(--dark-card);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 1rem;
-            padding: 1.5rem;
+            border-radius: 1.5rem;
+            padding: 2rem;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .charter-card:hover {
-            border-color: rgba(139, 92, 246, 0.3);
+            border-color: var(--secondary);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(236, 72, 153, 0.1);
         }
 
         /* Welcome Banner */
@@ -299,23 +372,27 @@
 
         /* FAQ Accordion */
         .faq-item {
-            background: rgba(26, 26, 46, 0.6);
+            background: var(--dark-card);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 1rem;
+            border-radius: 1.25rem;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            margin-bottom: 1rem;
         }
 
         .faq-item:hover {
-            border-color: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .faq-question {
             cursor: pointer;
-            padding: 1.25rem;
+            padding: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: #e5e7eb;
+            font-weight: 600;
         }
 
         .faq-answer {
@@ -770,59 +847,84 @@
 
             <!-- الجملة القوية الواضحة -->
             <div
-                class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl p-4 sm:p-6 mb-6 max-w-xl mx-auto">
+                class="bg-[#0f0f24] border-2 border-purple-500/40 rounded-3xl p-6 sm:p-8 mb-8 max-w-xl mx-auto shadow-[0_0_30px_rgba(139,92,246,0.2)] transition-all duration-500 hover:scale-[1.02]">
                 <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
                     <span data-en="Reserve Your Spot Forever" data-ar="احجز مكانك للأبد">Reserve Your Spot
                         Forever</span>
                 </h2>
-                <p class="text-2xl sm:text-3xl font-black gradient-text">
+                <p class="text-3xl sm:text-4xl font-black gradient-text">
                     <span data-en="Just $2.00!" data-ar="فقط 2 دولار!">Just $2.00!</span>
                 </p>
             </div>
 
             <!-- أمثلة على الاستخدامات -->
-            <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 max-w-2xl mx-auto">
+            <div class="flex flex-wrap justify-center gap-3 mb-10 max-w-2xl mx-auto">
                 <span
-                    class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-xs sm:text-sm text-gray-300">
+                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
                     💼 <span data-en="Your Company Logo" data-ar="شعار شركتك">Your Company Logo</span>
                 </span>
                 <span
-                    class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-xs sm:text-sm text-gray-300">
+                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
                     👤 <span data-en="Your Name" data-ar="اسمك">Your Name</span>
                 </span>
                 <span
-                    class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-xs sm:text-sm text-gray-300">
+                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
                     ❤️ <span data-en="Memory of Someone" data-ar="ذكرى شخص">Memory of Someone</span>
                 </span>
                 <span
-                    class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-xs sm:text-sm text-gray-300">
+                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
                     🎂 <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
                 </span>
                 <span
-                    class="bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-xs sm:text-sm text-gray-300">
+                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
                     ⭐ <span data-en="Digital Legacy" data-ar="أثر رقمي دائم">Digital Legacy</span>
                 </span>
             </div>
 
-            <!-- Stats -->
-            <div class="flex flex-wrap justify-center gap-4 mb-6">
-                <div class="stat-card primary min-w-[130px]">
-                    <div class="text-3xl sm:text-4xl font-black text-white" id="soldCount">0</div>
-                    <div class="text-xs sm:text-sm text-purple-300" data-en="Stories Shared" data-ar="قصة مشاركة">
-                        Stories Shared</div>
+            <!-- Stats Grid: 3 Balanced Columns -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <!-- Stat 1: Stories Shared (Purple Glow) -->
+                <div
+                    class="stat-card primary group relative overflow-hidden transition-all duration-500 hover:scale-[1.05]">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="text-3xl sm:text-4xl font-black text-white glow-text" id="soldCount">0</div>
+                    <div class="text-[10px] sm:text-xs text-purple-300 font-bold uppercase tracking-[0.2em] mt-1"
+                        data-en="Stories Shared" data-ar="قصة مشاركة">Stories Shared</div>
+                    <div
+                        class="absolute -bottom-1 -right-1 text-2xl opacity-10 group-hover:opacity-20 transition-opacity">
+                        ✨</div>
                 </div>
-                <div class="stat-card min-w-[130px] border-green-500/20 bg-green-500/5">
+
+                <!-- Stat 2: Total Invested (Green Glow) -->
+                <div
+                    class="stat-card border-green-500/30 bg-green-500/5 group relative overflow-hidden transition-all duration-500 hover:scale-[1.05]">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
                     <div class="text-3xl sm:text-4xl font-black text-green-400 flex items-center justify-center gap-1">
                         <span>$</span><span id="totalInvestment">0.00</span>
                     </div>
-                    <div class="text-xs sm:text-sm text-green-300/70 font-bold uppercase tracking-tighter"
-                        data-en="Total Investment" data-ar="إجمالي الاستثمار">Total Investment</div>
+                    <div class="text-[10px] sm:text-xs text-green-300/70 font-bold uppercase tracking-[0.2em] mt-1"
+                        data-en="Total Invested" data-ar="إجمالي الاستثمار">Total Invested</div>
+                    <div
+                        class="absolute -bottom-1 -right-1 text-2xl opacity-10 group-hover:opacity-20 transition-opacity">
+                        💰</div>
                 </div>
-                <!-- Available (Hidden on small screens to make room if needed) -->
-                <div class="stat-card min-w-[130px] hidden sm:block">
-                    <div class="text-3xl sm:text-4xl font-black text-white">$2.00</div>
-                    <div class="text-xs sm:text-sm text-gray-400" data-en="One Cell Forever" data-ar="للخانة للأبد">One
-                        Cell Forever</div>
+
+                <!-- Stat 3: Available Cells (Pink Glow) -->
+                <div
+                    class="stat-card border-pink-500/30 bg-pink-500/5 group relative overflow-hidden transition-all duration-500 hover:scale-[1.05]">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="text-3xl sm:text-4xl font-black text-pink-400" id="availableCount">1,000,000</div>
+                    <div class="text-[10px] sm:text-xs text-pink-300/70 font-bold uppercase tracking-[0.2em] mt-1"
+                        data-en="Cells Available" data-ar="خانة متاحة">Cells Available</div>
+                    <div
+                        class="absolute -bottom-1 -right-1 text-2xl opacity-10 group-hover:opacity-20 transition-opacity">
+                        ⏳</div>
                 </div>
             </div>
 
@@ -1299,15 +1401,17 @@
     <!-- Claim Cell Modal -->
     <div id="claimModal"
         class="fixed inset-0 modal-overlay z-50 hidden items-center justify-center p-2 sm:p-4 overflow-y-auto">
-        <div class="glass-card w-full max-w-md sm:max-w-lg relative my-4 sm:my-8">
+        <div
+            class="bg-[#0f0f24] border border-purple-500/30 w-full max-w-md sm:max-w-lg relative my-4 sm:my-8 rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.8),0_0_20px_rgba(139,92,246,0.1)]">
             <div class="p-4 sm:p-6 border-b border-white/5">
                 <button onclick="closeClaimModal()"
-                    class="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition">✕</button>
+                    class="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 bg-black/40 hover:bg-white/10 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition border border-white/5">✕</button>
 
                 <div class="flex justify-center gap-2 mb-4">
-                    <div id="stepDot1" class="w-2.5 h-2.5 rounded-full bg-purple-500"></div>
-                    <div id="stepDot2" class="w-2.5 h-2.5 rounded-full bg-gray-600"></div>
-                    <div id="stepDot3" class="w-2.5 h-2.5 rounded-full bg-gray-600"></div>
+                    <div id="stepDot1"
+                        class="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(139,92,246,0.6)]"></div>
+                    <div id="stepDot2" class="w-2.5 h-2.5 rounded-full bg-gray-700"></div>
+                    <div id="stepDot3" class="w-2.5 h-2.5 rounded-full bg-gray-700"></div>
                 </div>
 
                 <div class="text-center">
@@ -1335,8 +1439,8 @@
 
                     <!-- Enhanced Live Preview Box -->
                     <div
-                        class="glass-card mb-6 border-purple-500/20 bg-purple-500/5 relative overflow-hidden group p-5">
-                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-30">
+                        class="bg-[#050510] border border-purple-500/30 rounded-2xl mb-6 relative overflow-hidden group p-5 shadow-inner">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-30">
                         </div>
 
                         <div class="relative z-10 text-center">
@@ -1354,21 +1458,21 @@
                                     <div class="w-8 h-8 rounded-sm bg-blue-500/10 border border-white/5 opacity-40">
                                     </div>
                                     <!-- Row 2 -->
-                                    <div class="w-8 h-8 rounded-sm bg-purple-500/20 border border-white/5 opacity-50">
+                                    <div class="w-8 h-8 rounded-sm bg-[#1a1a35] border border-white/5 opacity-50">
                                     </div>
                                     <!-- USER CELL (CENTER) -->
                                     <div id="previewGridCell"
                                         class="w-8 h-8 rounded-sm bg-gradient-to-br from-purple-600 to-pink-600 shadow-[0_0_15px_rgba(139,92,246,0.6)] border-2 border-white ring-2 ring-purple-600/50 flex items-center justify-center overflow-hidden transition-all duration-300">
                                         <span class="text-white text-xs font-bold">🎯</span>
                                     </div>
-                                    <div class="w-8 h-8 rounded-sm bg-indigo-500/10 border border-white/5 opacity-30">
+                                    <div class="w-8 h-8 rounded-sm bg-[#12122b] border border-white/5 opacity-30">
                                     </div>
                                     <!-- Row 3 -->
-                                    <div class="w-8 h-8 rounded-sm bg-pink-500/10 border border-white/5 opacity-40">
+                                    <div class="w-8 h-8 rounded-sm bg-[#241a35] border border-white/5 opacity-40">
                                     </div>
-                                    <div class="w-8 h-8 rounded-sm bg-purple-500/10 border border-white/5 opacity-30">
+                                    <div class="w-8 h-8 rounded-sm bg-[#1a1a35] border border-white/5 opacity-30">
                                     </div>
-                                    <div class="w-8 h-8 rounded-sm bg-blue-500/10 border border-white/5 opacity-50">
+                                    <div class="w-8 h-8 rounded-sm bg-[#12122b] border border-white/5 opacity-50">
                                     </div>
                                 </div>
                             </div>
@@ -1417,7 +1521,7 @@
                             <div
                                 class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
                             </div>
-                            <div class="relative bg-[#16162a] rounded-2xl p-4 h-full">
+                            <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5">
                                 <label
                                     class="flex items-center gap-2 text-purple-400 mb-2 text-xs font-bold uppercase tracking-widest">
                                     <span class="text-lg">👤</span>
@@ -1434,7 +1538,7 @@
                             <div
                                 class="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-orange-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
                             </div>
-                            <div class="relative bg-[#16162a] rounded-2xl p-4 h-full">
+                            <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5">
                                 <label
                                     class="flex items-center gap-2 text-pink-400 mb-2 text-xs font-bold uppercase tracking-widest">
                                     <span class="text-lg">📅</span>
@@ -1532,8 +1636,7 @@
                         <div
                             class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 rounded-3xl opacity-75 blur-md group-hover:opacity-100 transition duration-500 animate-pulse">
                         </div>
-                        <div
-                            class="relative bg-[#0f0f1a] rounded-3xl p-8 text-center border border-white/10 backdrop-blur-xl">
+                        <div class="relative bg-[#050510] rounded-3xl p-8 text-center border border-purple-500/30">
                             <div class="text-purple-300 text-xs font-bold uppercase tracking-widest mb-2"
                                 data-en="Total Investment" data-ar="الاستثمار الكلي">Total Investment</div>
                             <div class="flex justify-center items-baseline gap-1 mb-2">
@@ -1615,9 +1718,9 @@
 
     <!-- View Cell Modal -->
     <div id="viewModal" class="fixed inset-0 modal-overlay z-50 hidden items-center justify-center p-4">
-        <div class="glass-card max-w-md w-full p-6 relative">
+        <div class="bg-[#0f0f24] border border-purple-500/30 max-w-md w-full p-6 relative rounded-3xl shadow-2xl">
             <button onclick="closeViewModal()"
-                class="absolute top-4 right-4 w-8 h-8 bg-white/5 hover:bg-white/10 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition">✕</button>
+                class="absolute top-4 right-4 w-8 h-8 bg-black/40 hover:bg-white/10 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition border border-white/5">✕</button>
             <div id="viewContent"></div>
         </div>
     </div>
@@ -1986,13 +2089,19 @@
 
         function updateStats() {
             const soldCount = Object.values(cellsData).filter(c => c.status === 'active').length;
+            const availableCount = TOTAL_CELLS - soldCount;
+
+            // Get current values for animation
+            const currentSold = parseInt(document.getElementById('soldCount').textContent.replace(/,/g, '')) || 0;
             const currentTotal = parseFloat(document.getElementById('totalInvestment').textContent) || 0;
+            const currentAvailable = parseInt(document.getElementById('availableCount').textContent.replace(/,/g, '')) || 1000000;
+
             const targetTotal = soldCount * 2.00;
 
-            document.getElementById('soldCount').textContent = soldCount.toLocaleString();
-
-            // Animate Total Investment
-            animateValue("totalInvestment", currentTotal, targetTotal, 1500);
+            // Animate All 3 Values
+            animateValue("soldCount", currentSold, soldCount, 1500, false);
+            animateValue("totalInvestment", currentTotal, targetTotal, 1500, true);
+            animateValue("availableCount", currentAvailable, availableCount, 1500, false);
 
             // Update progress bar
             const percent = (soldCount / TOTAL_CELLS) * 100;
@@ -2011,21 +2120,31 @@
             }
         }
 
-        function animateValue(id, start, end, duration) {
+        function animateValue(id, start, end, duration, isCurrency) {
             if (start === end) return;
             const obj = document.getElementById(id);
             const range = end - start;
-            let current = start;
-            const increment = end > start ? 0.01 : -0.01;
-            const stepTime = Math.abs(Math.floor(duration / (range * 100)));
-            const timer = setInterval(() => {
-                current += increment;
-                obj.textContent = current.toFixed(2);
-                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
-                    obj.textContent = end.toFixed(2);
-                    clearInterval(timer);
+            let startTime = null;
+
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = Math.min((timestamp - startTime) / duration, 1);
+                const current = start + (range * progress);
+
+                if (isCurrency) {
+                    obj.textContent = current.toFixed(2);
+                } else {
+                    obj.textContent = Math.floor(current).toLocaleString();
                 }
-            }, Math.max(stepTime, 10));
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    if (isCurrency) obj.textContent = end.toFixed(2);
+                    else obj.textContent = end.toLocaleString();
+                }
+            }
+            window.requestAnimationFrame(step);
         }
 
         // Mouse handlers
