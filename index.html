@@ -785,8 +785,8 @@
             }
 
             .stat-card {
-                padding: 8px 12px !important;
-                margin-bottom: 6px !important;
+                padding: 1rem !important;
+                margin-bottom: 1rem !important;
                 min-height: auto !important;
             }
 
@@ -1020,7 +1020,7 @@
             </div>
 
             <!-- أمثلة على الاستخدامات -->
-            <div class="grid grid-cols-2 sm:flex sm:flex-wrap justify-center gap-2 sm:gap-3 mb-8 max-w-2xl mx-auto">
+            <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 max-w-2xl mx-auto">
                 <span
                     class="bg-[#0f0f24] border border-white/10 px-3 py-2 rounded-xl text-[10px] sm:text-sm text-gray-300 shadow-lg flex items-center justify-center gap-2">
                     💼 <span data-en="Company Logo" data-ar="شعار شركتك">Company Logo</span>
@@ -1038,7 +1038,7 @@
                     🎂 <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
                 </span>
                 <span
-                    class="bg-[#0f0f24] border border-white/10 px-3 py-2 rounded-xl text-[10px] sm:text-sm text-gray-300 shadow-lg flex items-center justify-center gap-2 col-span-2 sm:col-auto">
+                    class="bg-[#0f0f24] border border-white/10 px-3 py-2 rounded-xl text-[10px] sm:text-sm text-gray-300 shadow-lg flex items-center justify-center gap-2">
                     ⭐ <span data-en="Digital Legacy" data-ar="أثر رقمي دائم">Digital Legacy</span>
                 </span>
             </div>
@@ -3366,7 +3366,20 @@
             document.getElementById('uploadPreview').classList.add('hidden');
             document.getElementById('uploadZone').classList.remove('has-image');
             uploadedImageBase64 = null;
-            updateLivePreview(); // Clear preview
+
+            // Clear Live previews too
+            const previewCell = document.getElementById('previewGridCell');
+            if (previewCell) {
+                previewCell.innerHTML = '<span class="text-white text-xs font-bold">🎯</span>';
+                previewCell.classList.add('animate-pulse');
+            }
+            const avatar = document.getElementById('previewTooltipAvatar');
+            if (avatar) {
+                avatar.style.background = 'linear-gradient(135deg, #8b5cf6, #ec4899)';
+                avatar.innerHTML = '<span class="text-2xl opacity-50">✨</span>';
+            }
+
+            updateLivePreview(); // Clear preview text
         }
 
         function goToPayment() {
@@ -3645,12 +3658,12 @@
             // Name & Flag
             const previewName = document.getElementById('previewNameText');
             const previewFlag = document.getElementById('previewFlag');
-            const countrySelect = document.getElementById('userCountry');
-            const selectedOption = countrySelect.options[countrySelect.selectedIndex];
-            const flag = selectedOption.text.split(' ')[0];
+
+            // Use the displayed flag instead of searching a hidden select's options
+            const currentFlag = document.getElementById('currentFlagDisplay')?.textContent || '🇯🇴';
 
             previewName.textContent = name || (currentLang === 'ar' ? 'اسمك هنا' : 'Your Name');
-            previewFlag.textContent = flag;
+            previewFlag.textContent = currentFlag;
 
             // Date
             const previewDate = document.getElementById('previewDate');
