@@ -3,29 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#050510">
-    <link rel="manifest" href="manifest.json">
     <title>The Million Logo Page - First Arabic Digital Advertising Museum</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
-
-    <!-- AR Support -->
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
-            });
-        }
-    </script>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -38,50 +23,33 @@
 
     <style>
         :root {
-            --font-en: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-en: 'Poppins', sans-serif;
             --font-ar: 'Tajawal', sans-serif;
-            --primary: #8B5CF6;
-            /* Vibrant Violet */
-            --primary-dark: #6D28D9;
-            --secondary: #00F5FF;
-            /* Electric Cyan */
-            --accent: #F59E0B;
-            /* Amber for highlights */
-            --bg: #F8FAFC;
-            /* Light slate background */
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --text-main: #0F172A;
-            /* Slate 900 */
-            --text-muted: #64748B;
-            /* Slate 500 */
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --secondary: #ec4899;
+            --dark: #050510;
+            /* Deeper midnight black */
+            --dark-light: #0d0d1a;
+            --dark-card: #0f0f24;
+            /* Solid, deep surface */
+            --neon-glow: 0 0 20px rgba(139, 92, 246, 0.4);
+            --neon-green: #10b981;
+            --neon-pink: #ec4899;
         }
 
         body {
             font-family: var(--font-en);
-            background: var(--bg);
-            color: var(--text-main);
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            touch-action: pan-y;
-            user-select: none;
-            -webkit-user-select: none;
-            overflow-x: hidden !important;
-            width: 100%;
-            position: relative;
-            min-height: 100vh;
+            background: var(--dark);
+            color: #fff;
         }
 
         body[dir="rtl"] {
             font-family: var(--font-ar);
         }
 
-        html,
-        body {
-            overflow-x: hidden !important;
-            width: 100%;
-            position: relative;
+        html {
+            scroll-behavior: smooth;
         }
 
         ::-webkit-scrollbar {
@@ -95,61 +63,6 @@
         ::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 4px;
-        }
-
-        /* Ticker Animation */
-        .ticker-container {
-            background: rgba(139, 92, 246, 0.05);
-            border-top: 1px solid rgba(139, 92, 246, 0.1);
-            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
-            overflow: hidden;
-            white-space: nowrap;
-            padding: 12px 0;
-            user-select: none;
-            position: relative;
-            z-index: 10;
-        }
-
-        .ticker-content {
-            display: inline-block;
-            white-space: nowrap;
-            animation: ticker 40s linear infinite;
-        }
-
-        @keyframes ticker {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        .ticker-item {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0 50px;
-            color: #D4AF37;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-        }
-
-        /* Mobile Fixes - Force Fixed Dimensions */
-        nav {
-            height: 72px;
-        }
-
-        .hero-bg {
-            padding-top: 80px;
-        }
-
-        #canvasContainer {
-            overflow: hidden;
-            touch-action: none;
         }
 
         /* Grid Cells - Optimized */
@@ -173,17 +86,16 @@
         }
 
         .grid-cell.available {
-            background: #FFFFFF;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: linear-gradient(135deg, #1e1e3f 0%, #2a2a4a 100%);
+            border: 1px solid rgba(139, 92, 246, 0.1);
         }
 
         .grid-cell.available:hover {
-            background: var(--primary);
-            box-shadow: 0 0 15px var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
         }
 
         .gradient-text {
-            background: linear-gradient(135deg, var(--primary) 0%, #3B82F6 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -209,42 +121,34 @@
         }
 
         .glow-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-            color: #FFFFFF !important;
-            font-weight: 700 !important;
-            text-transform: none;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .glow-btn:hover {
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
-            transform: translateY(-2px);
-            filter: brightness(1.05);
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+            transform: translateY(-2px) scale(1.02);
         }
 
         .glass-card {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: var(--dark-card);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         .glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), var(--neon-glow);
         }
 
         .hero-bg {
             background:
-                radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.08), transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(0, 245, 255, 0.05), transparent 40%),
-                var(--bg);
+                radial-gradient(circle at 50% -20%, rgba(139, 92, 246, 0.15), transparent 60%),
+                var(--dark);
         }
 
         .upload-zone {
@@ -362,9 +266,9 @@
         }
 
         .stat-card.primary {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(0, 245, 255, 0.05) 100%), var(--dark-card);
-            border-color: rgba(212, 175, 55, 0.3);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%), var(--dark-card);
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.15);
         }
 
         .stat-card::after {
@@ -758,63 +662,16 @@
             .hero-bg {
                 min-height: auto;
                 padding-top: 80px;
-                padding-bottom: 20px;
-            }
-
-            nav {
-                height: 70px !important;
-                padding: 0 !important;
-            }
-
-            nav .max-w-7xl {
-                padding: 0 12px !important;
-                height: 100%;
-            }
-
-            nav button {
-                padding: 8px 12px !important;
-                font-size: 13px !important;
-                border-radius: 10px !important;
-                height: 40px !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                gap: 5px !important;
-            }
-
-            nav #langIcon {
-                font-size: 16px !important;
-            }
-
-            nav #langText {
-                font-size: 12px !important;
-                font-weight: 800 !important;
-            }
-
-            nav .w-10.h-10 {
-                width: 32px !important;
-                height: 32px !important;
-                font-size: 14px !important;
-                border-radius: 8px !important;
+                padding-bottom: 40px;
             }
 
             .stat-card {
-                padding: 1rem !important;
-                margin-bottom: 1rem !important;
-                min-height: auto !important;
+                padding: 1rem;
+                min-width: 100px;
             }
 
             .stat-card .text-3xl {
-                font-size: 1.4rem !important;
-            }
-
-            .ticker-container {
-                padding: 10px 0 !important;
-            }
-
-            h1 {
-                font-size: 1.8rem !important;
-                margin-bottom: 10px !important;
+                font-size: 1.5rem;
             }
 
             .canvas-container {
@@ -846,48 +703,16 @@
                 border-radius: 0.75rem;
             }
 
-            .modal-content-scroll {
-                max-height: 60vh;
-                overflow-y: auto !important;
-                -webkit-overflow-scrolling: touch;
-            }
-
             .modal-overlay {
                 padding: 0.5rem;
             }
 
             /* Fix modal on mobile */
-            #claimModal .bg-\[#0f0f24\],
-            #viewModal .bg-\[#0f0f24\] {
-                max-height: 85vh;
-                margin: 10px;
-                border-radius: 20px !important;
+            #claimModal .glass-card,
+            #viewModal .glass-card {
+                max-height: 90vh;
+                overflow-y: auto;
             }
-
-            .p-8 {
-                padding: 1.5rem !important;
-            }
-
-            .p-10 {
-                padding: 1.5rem !important;
-            }
-
-            .py-20 {
-                padding-top: 2.5rem !important;
-                padding-bottom: 2.5rem !important;
-            }
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Prevent ALL horizontal scroll */
-        html,
-        body {
-            max-width: 100% !important;
-            overflow-x: hidden !important;
         }
 
 
@@ -981,333 +806,282 @@
         </div>
     </div>
 
-    <!-- Navigation HUD -->
-    <nav class="fixed top-0 left-0 right-0 z-[100] transition-all duration-500 py-4 px-4 sm:px-6">
-        <div class="max-w-7xl mx-auto flex items-center justify-between glass-card px-6 py-3 border-white/20">
-            <!-- Brand -->
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-[#0f0f1a]/90 backdrop-blur-md z-50 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div
-                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-violet-500/20">
-                    M
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-sm font-black text-slate-900 leading-tight tracking-tight uppercase"
-                        data-en="The Million" data-ar="المليون">The Million</span>
-                    <span class="text-[10px] font-bold text-violet-500 uppercase tracking-widest leading-none"
-                        data-en="Museum" data-ar="متحف">متحف</span>
-                </div>
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl font-bold">
+                    M</div>
+                <span class="text-xl font-bold hidden sm:block" data-en="Million Logo" data-ar="الصفحة المليون">Million
+                    Logo</span>
             </div>
-
-            <!-- Tactical Controls -->
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 sm:gap-3">
                 <button onclick="toggleLanguage()"
-                    class="hidden sm:flex items-center gap-2 hover:bg-black/5 px-4 py-2 rounded-xl transition-all duration-300 border border-transparent hover:border-slate-200">
-                    <span id="langIcon" class="text-xl">🇺🇸</span>
-                    <span id="langText"
-                        class="font-bold text-xs uppercase tracking-widest text-slate-700">English</span>
+                    class="flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl transition-all duration-300 border border-purple-500/30 hover:border-purple-500/50 hover:scale-105 shadow-lg">
+                    <span id="langIcon" class="text-2xl sm:text-3xl">🇺🇸</span>
+                    <span id="langText" class="font-bold text-base sm:text-lg text-white">English</span>
                 </button>
-                <a href="#grid" class="glow-btn px-6 py-3 rounded-xl font-bold text-xs">
-                    <span data-en="Explore Archive" data-ar="استكشف الأرشيف">استكشف الأرشيف</span>
+                <a href="#grid"
+                    class="glow-btn px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-semibold text-sm sm:text-base">
+                    <span data-en="Get Your Cell" data-ar="احجز خانتك">Get Your Cell</span>
                 </a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-bg min-h-screen flex items-center justify-center pt-32 pb-20 overflow-hidden relative">
-        <div class="max-w-6xl mx-auto px-4 text-center relative z-10">
-            <div class="mb-10 flex justify-center">
-                <div
-                    class="bg-violet-100/50 border border-violet-200 px-6 py-2 rounded-full flex items-center gap-3 backdrop-blur-md">
-                    <span class="w-2 h-2 rounded-full bg-violet-600 animate-pulse"></span>
-                    <span class="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-violet-700"
-                        data-en="Worlds First Arabic Digital Museum" data-ar="أول متحف رقمي عربي في العالم">Worlds First
-                        Arabic Digital Museum</span>
-                </div>
+    <section class="hero-bg min-h-screen flex items-center justify-center pt-20">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <div class="mb-6">
+                <span
+                    class="inline-block glass-card px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium text-purple-300">
+                    🏛️ <span data-en="First Arabic Digital Advertising Museum"
+                        data-ar="أول متحف إعلاني رقمي عربي">First Arabic Digital Advertising Museum</span>
+                </span>
             </div>
 
-            <h1 class="text-5xl sm:text-7xl md:text-8xl font-black mb-8 leading-tight tracking-tight text-slate-900">
-                <span data-en="The Digital" data-ar="الأرشيف">The Digital</span><br>
-                <span class="gradient-text" data-en="Million Logo" data-ar="لمليون شعار">Million Logo</span><br>
-                <span class="text-slate-400 text-2xl sm:text-4xl tracking-widest block mt-4 uppercase font-bold"
-                    data-en="Archive" data-ar="الرقمي">Archive</span>
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-black mb-4 leading-tight">
+                <span class="text-white" data-en="The Million" data-ar="الصفحة">The Million</span><br>
+                <span class="gradient-text" data-en="Logo Page" data-ar="المليون شعار">Logo Page</span>
             </h1>
 
-            <div class="relative max-w-xl mx-auto mb-16 mt-12">
-                <div class="glass-card p-8 sm:p-12 relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-transparent"></div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mb-6 uppercase tracking-tight">
-                        <span data-en="Become Part of History" data-ar="كن جزءاً من التاريخ">Become Part of
-                            History</span>
-                    </h2>
-                    <div class="flex items-center justify-center gap-6 mb-8">
-                        <div class="h-[1px] flex-1 bg-slate-200"></div>
-                        <p class="text-4xl sm:text-6xl font-black text-violet-600 drop-shadow-sm">
-                            <span data-en="$2.00" data-ar="2 دولار">$2.00</span>
-                        </p>
-                        <div class="h-[1px] flex-1 bg-slate-200"></div>
-                    </div>
-                    <p class="text-slate-500 text-xs sm:text-sm font-bold uppercase tracking-[0.2em]"
-                        data-en="Life-Long Spot • Unlimited Access" data-ar="مكانك للأبد • وصول غير محدود">Life-Long
-                        Spot • Unlimited Access</p>
-                </div>
+            <!-- الجملة القوية الواضحة -->
+            <div
+                class="bg-[#0f0f24] border-2 border-purple-500/40 rounded-3xl p-6 sm:p-8 mb-8 max-w-xl mx-auto shadow-[0_0_30px_rgba(139,92,246,0.2)] transition-all duration-500 hover:scale-[1.02]">
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
+                    <span data-en="Reserve Your Spot Forever" data-ar="احجز مكانك للأبد">Reserve Your Spot
+                        Forever</span>
+                </h2>
+                <p class="text-3xl sm:text-4xl font-black gradient-text">
+                    <span data-en="Just $2.00!" data-ar="فقط 2 دولار!">Just $2.00!</span>
+                </p>
             </div>
 
-            <!-- Usage Specifics -->
-            <div class="flex flex-wrap justify-center gap-3 mb-16 max-w-3xl mx-auto">
+            <!-- أمثلة على الاستخدامات -->
+            <div class="flex flex-wrap justify-center gap-3 mb-10 max-w-2xl mx-auto">
                 <span
-                    class="bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-xs text-slate-700 font-bold uppercase tracking-wide shadow-sm flex items-center gap-2 hover:border-violet-300 hover:bg-violet-50 transition-all cursor-default">
-                    🏢 <span data-en="Business Presence" data-ar="حضور تجاري">حضور تجاري</span>
+                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
+                    💼 <span data-en="Your Company Logo" data-ar="شعار شركتك">Your Company Logo</span>
                 </span>
                 <span
-                    class="bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-xs text-slate-700 font-bold uppercase tracking-wide shadow-sm flex items-center gap-2 hover:border-violet-300 hover:bg-violet-50 transition-all cursor-default">
-                    👤 <span data-en="Personal Legacy" data-ar="أثر شخصي">أثر شخصي</span>
+                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
+                    👤 <span data-en="Your Name" data-ar="اسمك">Your Name</span>
                 </span>
                 <span
-                    class="bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-xs text-slate-700 font-bold uppercase tracking-wide shadow-sm flex items-center gap-2 hover:border-violet-300 hover:bg-violet-50 transition-all cursor-default">
-                    🌟 <span data-en="Featured Story" data-ar="قصة مميزة">قصة مميزة</span>
+                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
+                    ❤️ <span data-en="Memory of Someone" data-ar="ذكرى شخص">Memory of Someone</span>
                 </span>
                 <span
-                    class="bg-white border border-slate-200 px-5 py-2.5 rounded-xl text-xs text-slate-700 font-bold uppercase tracking-wide shadow-sm flex items-center gap-2 hover:border-violet-300 hover:bg-violet-50 transition-all cursor-default">
-                    🌍 <span data-en="Global Mark" data-ar="بصمة عالمية">بصمة عالمية</span>
+                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
+                    🎂 <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
+                </span>
+                <span
+                    class="bg-[#0f0f24] border border-white/10 px-4 py-2 rounded-xl text-xs sm:text-sm text-gray-300 shadow-lg">
+                    ⭐ <span data-en="Digital Legacy" data-ar="أثر رقمي دائم">Digital Legacy</span>
                 </span>
             </div>
 
-            <!-- Impact Stats HUD -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
-                <!-- Sold Count -->
-                <div class="glass-card p-8 group border-slate-200 hover:border-violet-400">
-                    <div class="text-5xl font-black text-slate-900 mb-3 tracking-tight" id="soldCount">0</div>
-                    <div class="text-xs text-slate-500 font-bold uppercase tracking-widest" data-en="Archives Secured"
-                        data-ar="السجلات المحفوظة">السجلات المحفوظة</div>
-                </div>
-
-                <!-- Total Raised -->
-                <div class="glass-card p-8 border-violet-200 hover:border-violet-500 bg-violet-50/30">
-                    <div
-                        class="text-5xl font-black text-violet-600 mb-3 tracking-tight flex items-center justify-center gap-1">
-                        <span class="text-2xl">$</span><span id="totalInvestment">0.00</span>
-                    </div>
-                    <div class="text-xs text-violet-500 font-bold uppercase tracking-widest" data-en="Archive Value"
-                        data-ar="قيمة الأرشيف">قيمة الأرشيف</div>
-                </div>
-
-                <!-- Remaining -->
-                <div class="glass-card p-8 border-slate-200 hover:border-slate-400">
-                    <div class="text-5xl font-black text-slate-900 mb-3 tracking-tight" id="availableCount">1,000,000
-                    </div>
-                    <div class="text-xs text-slate-500 font-bold uppercase tracking-widest" data-en="Available Space"
-                        data-ar="المساحة المتاحة">المساحة المتاحة</div>
-                </div>
-            </div>
-
-            <!-- Data Point 02 -->
-            <div class="stat-card border-[#00F5FF]/20 bg-black/40">
+            <!-- Stats Grid: 3 Balanced Columns -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <!-- Stat 1: Stories Shared (Purple Glow) -->
                 <div
-                    class="text-4xl font-black text-[#00F5FF] mb-2 tracking-tighter flex items-center justify-center gap-1">
-                    <span class="text-xl">$</span><span id="totalInvestment">0.00</span>
+                    class="stat-card primary group relative overflow-hidden transition-all duration-500 hover:scale-[1.05]">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="text-3xl sm:text-4xl font-black text-white glow-text" id="soldCount">0</div>
+                    <div class="text-[10px] sm:text-xs text-purple-300 font-bold uppercase tracking-[0.2em] mt-1"
+                        data-en="Stories Shared" data-ar="قصة مشاركة">Stories Shared</div>
+                    <div
+                        class="absolute -bottom-1 -right-1 text-2xl opacity-10 group-hover:opacity-20 transition-opacity">
+                        ✨</div>
                 </div>
-                <div class="h-[1px] w-8 mx-auto bg-[#00F5FF]/30 mb-3"></div>
-                <div class="text-[9px] text-gray-500 font-black uppercase tracking-[0.4em]" data-en="Vault Valuation"
-                    data-ar="قيمة الخزنة">Vault Valuation</div>
-            </div>
 
-            <!-- Data Point 03 -->
-            <div class="stat-card border-white/10 bg-black/40">
-                <div class="text-4xl font-black text-white mb-2 tracking-tighter" id="availableCount">1,000,000
+                <!-- Stat 2: Total Invested (Green Glow) -->
+                <div
+                    class="stat-card border-green-500/30 bg-green-500/5 group relative overflow-hidden transition-all duration-500 hover:scale-[1.05]">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="text-3xl sm:text-4xl font-black text-green-400 flex items-center justify-center gap-1">
+                        <span>$</span><span id="totalInvestment">0.00</span>
+                    </div>
+                    <div class="text-[10px] sm:text-xs text-green-300/70 font-bold uppercase tracking-[0.2em] mt-1"
+                        data-en="Total Invested" data-ar="إجمالي الاستثمار">Total Invested</div>
+                    <div
+                        class="absolute -bottom-1 -right-1 text-2xl opacity-10 group-hover:opacity-20 transition-opacity">
+                        💰</div>
                 </div>
-                <div class="h-[1px] w-8 mx-auto bg-white/20 mb-3"></div>
-                <div class="text-[9px] text-gray-500 font-black uppercase tracking-[0.4em]" data-en="Remaining Slots"
-                    data-ar="الخانات المتبقية">Remaining Slots</div>
-            </div>
-        </div>
 
-        <!-- Luminous Progress HUD -->
-        <div class="max-w-md mx-auto mb-20 px-4">
-            <div class="flex justify-between text-xs font-bold uppercase tracking-widest text-slate-600 mb-4">
-                <span data-en="Archive Completion" data-ar="اكتمال الأرشيف">اكتمال الأرشيف</span>
-                <span id="progressText" class="text-violet-600">0%</span>
+                <!-- Stat 3: Available Cells (Pink Glow) -->
+                <div
+                    class="stat-card border-pink-500/30 bg-pink-500/5 group relative overflow-hidden transition-all duration-500 hover:scale-[1.05]">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-pink-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    </div>
+                    <div class="text-3xl sm:text-4xl font-black text-pink-400" id="availableCount">1,000,000</div>
+                    <div class="text-[10px] sm:text-xs text-pink-300/70 font-bold uppercase tracking-[0.2em] mt-1"
+                        data-en="Cells Available" data-ar="خانة متاحة">Cells Available</div>
+                    <div
+                        class="absolute -bottom-1 -right-1 text-2xl opacity-10 group-hover:opacity-20 transition-opacity">
+                        ⏳</div>
+                </div>
             </div>
-            <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200 p-0.5">
-                <div id="progressBarHero"
-                    class="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full transition-all duration-1000 shadow-sm"
-                    style="width: 0%"></div>
-            </div>
-            <div class="mt-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">
-                <span id="soldCountDisplay" class="text-slate-600">0</span> / 1,000,000 <span data-en="Spots Occupied"
-                    data-ar="مكان محجوز">مكان محجوز</span>
-            </div>
-        </div>
 
-        <!-- Modern Action HUD -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-10 mt-16 px-4">
+            <!-- Progress Bar -->
+            <div class="max-w-md mx-auto mb-10">
+                <div class="flex justify-between text-xs text-gray-400 mb-2">
+                    <span data-en="Progress" data-ar="التقدم">Progress</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="h-3 bg-white/10 rounded-full overflow-hidden">
+                    <div id="progressBar"
+                        class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
+                        style="width: 0%"></div>
+                </div>
+                <p class="text-center text-xs text-gray-500 mt-2">
+                    <span id="soldCountSmall">0</span> / 1,000,000 <span data-en="cells sold" data-ar="خانة مباعة">cells
+                        sold</span>
+                </p>
+            </div>
+
             <a href="#grid"
-                class="glow-btn group relative px-12 py-6 rounded-2xl flex items-center gap-4 transition-all hover:scale-[1.02]">
-                <div class="flex flex-col items-start leading-tight">
-                    <span class="text-[10px] font-bold opacity-80 tracking-widest mb-1 text-white uppercase"
-                        data-en="Secure Your" data-ar="احجز الآن">Secure Your</span>
-                    <span class="text-xl font-black text-white" data-en="Digital Legacy" data-ar="أثرك الرقمي">أثرك
-                        الرقمي</span>
-                </div>
-                <span class="text-2xl group-hover:translate-x-1 transition-transform text-white">→</span>
+                class="inline-block glow-btn px-8 sm:px-12 py-4 sm:py-5 rounded-full font-bold text-lg sm:text-xl shadow-2xl hover:scale-105 transition-transform">
+                🟢 <span data-en="Reserve Your Spot Now – $2.00" data-ar="احجز مكانك الآن – 2 دولار">Reserve Your Spot
+                    Now
+                    – $2.00</span>
             </a>
 
-            <div class="flex flex-wrap justify-center gap-8 text-slate-400 text-xs font-bold uppercase tracking-widest">
-                <span class="flex items-center gap-2 transition-colors hover:text-slate-600">🛡️ <span
-                        data-en="Verified" data-ar="موثق">موثق</span></span>
-                <span class="flex items-center gap-2 transition-colors hover:text-slate-600">💎 <span data-en="Eternal"
-                        data-ar="أبدي">أبدي</span></span>
-                <span class="flex items-center gap-2 transition-colors hover:text-slate-600">🇯🇴 <span data-en="Jordan"
-                        data-ar="الأردن">الأردن</span></span>
+            <!-- عناصر الثقة -->
+            <div class="flex flex-wrap justify-center gap-4 mt-6 text-xs sm:text-sm text-gray-400">
+                <span class="flex items-center gap-1">
+                    🔒 <span data-en="Secure Payment" data-ar="دفع آمن">Secure Payment</span>
+                </span>
+                <span class="flex items-center gap-1">
+                    ✅ <span data-en="No Hidden Fees" data-ar="بدون رسوم خفية">No Hidden Fees</span>
+                </span>
+                <span class="flex items-center gap-1">
+                    🇯🇴 <span data-en="Jordanian Project" data-ar="مشروع أردني">Jordanian Project</span>
+                </span>
             </div>
-        </div>
 
-        <div class="ticker-container bg-black/80 border-y border-[#D4AF37]/10 backdrop-blur-xl">
-            <div id="recentTicker" class="ticker-content py-2">
-                <!-- Items populated by JS -->
-                <div class="ticker-item">🏛️ <span data-en="VAULT ACTIVE" data-ar="الخزنة مفعلة">VAULT ACTIVE</span>
-                </div>
-                <div class="ticker-item">👑 <span data-en="SECURE YOUR SPOT" data-ar="احجز مكانك">SECURE YOUR
-                        SPOT</span></div>
-                <div class="ticker-item">⚖️ <span data-en="EQUALITY IN LEGACY" data-ar="المساواة في الأثر">EQUALITY
-                        IN LEGACY</span></div>
+            <div class="mt-12">
+                <svg class="w-6 h-6 mx-auto text-purple-500/50 animate-bounce" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
             </div>
-        </div>
-        </div>
-
-        <div class="mt-12">
-            <svg class="w-6 h-6 mx-auto text-purple-500/50 animate-bounce" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3">
-                </path>
-            </svg>
-        </div>
         </div>
     </section>
 
-    <!-- Why People Joined (Museum Categories) -->
-    <section class="py-20 bg-slate-50">
+    <!-- Why People Joined - Social Proof -->
+    <section class="py-16 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-center mb-8">
+                <span class="gradient-text" data-en="Why People Joined?" data-ar="ليش الناس حجزت؟">Why People
+                    Joined?</span>
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="glass-card p-4 text-center hover:scale-105 transition">
+                    <span class="text-3xl mb-2 block">❤️</span>
+                    <p class="text-sm text-gray-300" data-en="Memory of someone" data-ar="ذكرى شخص عزيز">Memory of
+                        someone</p>
+                </div>
+                <div class="glass-card p-4 text-center hover:scale-105 transition">
+                    <span class="text-3xl mb-2 block">🚀</span>
+                    <p class="text-sm text-gray-300" data-en="Start of a project" data-ar="بداية مشروع">Start of a
+                        project</p>
+                </div>
+                <div class="glass-card p-4 text-center hover:scale-105 transition">
+                    <span class="text-3xl mb-2 block">🇯🇴</span>
+                    <p class="text-sm text-gray-300" data-en="Pride in identity" data-ar="فخر بالهوية">Pride in identity
+                    </p>
+                </div>
+                <div class="glass-card p-4 text-center hover:scale-105 transition">
+                    <span class="text-3xl mb-2 block">💡</span>
+                    <p class="text-sm text-gray-300" data-en="A cool idea" data-ar="فكرة حلوة">A cool idea</p>
+                </div>
+            </div>
+            <p class="text-center text-gray-500 text-sm mt-6" data-en="Join them with just $2.00!"
+                data-ar="انضم إليهم بـ 2 دولار فقط!">Join them with just $2.00!</p>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="py-20">
         <div class="max-w-5xl mx-auto px-4">
-            <h2 class="text-xs font-bold tracking-[0.4em] text-center text-slate-400 mb-12 uppercase"
-                data-en="Common Uses" data-ar="الاستخدامات الشائعة">الاستخدامات الشائعة</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                <div class="glass-card p-8 border-slate-200 hover:border-violet-300">
-                    <span class="text-3xl mb-4 block">🏛️</span>
-                    <p class="text-xs font-bold uppercase tracking-widest text-slate-700" data-en="Digital Legacy"
-                        data-ar="أثر رقمي">أثر رقمي</p>
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-12">
+                <span class="gradient-text" data-en="How It Works" data-ar="كيف يعمل">How It Works</span>
+            </h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-card p-6 text-center">
+                    <div class="step-badge mx-auto mb-4">1</div>
+                    <h3 class="font-semibold mb-2 text-white" data-en="Choose Your Cell" data-ar="اختر خانتك">Choose
+                        Your Cell</h3>
+                    <p class="text-gray-400 text-sm" data-en="Click on any available cell in the grid"
+                        data-ar="اضغط على أي خانة متاحة في الشبكة">Click on any available cell in the grid</p>
                 </div>
-                <div class="glass-card p-8 border-slate-200 hover:border-violet-300">
-                    <span class="text-3xl mb-4 block">💡</span>
-                    <p class="text-xs font-bold uppercase tracking-widest text-slate-700" data-en="New Ideas"
-                        data-ar="أفكار ملهمة">أفكار ملهمة</p>
+                <div class="glass-card p-6 text-center">
+                    <div class="step-badge mx-auto mb-4">2</div>
+                    <h3 class="font-semibold mb-2 text-white" data-en="Share Your Story" data-ar="شارك قصتك">Share Your
+                        Story</h3>
+                    <p class="text-gray-400 text-sm" data-en="Add your name, special date, and story"
+                        data-ar="أضف اسمك، تاريخك المهم، وقصتك">Add your name, special date, and story</p>
                 </div>
-                <div class="glass-card p-8 border-slate-200 hover:border-violet-300">
-                    <span class="text-3xl mb-4 block">👑</span>
-                    <p class="text-xs font-bold uppercase tracking-widest text-slate-700" data-en="Brand Impact"
-                        data-ar="بصمة تجارية">بصمة تجارية</p>
+                <div class="glass-card p-6 text-center">
+                    <div class="step-badge mx-auto mb-4">3</div>
+                    <h3 class="font-semibold mb-2 text-white" data-en="Upload Your Logo" data-ar="ارفع شعارك">Upload
+                        Your Logo</h3>
+                    <p class="text-gray-400 text-sm" data-en="Add your photo or logo to represent you"
+                        data-ar="أضف صورتك أو شعارك ليمثلك">Add your photo or logo to represent you</p>
                 </div>
-                <div class="glass-card p-8 border-slate-200 hover:border-violet-300">
-                    <span class="text-3xl mb-4 block">🌍</span>
-                    <p class="text-xs font-bold uppercase tracking-widest text-slate-700" data-en="Global Reach"
-                        data-ar="انتشار عالمي">انتشار عالمي</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Protocol (How It Works) -->
-    <section class="py-24 bg-white">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="text-center mb-20">
-                <h2 class="text-xs font-bold tracking-[0.5em] text-violet-500 uppercase mb-4" data-en="The Simple Way"
-                    data-ar="بخطوات بسيطة">بخطوات بسيطة</h2>
-                <h3 class="text-4xl font-black text-slate-900" data-en="How to Join the Archive"
-                    data-ar="كيفية الانضمام للأرشيف">كيفية الانضمام للأرشيف</h3>
-            </div>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="glass-card p-10 border-slate-100 hover:border-violet-200 group">
-                    <div
-                        class="w-10 h-10 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center font-black mb-6 group-hover:bg-violet-600 group-hover:text-white transition-all">
-                        1</div>
-                    <h4 class="font-black text-slate-900 mb-4 text-sm" data-en="CHOOSE SPACE" data-ar="اختر مكانك">اختر
-                        مكانك</h4>
-                    <p class="text-xs text-slate-500 leading-relaxed font-bold uppercase tracking-wide"
-                        data-en="Locate any available spot on the archive grid."
-                        data-ar="حدد أي خانة متاحة على شبكة الأرشيف.">Locate any available spot on the archive grid.</p>
-                </div>
-                <div class="glass-card p-10 border-slate-100 hover:border-violet-200 group">
-                    <div
-                        class="w-10 h-10 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center font-black mb-6 group-hover:bg-violet-600 group-hover:text-white transition-all">
-                        2</div>
-                    <h4 class="font-black text-slate-900 mb-4 text-sm" data-en="ADD DETAILS" data-ar="أضف معلوماتك">أضف
-                        معلوماتك</h4>
-                    <p class="text-xs text-slate-500 leading-relaxed font-bold uppercase tracking-wide"
-                        data-en="Share your name, your story, and a date." data-ar="اكتب اسمك وقصتك وتاريخاً يميزك.">
-                        Share your name, your story, and a date.</p>
-                </div>
-                <div class="glass-card p-10 border-slate-100 hover:border-violet-200 group">
-                    <div
-                        class="w-10 h-10 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center font-black mb-6 group-hover:bg-violet-600 group-hover:text-white transition-all">
-                        3</div>
-                    <h4 class="font-black text-slate-900 mb-4 text-sm" data-en="UPLOAD LOGO" data-ar="ارفع شعارك">ارفع
-                        شعارك</h4>
-                    <p class="text-xs text-slate-500 leading-relaxed font-bold uppercase tracking-wide"
-                        data-en="Upload your personal or business logo."
-                        data-ar="ارفع شعارك الشخصي أو التجاري للأرشفة.">Upload your personal or business logo.</p>
-                </div>
-                <div class="glass-card p-10 border-slate-100 hover:border-violet-200 group">
-                    <div
-                        class="w-10 h-10 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center font-black mb-6 group-hover:bg-violet-600 group-hover:text-white transition-all">
-                        4</div>
-                    <h4 class="font-black text-slate-900 mb-4 text-sm" data-en="SECURE SPOT" data-ar="ثبّت مكانك">ثبّت
-                        مكانك</h4>
-                    <p class="text-xs text-slate-500 leading-relaxed font-bold uppercase tracking-wide"
-                        data-en="Complete your spot to be archived forever."
-                        data-ar="أكمل العملية ليتم حفظ مكانك للأبد.">Complete your spot to be archived forever.</p>
+                <div class="glass-card p-6 text-center">
+                    <div class="step-badge mx-auto mb-4">4</div>
+                    <h3 class="font-semibold mb-2 text-white" data-en="Instant Payment" data-ar="دفع فوري">Instant
+                        Payment</h3>
+                    <p class="text-gray-400 text-sm" data-en="Quick payment via Card or Apple Pay"
+                        data-ar="دفع سريع عبر البطاقة أو أبل باي">Quick payment via Card or Apple Pay</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- The Archive Grid -->
-    <section id="grid" class="py-24 bg-slate-50">
+    <!-- Grid Section -->
+    <section id="grid" class="py-20">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <div class="inline-block px-5 py-1.5 bg-violet-100 text-[10px] font-bold tracking-[0.3em] text-violet-600 uppercase mb-4 rounded-full"
-                    data-en="Interactive Experience" data-ar="تجربة تفاعلية">Interactive Experience</div>
-                <h2 class="text-4xl sm:text-6xl font-black text-slate-900 mb-6 tracking-tight">
-                    <span data-en="The Million Logo Matrix" data-ar="مصفوفة المليون شعار">مصفوفة المليون شعار</span>
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-3">
+                    <span class="gradient-text" data-en="The Million Grid" data-ar="الشبكة المليونية">The Million
+                        Grid</span>
                 </h2>
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest max-w-2xl mx-auto leading-relaxed"
-                    data-en="Select an empty spot to claim your position in the worlds first digital logo museum."
-                    data-ar="اختر مكاناً متاحاً لتحجز مكانك في أول متحف رقمي للشعارات في العالم.">
-                    Select an empty spot to claim your position in the worlds first digital logo museum.</p>
+                <p class="text-gray-400 text-sm" data-en="Click on any dark cell to claim it!"
+                    data-ar="اضغط على أي خانة داكنة لحجزها!">Click on any dark cell to claim it!</p>
             </div>
 
-            <!-- Search Matrix HUD -->
-            <div class="max-w-md mx-auto mb-16">
-                <div
-                    class="relative glass-card bg-white p-2 border-slate-200 focus-within:border-violet-400 focus-within:ring-4 focus-within:ring-violet-500/10 transition-all duration-300">
-                    <div class="flex items-center gap-4 px-4">
-                        <span class="text-slate-400">🔍</span>
-                        <input type="text" id="searchInput"
-                            class="bg-transparent w-full py-4 outline-none text-slate-900 placeholder-slate-300 text-sm font-bold uppercase tracking-wide"
-                            placeholder="Find by name or #ID..." oninput="searchCells(this.value)">
-                    </div>
+            <!-- Search Box -->
+            <div class="max-w-md mx-auto mb-6">
+                <div class="search-box flex items-center px-4 py-3">
+                    <span class="text-gray-400 mr-3">🔍</span>
+                    <input type="text" id="searchInput"
+                        class="bg-transparent w-full outline-none text-white placeholder-gray-500 text-sm"
+                        placeholder="Search by name..." data-placeholder-en="Search by name..."
+                        data-placeholder-ar="ابحث بالاسم..." oninput="searchCells(this.value)">
+                    <button onclick="clearSearch()" class="text-gray-500 hover:text-white ml-2 hidden"
+                        id="clearSearchBtn">&times;</button>
                 </div>
             </div>
 
-            <!-- Vault Legend -->
-            <div class="flex flex-wrap justify-center gap-10 mb-12">
-                <div class="flex items-center gap-3">
-                    <div class="w-4 h-4 rounded shadow-sm bg-white border border-slate-200"></div>
-                    <span class="text-slate-500 text-[10px] font-bold uppercase tracking-widest" data-en="Available"
-                        data-ar="متاح">متاح</span>
+            <!-- Grid Legend -->
+            <div class="flex justify-center gap-6 mb-6">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded bg-[#1e1e3f] border border-purple-500/20"></div>
+                    <span class="text-gray-500 text-xs" data-en="Available" data-ar="متاحة">Available</span>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="w-4 h-4 rounded shadow-sm bg-violet-500"></div>
-                    <span class="text-slate-500 text-[10px] font-bold uppercase tracking-widest" data-en="Secured"
-                        data-ar="محجوز">محجوز</span>
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded bg-gradient-to-r from-purple-500 to-pink-500"></div>
+                    <span class="text-gray-500 text-xs" data-en="Taken" data-ar="محجوزة">Taken</span>
                 </div>
             </div>
 
@@ -1364,132 +1138,88 @@
                 </button>
             </div>
 
-            <!-- The Founders (Pioneers of the Archive) -->
-            <div class="mt-24">
-                <div class="text-center mb-16">
-                    <h3 class="text-xs font-bold tracking-[0.5em] text-violet-500 uppercase mb-4" data-en="The Pioneers"
-                        data-ar="رواد الأرشيف">رواد الأرشيف</h3>
-                    <h4 class="text-3xl font-black text-slate-900" data-en="The First Three" data-ar="الثلاثة الأوائل">
-                        الثلاثة الأوائل</h4>
-                </div>
-
-                <div id="foundingWall" class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto px-4">
-                    <div class="glass-card p-8 flex flex-col items-center border-slate-100 hover:border-violet-200">
-                        <div class="text-[10px] font-bold text-slate-400 tracking-widest mb-6 uppercase">#0001</div>
-                        <div id="founder1Image"
-                            class="w-24 h-24 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-3xl text-slate-300 shadow-sm">
-                            ?</div>
-                        <h4 id="founder1Name" class="font-black text-sm mt-6 text-slate-900 uppercase tracking-wide"
-                            data-en="Pending..." data-ar="بانتظار...">Pending...</h4>
-                        <p id="founder1Story"
-                            class="text-slate-500 text-[10px] mt-4 line-clamp-2 text-center leading-relaxed font-bold uppercase">
-                        </p>
-                    </div>
-                    <div class="glass-card p-8 flex flex-col items-center border-violet-100 bg-violet-50/20">
-                        <div class="text-[10px] font-bold text-violet-400 tracking-widest mb-6 uppercase">#0002</div>
-                        <div id="founder2Image"
-                            class="w-24 h-24 rounded-2xl bg-white border border-violet-100 flex items-center justify-center text-3xl text-violet-200 shadow-sm">
-                            ?</div>
-                        <h4 id="founder2Name" class="font-black text-sm mt-6 text-slate-900 uppercase tracking-wide"
-                            data-en="Pending..." data-ar="بانتظار...">Pending...</h4>
-                        <p id="founder2Story"
-                            class="text-slate-500 text-[10px] mt-4 line-clamp-2 text-center leading-relaxed font-bold uppercase">
-                        </p>
-                    </div>
-                    <div class="glass-card p-8 flex flex-col items-center border-slate-100 hover:border-violet-200">
-                        <div class="text-[10px] font-bold text-slate-400 tracking-widest mb-6 uppercase">#0003</div>
-                        <div id="founder3Image"
-                            class="w-24 h-24 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-3xl text-slate-300 shadow-sm">
-                            ?</div>
-                        <h4 id="founder3Name" class="font-black text-sm mt-6 text-slate-900 uppercase tracking-wide"
-                            data-en="Pending..." data-ar="بانتظار...">Pending...</h4>
-                        <p id="founder3Story"
-                            class="text-slate-500 text-[10px] mt-4 line-clamp-2 text-center leading-relaxed font-bold uppercase">
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <p id="founder3Story" class="text-gray-600 text-[10px] mt-4 line-clamp-2 text-center leading-relaxed"></p>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-    </section>
-
-    <!-- Promise Section -->
-    <section class="py-20 bg-white">
-        <div class="max-w-4xl mx-auto px-4">
-            <div class="glass-card p-10 border-slate-100 shadow-xl">
-                <h2 class="text-3xl font-black text-center mb-12 text-slate-900">
-                    ✨ <span data-en="Our Commitment" data-ar="التزامنا">التزامنا</span>
-                </h2>
-
-                <div class="grid sm:grid-cols-2 gap-6">
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span class="text-3xl mb-4 block">💰</span>
-                        <h3 class="text-lg font-black text-slate-900" data-en="$2.00 Forever" data-ar="2 دولار للأبد">2
-                            دولار للأبد</h3>
-                        <p class="text-slate-500 mt-2 text-sm font-bold uppercase tracking-wide"
-                            data-en="The price is fixed and will never increase." data-ar="السعر ثابت ولن يتغير أبداً.">
-                            The price is fixed and will never increase.</p>
-                    </div>
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span class="text-3xl mb-4 block">🔒</span>
-                        <h3 class="text-lg font-black text-slate-900" data-en="Permanent Archive" data-ar="أرشفة دائمة">
-                            أرشفة دائمة</h3>
-                        <p class="text-slate-500 mt-2 text-sm font-bold uppercase tracking-wide"
-                            data-en="Your spot is secured and will never be deleted."
-                            data-ar="مكانك محفوظ ولن يتم حذفه نهائياً.">Your spot is secured and will never be deleted.
-                        </p>
-                    </div>
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span class="text-3xl mb-4 block">📜</span>
-                        <h3 class="text-lg font-black text-slate-900" data-en="Historical Value" data-ar="قيمة تاريخية">
-                            قيمة تاريخية</h3>
-                        <p class="text-slate-500 mt-2 text-sm font-bold uppercase tracking-wide"
-                            data-en="Become part of the worlds first digital logo museum."
-                            data-ar="كن جزءاً من أول متحف رقمي للشعارات في العالم.">Become part of the worlds first
-                            digital logo museum.</p>
-                    </div>
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100">
-                        <span class="text-3xl mb-4 block">🤝</span>
-                        <h3 class="text-lg font-black text-slate-900" data-en="No Hidden Fees"
-                            data-ar="لا توجد رسوم خفية">لا توجد رسوم خفية</h3>
-                        <p class="text-slate-500 mt-2 text-sm font-bold uppercase tracking-wide"
-                            data-en="A single payment for lifetime access." data-ar="دفعة واحدة فقط للوصول مدى الحياة.">
-                            A single payment for lifetime access.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Regional Leaderboard (Global Reach) -->
-    <section class="py-20 bg-gradient-to-b from-transparent via-purple-500/5 to-transparent">
-        <div class="max-w-6xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl sm:text-5xl font-black mb-6 tracking-tight">
-                    🌐 <span class="gradient-text" data-en="Global Reach" data-ar="الانتشار العالمي">Global Reach</span>
-                </h2>
-                <p class="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base"
-                    data-en="See which cities and countries are leading the museum's expansion."
-                    data-ar="شاهد أي المدن والدول تتصدر توسع المتحف.">See which cities and countries are leading the
-                    museum's expansion.</p>
-            </div>
-
-            <div class="max-w-4xl mx-auto">
-                <!-- Leaderboard Card (Now centered and elegant) -->
-                <div class="cyber-card p-8">
-                    <h3 class="text-xl font-bold mb-8 flex items-center justify-center gap-3">
-                        🏆 <span data-en="Top Regions" data-ar="أكثر المناطق نشاطاً">Top Regions</span>
+            <!-- The First Three -->
+            <div class="mt-16">
+                <div class="text-center mb-10">
+                    <p class="text-purple-400/60 text-xs uppercase tracking-widest mb-2" data-en="Hall of Fame"
+                        data-ar="قاعة الشرف">Hall of Fame</p>
+                    <h3 class="text-xl sm:text-2xl font-bold text-white">
+                        <span data-en="The First Three" data-ar="الثلاثة الأوائل">The First Three</span>
                     </h3>
-                    <div id="leaderboardList" class="space-y-6 max-w-2xl mx-auto">
-                        <!-- Loading State -->
-                        <div class="animate-pulse space-y-4">
-                            <div class="h-4 bg-white/5 rounded w-3/4"></div>
-                            <div class="h-4 bg-white/5 rounded w-1/2"></div>
-                            <div class="h-4 bg-white/5 rounded w-2/3"></div>
-                        </div>
+                    <p class="text-gray-500 mt-2 text-sm">
+                        <span data-en="The pioneers who started it all" data-ar="الرواد الذين بدأوا كل شيء">The pioneers
+                            who started it all</span>
+                    </p>
+                </div>
+
+                <div id="foundingWall" class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+                    <div class="founder-card">
+                        <div class="founder-rank gold"><span>1st</span><span>Pioneer</span></div>
+                        <div id="founder1Image"
+                            class="founder-avatar bg-[#1e1e3f] flex items-center justify-center text-2xl text-gray-600">
+                            ?</div>
+                        <h4 id="founder1Name" class="font-semibold text-sm mt-4 text-gray-400" data-en="Awaiting..."
+                            data-ar="بانتظار...">Awaiting...</h4>
+                        <p id="founder1Story" class="text-gray-500 text-xs mt-2 line-clamp-2"></p>
+                    </div>
+                    <div class="founder-card">
+                        <div class="founder-rank silver"><span>2nd</span><span>Pioneer</span></div>
+                        <div id="founder2Image"
+                            class="founder-avatar bg-[#1e1e3f] flex items-center justify-center text-2xl text-gray-600">
+                            ?</div>
+                        <h4 id="founder2Name" class="font-semibold text-sm mt-4 text-gray-400" data-en="Awaiting..."
+                            data-ar="بانتظار...">Awaiting...</h4>
+                        <p id="founder2Story" class="text-gray-500 text-xs mt-2 line-clamp-2"></p>
+                    </div>
+                    <div class="founder-card">
+                        <div class="founder-rank bronze"><span>3rd</span><span>Pioneer</span></div>
+                        <div id="founder3Image"
+                            class="founder-avatar bg-[#1e1e3f] flex items-center justify-center text-2xl text-gray-600">
+                            ?</div>
+                        <h4 id="founder3Name" class="font-semibold text-sm mt-4 text-gray-400" data-en="Awaiting..."
+                            data-ar="بانتظار...">Awaiting...</h4>
+                        <p id="founder3Story" class="text-gray-500 text-xs mt-2 line-clamp-2"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Charter Section -->
+    <section class="py-20">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="gradient-border p-8 sm:p-10">
+                <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8">
+                    📜 <span class="gradient-text" data-en="Our Promise" data-ar="وعدنا">Our Promise</span>
+                </h2>
+
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div class="charter-card">
+                        <span class="text-3xl mb-3 block">💰</span>
+                        <h3 class="text-lg font-bold text-white" data-en="$2.00 Forever" data-ar="2 دولار للأبد">$2.00
+                            Forever</h3>
+                        <p class="text-gray-400 mt-2 text-sm" data-en="Price never changes" data-ar="السعر لن يتغير">
+                            Price never changes</p>
+                    </div>
+                    <div class="charter-card">
+                        <span class="text-3xl mb-3 block">🔒</span>
+                        <h3 class="text-lg font-bold text-white" data-en="Never Deleted" data-ar="لن تُحذف">Never
+                            Deleted</h3>
+                        <p class="text-gray-400 mt-2 text-sm" data-en="Your story stays forever"
+                            data-ar="قصتك تبقى للأبد">Your story stays forever</p>
+                    </div>
+                    <div class="charter-card">
+                        <span class="text-3xl mb-3 block">✨</span>
+                        <h3 class="text-lg font-bold text-white" data-en="No Changes" data-ar="لا تعديل">No Changes</h3>
+                        <p class="text-gray-400 mt-2 text-sm" data-en="Preserved as you wrote it"
+                            data-ar="محفوظة كما كتبتها">Preserved as you wrote it</p>
+                    </div>
+                    <div class="charter-card">
+                        <span class="text-3xl mb-3 block">🏛️</span>
+                        <h3 class="text-lg font-bold text-white" data-en="Digital Museum" data-ar="متحف رقمي">Digital
+                            Museum</h3>
+                        <p class="text-gray-400 mt-2 text-sm" data-en="Part of Arab digital history"
+                            data-ar="جزء من التاريخ الرقمي العربي">Part of Arab digital history</p>
                     </div>
                 </div>
             </div>
@@ -1497,164 +1227,184 @@
     </section>
 
     <!-- FAQ Section -->
-    <section class="py-24 bg-slate-50">
+    <section class="py-20">
         <div class="max-w-3xl mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-xs font-bold tracking-[0.4em] text-violet-500 uppercase mb-4"
-                    data-en="Questions & Answers" data-ar="أسئلة وأجوبة">أسئلة وأجوبة</h2>
-                <h3 class="text-3xl font-black text-slate-900" data-en="Frequently Asked Questions"
-                    data-ar="الأسئلة الشائعة">الأسئلة الشائعة</h3>
-            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-center mb-12">
+                <span class="gradient-text" data-en="Frequently Asked Questions" data-ar="الأسئلة الشائعة">Frequently
+                    Asked Questions</span>
+            </h2>
 
             <div class="space-y-4">
-                <div
-                    class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm transition-all hover:border-violet-200">
-                    <div class="faq-question p-6 flex items-center justify-between cursor-pointer"
-                        onclick="toggleFaq(this)">
-                        <span class="font-bold text-slate-800" data-en="What do I get with my spot?"
-                            data-ar="ماذا أحصل عند حجز مكان؟">ماذا أحصل عند حجز مكان؟</span>
-                        <span class="faq-icon text-slate-300">▼</span>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="font-semibold text-white text-sm sm:text-base"
+                            data-en="What do I get when I buy a cell?" data-ar="ماذا أحصل عند شراء خانة؟">What do I get
+                            when I buy a cell?</span>
+                        <span class="faq-icon text-purple-400">▼</span>
                     </div>
-                    <div class="faq-answer hidden bg-slate-50 border-t border-slate-100">
-                        <p class="p-6 text-slate-600 text-sm leading-relaxed"
-                            data-en="Your logo and story will be permanently archived in the museum. Anyone visiting can explore your legacy forever."
-                            data-ar="سيتم أرشفة شعارك وقصتك بشكل دائم في المتحف. يمكن لأي زائر استكشاف أثرك للأبد.">
-                            Your logo and story will be permanently archived in the museum. Anyone visiting can explore
-                            your legacy forever.
-                        </p>
+                    <div class="faq-answer">
+                        <p class="px-5 pb-5 text-gray-400 text-sm"
+                            data-en="Your logo/photo appears permanently on the grid. When anyone clicks on it, they see your name, story, and special date. It's your digital legacy forever!"
+                            data-ar="شعارك/صورتك تظهر بشكل دائم على الشبكة. عندما يضغط أي شخص عليها، يرى اسمك وقصتك وتاريخك المميز. إنه إرثك الرقمي للأبد!">
+                            Your logo/photo appears permanently on the grid. When anyone clicks on it, they see your
+                            name, story, and special date. It's your digital legacy forever!</p>
                     </div>
                 </div>
-                <!-- ... other FAQs with same pattern ... -->
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="font-semibold text-white text-sm sm:text-base" data-en="How do I pay?"
+                            data-ar="كيف أدفع؟">How do I pay?</span>
+                        <span class="faq-icon text-purple-400">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="px-5 pb-5 text-gray-400 text-sm"
+                            data-en="You can pay instantly via Credit Card or Apple Pay using Gumroad. It's safe, fast, and automatic!"
+                            data-ar="يمكنك الدفع فوراً عبر البطاقة أو أبل باي باستخدام Gumroad. الطريقة آمنة وسريعة وتلقائية!">
+                            You can pay instantly via Credit Card or Apple Pay using Gumroad. It's safe, fast, and
+                            automatic!</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="font-semibold text-white text-sm sm:text-base"
+                            data-en="Can I edit my cell after purchase?" data-ar="هل يمكنني تعديل خانتي بعد الشراء؟">Can
+                            I edit my cell after purchase?</span>
+                        <span class="faq-icon text-purple-400">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="px-5 pb-5 text-gray-400 text-sm"
+                            data-en="No. Once confirmed, your cell becomes part of the permanent archive. This ensures authenticity and historical value."
+                            data-ar="لا. بمجرد التأكيد، تصبح خانتك جزءاً من الأرشيف الدائم. هذا يضمن المصداقية والقيمة التاريخية.">
+                            No. Once confirmed, your cell becomes part of the permanent archive. This ensures
+                            authenticity and historical value.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="font-semibold text-white text-sm sm:text-base"
+                            data-en="What happens after all cells are sold?"
+                            data-ar="ماذا يحدث بعد بيع كل الخانات؟">What happens after all cells are sold?</span>
+                        <span class="faq-icon text-purple-400">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="px-5 pb-5 text-gray-400 text-sm"
+                            data-en="The page becomes a permanent digital museum - the first Arabic advertising archive. No more purchases, just viewing a piece of history."
+                            data-ar="تصبح الصفحة متحفاً رقمياً دائماً - أول أرشيف إعلاني عربي. لا مزيد من الشراء، فقط مشاهدة قطعة من التاريخ.">
+                            The page becomes a permanent digital museum - the first Arabic advertising archive. No more
+                            purchases, just viewing a piece of history.</p>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </section>
 
-    <!-- Contact & Trust Section -->
-    <section class="py-20 bg-white">
+    <!-- قسم التواصل والثقة -->
+    <section class="py-12 bg-gradient-to-r from-purple-500/5 to-pink-500/5">
         <div class="max-w-4xl mx-auto px-4">
-            <div class="glass-card p-10 text-center border-slate-200 shadow-xl">
-                <h3 class="text-2xl font-black text-slate-900 mb-4">
-                    💬 <span data-en="Need Assistance?" data-ar="هل تحتاج لمساعدة؟">هل تحتاج لمساعدة؟</span>
+            <div class="glass-card p-6 sm:p-8 text-center">
+                <h3 class="text-xl sm:text-2xl font-bold text-white mb-4">
+                    💬 <span data-en="Have Questions?" data-ar="عندك أسئلة؟">Have Questions?</span>
                 </h3>
-                <p class="text-slate-500 mb-10 text-sm font-bold uppercase tracking-wide"
-                    data-en="Our team is here to support you at any time." data-ar="فريقنا متواجد لدعمك في أي وقت.">Our
-                    team is here to support you at any time.</p>
+                <p class="text-gray-400 mb-6 text-sm sm:text-base" data-en="We're here to help! Contact us anytime."
+                    data-ar="نحن هنا للمساعدة! تواصل معنا في أي وقت.">We're here to help! Contact us anytime.</p>
 
-                <div class="flex flex-wrap justify-center gap-6">
+                <div class="flex flex-wrap justify-center gap-4">
                     <a href="https://wa.me/962775925599" target="_blank"
-                        class="flex items-center gap-3 bg-green-50 text-green-600 border border-green-200 px-8 py-4 rounded-2xl font-bold transition hover:bg-green-100 shadow-sm">
+                        class="flex items-center gap-2 bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 px-6 py-3 rounded-xl transition">
                         <span class="text-xl">📱</span>
-                        <span>WhatsApp Support</span>
+                        <span class="text-green-400 font-semibold">WhatsApp</span>
                     </a>
                     <a href="mailto:ezz2006m@gmail.com"
-                        class="flex items-center gap-3 bg-violet-50 text-violet-600 border border-violet-200 px-8 py-4 rounded-2xl font-bold transition hover:bg-violet-100 shadow-sm">
+                        class="flex items-center gap-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 px-6 py-3 rounded-xl transition">
                         <span class="text-xl">✉️</span>
-                        <span>Official Email</span>
+                        <span class="text-purple-400 font-semibold">Email</span>
                     </a>
                 </div>
 
-                <div class="mt-12 pt-8 border-t border-slate-100">
-                    <div
-                        class="flex flex-wrap justify-center gap-10 text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                        <span class="flex items-center gap-2">🔒 <span data-en="Verified Secure" data-ar="آمن وموثق">آمن
-                                وموثق</span></span>
-                        <span class="flex items-center gap-2">💯 <span data-en="Lifetime Access"
-                                data-ar="وصول مادي الحياة">وصول مدى الحياة</span></span>
-                        <span class="flex items-center gap-2">🇯🇴 <span data-en="Jordanian Digital Heritage"
-                                data-ar="تراث رقمي أردني">تراث رقمي أردني</span></span>
+                <div class="mt-6 pt-6 border-t border-white/5">
+                    <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+                        <span class="flex items-center gap-2">
+                            🔒 <span data-en="Secure & Safe" data-ar="آمن ومحمي">Secure & Safe</span>
+                        </span>
+                        <span class="flex items-center gap-2">
+                            💯 <span data-en="$2.00 = Forever" data-ar="2 دولار = للأبد">$2.00 = Forever</span>
+                        </span>
+                        <span class="flex items-center gap-2">
+                            🇯🇴 <span data-en="Made in Jordan" data-ar="صنع في الأردن">Made in Jordan</span>
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Final Invitation -->
-    <section class="py-32 text-center bg-slate-50 overflow-hidden relative">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.05)_0%,transparent_100%)]">
-        </div>
-        <div class="max-w-4xl mx-auto px-4 relative z-10">
-            <span class="text-6xl mb-10 block animate-bounce-slow">🎨</span>
-            <h3 class="text-4xl sm:text-5xl font-black text-slate-900 mb-8 tracking-tight">
-                <span data-en="Be Part of History" data-ar="كن جزءاً من التاريخ">كن جزءاً من التاريخ</span>
-            </h3>
-            <p class="text-slate-500 text-sm font-bold uppercase tracking-widest leading-relaxed mb-12 max-w-2xl mx-auto"
-                data-en="Join thousands of others in the world's first digital logo museum. Your legacy starts here."
-                data-ar="انضم إلى الآلاف في أول متحف رقمي للشعارات في العالم. أثرك يبدأ من هنا.">Join thousands of
-                others in the world's first digital logo museum. Your legacy starts here.</p>
+    <!-- Warm Ending Section -->
+    <section class="py-16 text-center">
+        <div class="max-w-3xl mx-auto px-4">
+            <div class="glass-card p-8 sm:p-12">
+                <span class="text-5xl sm:text-6xl mb-6 block">🤍</span>
+                <h3 class="text-2xl sm:text-3xl font-bold text-white mb-4">
+                    <span data-en="Thank you for being here" data-ar="شكراً لأنك هنا">Thank you for being here</span>
+                </h3>
+                <p class="text-gray-400 text-sm sm:text-base leading-relaxed mb-6"
+                    data-en="Thank you for thinking about being part of this idea. Together, we are building Arab digital history - one cell at a time."
+                    data-ar="شكراً لأنك فكرت تكون جزء من هالفكرة. معاً نبني التاريخ الرقمي العربي - خانة بخانة.">Thank
+                    you for thinking about being part of this idea. Together, we are building Arab digital history - one
+                    cell at a time.</p>
 
-            <a href="#grid"
-                class="glow-btn inline-flex items-center gap-4 px-12 py-6 rounded-2xl text-lg font-black transition-all hover:scale-105 active:scale-95 shadow-xl">
-                <span data-en="Claim Your Position" data-ar="احجز مكانك الآن">احجز مكانك الآن</span>
-                <span class="text-2xl">→</span>
-            </a>
+                <p class="text-purple-400 text-lg sm:text-xl font-semibold mb-8">
+                    <span data-en="Your name deserves to be part of history 🌟"
+                        data-ar="اسمك يستحق أن يكون جزءاً من التاريخ 🌟">Your name deserves to be part of history
+                        🌟</span>
+                </p>
+
+                <a href="#grid"
+                    class="inline-block glow-btn px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg shadow-2xl hover:scale-105 transition-transform">
+                    🟢 <span data-en="Reserve Your Spot – $2.00" data-ar="مساهمة رمزية – 2 دولار">Reserve Your Spot –
+                        $2.00</span>
+                </a>
+
+                <p class="text-gray-500 text-xs mt-6" data-en="A symbolic contribution • Your legacy forever"
+                    data-ar="مساهمة رمزية • إرثك للأبد">A symbolic contribution • Your legacy forever</p>
+            </div>
         </div>
     </section>
 
-    <!-- Clean Footer -->
-    <footer class="py-20 bg-white border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-12">
-                <div class="flex flex-col items-center md:items-start gap-4">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-10 h-10 rounded-xl bg-violet-600 flex items-center justify-center text-white font-black">
-                            M</div>
-                        <span class="text-sm font-black text-slate-900 uppercase tracking-widest">The Million
-                            Museum</span>
-                    </div>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">The worlds first Arabic
-                        digital logo archive.</p>
+    <!-- Footer -->
+    <footer class="py-10 border-t border-white/5">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-wrap justify-between items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl font-bold">
+                        M</div>
+                    <span class="text-lg font-bold text-white">Million Logo</span>
                 </div>
-
-                <div class="flex flex-col items-center gap-4">
-                    <div class="text-[10px] text-slate-400 font-bold tracking-[0.2em] uppercase">Project by Alexander
-                        Smadi</div>
-                    <div class="flex gap-8">
-                        <a href="https://wa.me/962775925599" target="_blank"
-                            class="text-xs text-slate-600 hover:text-violet-600 font-bold uppercase tracking-widest transition">WhatsApp</a>
-                        <a href="mailto:ezz2006m@gmail.com"
-                            class="text-xs text-slate-600 hover:text-violet-600 font-bold uppercase tracking-widest transition">Email
-                            Us</a>
-                    </div>
+                <div class="text-gray-500 text-sm">
+                    <span data-en="An idea by SMADI 🇯🇴" data-ar="فكرة SMADI 🇯🇴">An idea by
+                        SMADI 🇯🇴</span>
                 </div>
-
-                <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                    © 2026 The Million Museum.
+                <div class="flex gap-4">
+                    <a href="https://wa.me/962775925599" target="_blank"
+                        class="text-gray-500 hover:text-green-400 transition text-sm">WhatsApp</a>
+                    <a href="mailto:ezz2006m@gmail.com"
+                        class="text-gray-500 hover:text-purple-400 transition text-sm">Email</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Flag Selector Modal (Searchable) -->
-    <div id="flagSelectorModal" class="fixed inset-0 modal-overlay z-[60] hidden items-center justify-center p-4">
-        <div
-            class="bg-[#0f0f24] border border-purple-500/30 w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
-            <div class="p-4 border-b border-white/5 flex justify-between items-center">
-                <h3 class="text-white font-bold" data-en="Select Country" data-ar="اختر الدولة">Select Country</h3>
-                <button onclick="closeFlagSelector()" class="text-gray-400 hover:text-white">✕</button>
-            </div>
-            <div class="p-4">
-                <div class="relative group">
-                    <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                        <span class="text-gray-500">🔍</span>
-                    </div>
-                    <input type="text" id="flagSearchInput" oninput="filterCountries()"
-                        class="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-white focus:outline-none focus:border-purple-500 transition"
-                        placeholder="Search country... / ابحث عن دولة...">
-                </div>
-            </div>
-            <div id="countryList" class="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-hide">
-                <!-- Countries will be injected here -->
-            </div>
-        </div>
-    </div>
-
     <!-- Claim Cell Modal -->
     <div id="claimModal"
         class="fixed inset-0 modal-overlay z-50 hidden items-center justify-center p-2 sm:p-4 overflow-y-auto">
         <div
-            class="bg-[#0f0f24] border border-purple-500/30 w-full max-w-md sm:max-w-lg relative rounded-2xl shadow-[0_30px_100px_rgba(0,0,0,0.8),0_0_20px_rgba(139,92,246,0.1)] overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
-            <div class="p-3 sm:p-6 border-b border-white/5 flex-shrink-0 relative">
+            class="bg-[#0f0f24] border border-purple-500/30 w-full max-w-md sm:max-w-lg relative my-4 sm:my-8 rounded-3xl shadow-[0_30px_100px_rgba(0,0,0,0.8),0_0_20px_rgba(139,92,246,0.1)]">
+            <div class="p-4 sm:p-6 border-b border-white/5">
                 <button onclick="closeClaimModal()"
                     class="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 bg-black/40 hover:bg-white/10 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition border border-white/5">✕</button>
 
@@ -1677,339 +1427,309 @@
                 </div>
             </div>
 
-            <div class="flex-1 overflow-hidden flex flex-col">
-                <div class="flex-1 overflow-y-auto p-4 sm:p-6 scrollbar-hide modal-content-scroll">
-                    <!-- Step 1: Your Story (Redesigned) -->
-                    <!-- Step 1: Your Story (Perfected) -->
-                    <div id="step1" class="step-content">
-                        <!-- Live Preview Title -->
-                        <div class="flex items-center gap-2 mb-4 px-1">
-                            <span class="text-lg">👀</span>
-                            <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-purple-400/80"
-                                data-en="Live Preview" data-ar="معاينة مباشرة">Live Preview</h4>
+            <div class="p-4 sm:p-6">
+                <!-- Step 1: Your Story (Redesigned) -->
+                <!-- Step 1: Your Story (Perfected) -->
+                <div id="step1" class="step-content">
+                    <!-- Live Preview Title -->
+                    <div class="flex items-center gap-2 mb-4 px-1">
+                        <span class="text-lg">👀</span>
+                        <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-purple-400/80"
+                            data-en="Live Preview" data-ar="معاينة مباشرة">Live Preview</h4>
+                    </div>
+
+                    <!-- Enhanced Live Preview Box -->
+                    <div
+                        class="bg-[#050510] border border-purple-500/30 rounded-2xl mb-6 relative overflow-hidden group p-5 shadow-inner">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-30">
                         </div>
 
-                        <!-- Enhanced Live Preview Box -->
-                        <div
-                            class="bg-[#050510] border border-purple-500/30 rounded-2xl mb-4 relative overflow-hidden group p-3 sm:p-5 shadow-inner">
-                            <div class="absolute inset-0 bg-[#D4AF37]/5 opacity-10"></div>
+                        <div class="relative z-10 text-center">
+                            <!-- Mini Grid Simulation -->
+                            <p class="text-[10px] text-purple-300/60 uppercase font-black tracking-[0.2em] mb-3"
+                                data-en="Your spot in the crowd" data-ar="موقعك بين الجميع">Your spot in the crowd</p>
+                            <div class="flex justify-center mb-8">
+                                <div
+                                    class="grid grid-cols-3 gap-1.5 p-2 bg-[#0f0f1a] rounded-xl border border-white/5 shadow-2xl scale-110 sm:scale-125 transition-transform duration-500 hover:scale-[1.3]">
+                                    <!-- Row 1 -->
+                                    <div class="w-8 h-8 rounded-sm bg-purple-500/10 border border-white/5 opacity-40">
+                                    </div>
+                                    <div class="w-8 h-8 rounded-sm bg-pink-500/10 border border-white/5 opacity-30">
+                                    </div>
+                                    <div class="w-8 h-8 rounded-sm bg-blue-500/10 border border-white/5 opacity-40">
+                                    </div>
+                                    <!-- Row 2 -->
+                                    <div class="w-8 h-8 rounded-sm bg-[#1a1a35] border border-white/5 opacity-50">
+                                    </div>
+                                    <!-- USER CELL (CENTER) -->
+                                    <div id="previewGridCell"
+                                        class="w-8 h-8 rounded-sm bg-gradient-to-br from-purple-600 to-pink-600 shadow-[0_0_15px_rgba(139,92,246,0.6)] border-2 border-white ring-2 ring-purple-600/50 flex items-center justify-center overflow-hidden transition-all duration-300">
+                                        <span class="text-white text-xs font-bold">🎯</span>
+                                    </div>
+                                    <div class="w-8 h-8 rounded-sm bg-[#12122b] border border-white/5 opacity-30">
+                                    </div>
+                                    <!-- Row 3 -->
+                                    <div class="w-8 h-8 rounded-sm bg-[#241a35] border border-white/5 opacity-40">
+                                    </div>
+                                    <div class="w-8 h-8 rounded-sm bg-[#1a1a35] border border-white/5 opacity-30">
+                                    </div>
+                                    <div class="w-8 h-8 rounded-sm bg-[#12122b] border border-white/5 opacity-50">
+                                    </div>
+                                </div>
+                            </div>
 
-                            <div class="relative z-10 text-center">
-                                <!-- Imperial Matrix Placement -->
-                                <p class="text-[9px] text-[#D4AF37]/60 uppercase font-black tracking-[0.4em] mb-4"
-                                    data-en="Matrix Position" data-ar="موقعك في المصفوفة">Matrix Position
+                            <!-- High-Fidelity Tooltip Preview -->
+                            <div class="max-w-[240px] mx-auto transform hover:scale-[1.02] transition-all duration-300">
+                                <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-3 text-center"
+                                    data-en="How others will see it" data-ar="كيف سيراك الآخرون">How others will see it
                                 </p>
-                                <div class="flex justify-center mb-8">
+                                <div
+                                    class="relative p-4 rounded-2xl bg-[#16162a]/95 border border-purple-500/40 shadow-[0_15px_50px_rgba(0,0,0,0.6),0_0_20px_rgba(139,92,246,0.2)] backdrop-blur-xl">
+                                    <div id="previewTooltipAvatar"
+                                        class="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 mx-auto mb-3 border-2 border-white/10 shadow-lg flex items-center justify-center overflow-hidden">
+                                        <span class="text-2xl opacity-50">✨</span>
+                                    </div>
+                                    <div id="previewName"
+                                        class="text-sm font-black text-white text-center mb-1 truncate"
+                                        data-en="Your Name" data-ar="اسمك هنا">Your Name</div>
                                     <div
-                                        class="grid grid-cols-3 gap-1 p-2 bg-black rounded-none border border-[#D4AF37]/20 shadow-2xl scale-[0.85] sm:scale-125 transition-transform duration-500">
-                                        <!-- Ambient Cells -->
-                                        <div class="w-8 h-8 rounded-none bg-white/5 border border-white/5 opacity-40">
-                                        </div>
-                                        <div class="w-8 h-8 rounded-none bg-white/5 border border-white/5 opacity-30">
-                                        </div>
-                                        <div class="w-8 h-8 rounded-none bg-white/5 border border-white/5 opacity-40">
-                                        </div>
-                                        <div class="w-8 h-8 rounded-none bg-white/5 border border-white/5 opacity-50">
-                                        </div>
-                                        <!-- TARGET CELL -->
-                                        <div id="previewGridCell"
-                                            class="w-8 h-8 rounded-none bg-gradient-to-br from-[#D4AF37] to-[#00F5FF] shadow-[0_0_20px_rgba(212,175,55,0.4)] border border-white flex items-center justify-center overflow-hidden transition-all duration-300">
-                                            <span class="text-black text-[10px] font-black">⚜️</span>
-                                        </div>
-                                        <div class="w-8 h-8 rounded-none bg-white/5 border border-white/5 opacity-30">
-                                        </div>
-                                        <div class="w-8 h-8 rounded-none bg-white/5 border border-white/5 opacity-40">
-                                        </div>
-                                        <div class="w-8 h-8 rounded-none bg-white/5 border border-white/5 opacity-30">
-                                        </div>
-                                        <div class="w-8 h-8 rounded-none bg-white/5 border border-white/5 opacity-50">
+                                        class="text-[9px] text-purple-400 font-bold text-center mb-2 tracking-tighter uppercase">
+                                        Cell #<span id="previewCellIdDisplay">0</span></div>
+                                    <div id="previewDateWrapper"
+                                        class="flex items-center justify-center gap-1.5 mb-3 text-pink-400">
+                                        <span class="text-[10px]">📅</span>
+                                        <span id="previewDate" class="text-[10px] font-bold">2026-02-18</span>
+                                    </div>
+                                    <div class="border-t border-white/10 pt-3 text-center">
+                                        <div id="previewStory"
+                                            class="text-[11px] text-gray-400 leading-relaxed italic line-clamp-2"
+                                            data-en="Your amazing story will appear here..."
+                                            data-ar="قصتك الرائعة ستظهر هنا...">"Your amazing story will appear here..."
                                         </div>
                                     </div>
-                                </div>
-
-                                <!-- Imperial Record Preview -->
-                                <div class="max-w-[260px] mx-auto transition-all duration-300">
-                                    <p class="text-[9px] text-gray-700 uppercase tracking-[0.3em] mb-4 text-center"
-                                        data-en="Public Record Preview" data-ar="معاينة السجل العام">Public Record
-                                        Preview
-                                    </p>
-                                    <div
-                                        class="relative p-6 rounded-none bg-black border border-[#D4AF37]/40 shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
-                                        <div id="previewTooltipAvatar"
-                                            class="w-20 h-20 rounded-none bg-[#0a0a1a] mx-auto mb-4 border border-[#D4AF37]/20 shadow-lg flex items-center justify-center overflow-hidden">
-                                            <span class="text-3xl opacity-20">👑</span>
-                                        </div>
-                                        <div id="previewName"
-                                            class="text-xs font-black text-white text-center mb-1 uppercase tracking-widest flex items-center justify-center gap-2">
-                                            <span id="previewFlag">🇯🇴</span>
-                                            <span id="previewNameText">IDENTITY_VAL</span>
-                                        </div>
-                                        <div
-                                            class="text-[8px] text-[#D4AF37] font-black text-center mb-3 tracking-[0.2em] uppercase">
-                                            SEC_ID: <span id="previewCellIdDisplay">0</span></div>
-
-                                        <div id="previewDateWrapper"
-                                            class="flex items-center justify-center gap-2 mb-4 text-gray-500">
-                                            <span class="text-[9px] font-black tracking-widest uppercase"
-                                                id="previewDate">2026.02.18</span>
-                                        </div>
-
-                                        <div class="border-t border-white/5 pt-4 text-center">
-                                            <div id="previewStory"
-                                                class="text-[10px] text-gray-400 leading-relaxed font-bold uppercase tracking-wider line-clamp-2"
-                                                data-en="TRANSMISSION PENDING..." data-ar="بانتظار الإرسال...">
-                                                "TRANSMISSION PENDING..."
-                                            </div>
-                                        </div>
+                                    <div class="flex justify-center gap-4 mt-3 pt-3 border-t border-white/5 opacity-60">
+                                        <div class="flex items-center gap-1 text-[10px] text-pink-400">❤️ 0</div>
+                                        <div class="flex items-center gap-1 text-[10px] text-blue-400">💬 0</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <!-- Name Input -->
-                            <div class="group relative">
-                                <div
-                                    class="absolute -inset-0.5 bg-[#D4AF37] rounded-none opacity-10 group-focus-within:opacity-30 transition blur-[2px]">
-                                </div>
-                                <div class="relative bg-black rounded-none p-5 h-full border border-white/10">
-                                    <label
-                                        class="flex items-center gap-2 text-[#D4AF37] mb-3 text-[9px] font-black uppercase tracking-[0.4em]">
-                                        <span>ENT_NAME</span>
-                                    </label>
-                                    <input type="text" id="userName"
-                                        class="w-full bg-transparent border-none p-0 text-white placeholder-gray-800 focus:ring-0 text-xs font-black uppercase tracking-widest"
-                                        placeholder="INPUT ENTITY...">
-                                </div>
-                            </div>
-
-                            <!-- Country Selector (Tactical Map) -->
-                            <div class="group relative">
-                                <div
-                                    class="absolute -inset-0.5 bg-[#00F5FF] rounded-none opacity-10 group-hover:opacity-30 transition blur-[2px]">
-                                </div>
-                                <div class="relative bg-black rounded-none p-5 h-full border border-white/10 cursor-pointer"
-                                    onclick="openFlagSelector()">
-                                    <label
-                                        class="flex items-center gap-2 text-[#00F5FF] mb-3 text-[9px] font-black uppercase tracking-[0.4em]">
-                                        <span>ORIGIN_PNT</span>
-                                    </label>
-                                    <div id="selectedCountryDisplay" class="flex items-center gap-3">
-                                        <span id="currentFlagDisplay" class="text-xl">🇯🇴</span>
-                                        <span id="currentCountryName"
-                                            class="text-xs font-black text-white uppercase tracking-widest">Jordan</span>
-                                    </div>
-                                    <input type="hidden" id="userCountry" value="JO">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-1 gap-3 mb-3">
-                            <!-- Chrono Point -->
-                            <div class="group relative mb-4">
-                                <div
-                                    class="absolute -inset-0.5 bg-[#D4AF37] rounded-none opacity-10 group-focus-within:opacity-30 transition blur-[2px]">
-                                </div>
-                                <div class="relative bg-black rounded-none p-5 h-full border border-white/10">
-                                    <label
-                                        class="flex items-center gap-2 text-[#D4AF37] mb-3 text-[9px] font-black uppercase tracking-[0.4em]">
-                                        <span>CHRONO_PNT</span>
-                                    </label>
-                                    <input type="date" id="specialDate"
-                                        class="w-full bg-transparent border-none p-0 text-white focus:ring-0 text-xs font-black uppercase tracking-widest cursor-pointer">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Transmission Content -->
-                        <div class="group relative mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                        <!-- Name Input -->
+                        <div class="group relative">
                             <div
-                                class="absolute -inset-0.5 bg-[#00F5FF] rounded-none opacity-10 group-focus-within:opacity-30 transition blur-[2px]">
+                                class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
                             </div>
-                            <div class="relative bg-black rounded-none p-5 border border-white/10">
+                            <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5">
                                 <label
-                                    class="flex items-center gap-2 text-[#00F5FF] mb-3 text-[9px] font-black uppercase tracking-[0.4em]">
-                                    <span>CONTENT_TRANS</span>
+                                    class="flex items-center gap-2 text-purple-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                    <span class="text-lg">👤</span>
+                                    <span data-en="Who are you?" data-ar="من أنت؟">Who are you?</span>
                                 </label>
-                                <textarea id="userStory"
-                                    class="w-full bg-transparent border-none p-0 text-white placeholder-gray-800 focus:ring-0 text-xs font-bold uppercase tracking-widest leading-relaxed resize-none h-24 scrollbar-hide"
-                                    placeholder="TRANSMIT YOUR MESSAGE..."></textarea>
+                                <input type="text" id="userName"
+                                    class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-lg font-semibold tracking-wide"
+                                    placeholder="Name or Brand">
                             </div>
                         </div>
 
-                        <!-- Image Upload (Premium Area) -->
-                        <div class="group relative cursor-pointer"
-                            onclick="document.getElementById('imageInput').click()">
+                        <!-- Date Input -->
+                        <div class="group relative">
                             <div
-                                class="absolute -inset-0.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl opacity-30 group-hover:opacity-100 transition duration-500 blur-[2px]">
+                                class="absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-orange-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
                             </div>
-                            <div class="relative bg-[#16162a] rounded-2xl p-1 overflow-hidden">
-                                <div id="uploadZone"
-                                    class="bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] p-6 text-center transition-all group-hover:bg-[#1a1a35]">
-                                    <input type="file" id="imageInput" accept="image/*" class="hidden"
-                                        onchange="handleImageUpload(this)">
+                            <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5">
+                                <label
+                                    class="flex items-center gap-2 text-pink-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                    <span class="text-lg">📅</span>
+                                    <span data-en="Important Date" data-ar="تاريخ مهم">Important Date</span>
+                                </label>
+                                <input type="date" id="specialDate"
+                                    class="w-full bg-transparent border-none p-0 text-white focus:ring-0 text-lg font-semibold tracking-wide cursor-pointer opacity-90 hover:opacity-100 transition">
+                            </div>
+                        </div>
+                    </div>
 
-                                    <div id="uploadPlaceholder" class="space-y-3">
-                                        <div
-                                            class="w-16 h-16 mx-auto bg-gradient-to-tr from-green-500/20 to-emerald-500/20 rounded-full flex items-center justify-center border border-green-500/30 group-hover:scale-110 transition duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                                            <span class="text-2xl">📸</span>
-                                        </div>
-                                        <div>
-                                            <h4 class="text-white font-bold text-sm tracking-wide"
-                                                data-en="Upload Photo" data-ar="ارفع صورتك">Upload Photo</h4>
-                                            <p class="text-green-400/60 text-[10px] mt-1 tracking-wider uppercase">PNG,
-                                                JPG
-                                                • Max 2MB</p>
-                                        </div>
+                    <!-- Story Input -->
+                    <div class="group relative mb-5">
+                        <div
+                            class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
+                        </div>
+                        <div class="relative bg-[#16162a] rounded-2xl p-4">
+                            <label
+                                class="flex items-center gap-2 text-blue-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                <span class="text-lg">✍️</span>
+                                <span data-en="Your Legacy Message" data-ar="رسالتك للتاريخ">Your Legacy Message</span>
+                            </label>
+                            <textarea id="userStory"
+                                class="w-full bg-transparent border-none p-0 text-white placeholder-gray-600 focus:ring-0 text-sm leading-relaxed resize-none h-24 scrollbar-hide"
+                                placeholder="What do you want the world to know?"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Image Upload (Premium Area) -->
+                    <div class="group relative cursor-pointer" onclick="document.getElementById('imageInput').click()">
+                        <div
+                            class="absolute -inset-0.5 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl opacity-30 group-hover:opacity-100 transition duration-500 blur-[2px]">
+                        </div>
+                        <div class="relative bg-[#16162a] rounded-2xl p-1 overflow-hidden">
+                            <div id="uploadZone"
+                                class="bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] p-6 text-center transition-all group-hover:bg-[#1a1a35]">
+                                <input type="file" id="imageInput" accept="image/*" class="hidden"
+                                    onchange="handleImageUpload(this)">
+
+                                <div id="uploadPlaceholder" class="space-y-3">
+                                    <div
+                                        class="w-16 h-16 mx-auto bg-gradient-to-tr from-green-500/20 to-emerald-500/20 rounded-full flex items-center justify-center border border-green-500/30 group-hover:scale-110 transition duration-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                                        <span class="text-2xl">📸</span>
                                     </div>
+                                    <div>
+                                        <h4 class="text-white font-bold text-sm tracking-wide" data-en="Upload Photo"
+                                            data-ar="ارفع صورتك">Upload Photo</h4>
+                                        <p class="text-green-400/60 text-[10px] mt-1 tracking-wider uppercase">PNG, JPG
+                                            • Max 2MB</p>
+                                    </div>
+                                </div>
 
-                                    <div id="uploadPreview"
-                                        class="hidden relative h-32 flex items-center justify-center">
-                                        <img id="previewImage"
-                                            class="h-28 w-28 rounded-full object-cover border-4 border-[#16162a] shadow-2xl relative z-10">
-                                        <div class="absolute inset-0 flex items-center justify-center">
-                                            <div class="w-28 h-28 bg-green-500/20 rounded-full blur-xl animate-pulse">
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="absolute bottom-0 bg-green-500 text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-lg z-20">
-                                            ✓ <span data-en="UPLOADED" data-ar="تم الرفع">UPLOADED</span>
-                                        </div>
+                                <div id="uploadPreview" class="hidden relative h-32 flex items-center justify-center">
+                                    <img id="previewImage"
+                                        class="h-28 w-28 rounded-full object-cover border-4 border-[#16162a] shadow-2xl relative z-10">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="w-28 h-28 bg-green-500/20 rounded-full blur-xl animate-pulse"></div>
+                                    </div>
+                                    <div
+                                        class="absolute bottom-0 bg-green-500 text-black text-[10px] font-bold px-3 py-1 rounded-full shadow-lg z-20">
+                                        ✓ <span data-en="UPLOADED" data-ar="تم الرفع">UPLOADED</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <button onclick="goToPayment()"
-                            class="w-full mt-6 group relative inline-flex items-center justify-center px-6 py-3.5 sm:px-8 sm:py-4 font-bold text-white transition-all duration-200 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-600 transform active:scale-[0.98]">
-                            <span
-                                class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
-                            <span class="text-base sm:text-lg mr-2">✨</span>
-                            <span class="relative text-base sm:text-lg" data-en="Lock It In"
-                                data-ar="تأكيد وحجز الخانة">Lock It
-                                In</span>
-                            <span class="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                    <button onclick="goToPayment()"
+                        class="w-full mt-8 group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-200 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-600 transform active:scale-[0.98]">
+                        <span
+                            class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                        <span class="text-lg mr-2">✨</span>
+                        <span class="relative text-lg" data-en="Lock It In" data-ar="تأكيد وحجز الخانة">Lock It
+                            In</span>
+                        <span class="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                    </button>
+                </div>
+
+                <!-- Step 2: Payment (Perfected) -->
+                <div id="step2" class="step-content hidden">
+                    <div class="text-center mb-8 relative">
+                        <div class="absolute inset-0 bg-green-500/20 blur-3xl rounded-full opacity-20"></div>
+                        <div
+                            class="relative inline-block p-4 rounded-full bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20 mb-3 backdrop-blur-md shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                            <span class="text-4xl filter drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">⚡</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-white mb-2 tracking-tight" data-en="Instant Activation"
+                            data-ar="تفعيل فوري">Instant Activation</h3>
+                        <p class="text-gray-400 text-sm font-medium" data-en="Your legacy goes live immediately"
+                            data-ar="إرثك سيظهر أمام العالم فوراً">Your legacy goes live immediately</p>
+                    </div>
+
+                    <div
+                        class="group relative overflow-hidden rounded-3xl mb-8 transform transition-all hover:scale-[1.02] duration-500">
+                        <div
+                            class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 rounded-3xl opacity-75 blur-md group-hover:opacity-100 transition duration-500 animate-pulse">
+                        </div>
+                        <div class="relative bg-[#050510] rounded-3xl p-8 text-center border border-purple-500/30">
+                            <div class="text-purple-300 text-xs font-bold uppercase tracking-widest mb-2"
+                                data-en="Total Investment" data-ar="الاستثمار الكلي">Total Investment</div>
+                            <div class="flex justify-center items-baseline gap-1 mb-2">
+                                <span
+                                    class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">$2.00</span>
+                                <span class="text-xl text-gray-500 font-bold">USD</span>
+                            </div>
+                            <div class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-6"
+                                data-en="One Time • Forever" data-ar="مرة واحدة • للأبد">One Time • Forever</div>
+
+                            <!-- PayPal Button Container -->
+                            <div id="paypal-button-container" class="w-full mt-2 relative z-10"></div>
+                        </div>
+                    </div>
+
+
+                    <div class="mt-8 text-center">
+                        <button type="button" onclick="goBack()"
+                            class="text-xs text-gray-500 hover:text-white transition py-2 px-4 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/5">
+                            ← <span data-en="Back to Edit" data-ar="العودة للتعديل">Back to Edit</span>
                         </button>
                     </div>
+                </div>
 
-                    <!-- Step 2: Payment (Perfected) -->
-                    <div id="step2" class="step-content hidden">
-                        <div class="text-center mb-8 relative">
-                            <div class="absolute inset-0 bg-green-500/20 blur-3xl rounded-full opacity-20"></div>
+                <!-- Step 3: Success (Perfected) -->
+                <div id="step3" class="step-content hidden">
+                    <div class="text-center py-8 relative">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-b from-purple-600/20 to-pink-600/20 blur-3xl rounded-full opacity-30">
+                        </div>
+
+                        <div class="relative mb-8">
                             <div
-                                class="relative inline-block p-4 rounded-full bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20 mb-3 backdrop-blur-md shadow-[0_0_30px_rgba(16,185,129,0.2)]">
-                                <span class="text-4xl filter drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">⚡</span>
-                            </div>
-                            <h3 class="text-2xl font-black text-white mb-2 tracking-tight" data-en="Instant Activation"
-                                data-ar="تفعيل فوري">Instant Activation</h3>
-                            <p class="text-gray-400 text-sm font-medium" data-en="Your legacy goes live immediately"
-                                data-ar="إرثك سيظهر أمام العالم فوراً">Your legacy goes live immediately</p>
+                                class="text-7xl mb-4 animate-bounce-slow filter drop-shadow-[0_0_30px_rgba(236,72,153,0.5)]">
+                                🎉</div>
+                            <h3 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-white mb-2"
+                                data-en="You're In History!" data-ar="دخلت التاريخ!">You're In History!</h3>
+                            <p class="text-gray-400 font-medium" data-en="Your cell is now live on the grid forever."
+                                data-ar="خانتك الآن مباشرة على الشبكة للأبد.">Your cell is now live on the grid forever.
+                            </p>
                         </div>
 
                         <div
-                            class="group relative overflow-hidden rounded-3xl mb-8 transform transition-all hover:scale-[1.02] duration-500">
+                            class="bg-[#16162a]/80 backdrop-blur-xl border border-purple-500/30 p-8 rounded-3xl relative overflow-hidden group shadow-2xl">
                             <div
-                                class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 rounded-3xl opacity-75 blur-md group-hover:opacity-100 transition duration-500 animate-pulse">
-                            </div>
-                            <div class="relative bg-[#050510] rounded-3xl p-8 text-center border border-purple-500/30">
-                                <div class="text-purple-300 text-xs font-bold uppercase tracking-widest mb-2"
-                                    data-en="Total Investment" data-ar="الاستثمار الكلي">Total Investment</div>
-                                <div class="flex justify-center items-baseline gap-1 mb-2">
-                                    <span
-                                        class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">$2.00</span>
-                                    <span class="text-xl text-gray-500 font-bold">USD</span>
-                                </div>
-                                <div class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-6"
-                                    data-en="One Time • Forever" data-ar="مرة واحدة • للأبد">One Time • Forever</div>
-
-                                <!-- PayPal Button Container -->
-                                <div id="paypal-button-container" class="w-full mt-2 relative z-10"></div>
-                            </div>
-                        </div>
-
-
-                        <div class="mt-8 text-center">
-                            <button type="button" onclick="goBack()"
-                                class="text-xs text-gray-500 hover:text-white transition py-2 px-4 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/5">
-                                ← <span data-en="Back to Edit" data-ar="العودة للتعديل">Back to Edit</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Success (Perfected) -->
-                    <div id="step3" class="step-content hidden">
-                        <div class="text-center py-8 relative">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-b from-purple-600/20 to-pink-600/20 blur-3xl rounded-full opacity-30">
+                                class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition duration-700">
                             </div>
 
-                            <div class="relative mb-8">
-                                <div
-                                    class="text-7xl mb-4 animate-bounce-slow filter drop-shadow-[0_0_30px_rgba(236,72,153,0.5)]">
-                                    🎉</div>
-                                <h3 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-white mb-2"
-                                    data-en="You're In History!" data-ar="دخلت التاريخ!">You're In History!</h3>
-                                <p class="text-gray-400 font-medium"
-                                    data-en="Your cell is now live on the grid forever."
-                                    data-ar="خانتك الآن مباشرة على الشبكة للأبد.">Your cell is now live on the grid
-                                    forever.
-                                </p>
-                            </div>
+                            <div class="relative z-10">
+                                <div class="text-xs text-purple-300 font-bold uppercase tracking-widest mb-2"
+                                    data-en="Your Cell ID" data-ar="رقم خانتك">Your Cell ID</div>
+                                <div class="text-6xl font-black text-white tracking-tighter mb-6 font-mono">#<span
+                                        id="confirmedCellId">0</span></div>
 
-                            <div
-                                class="bg-[#16162a]/80 backdrop-blur-xl border border-purple-500/30 p-8 rounded-3xl relative overflow-hidden group shadow-2xl">
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition duration-700">
-                                </div>
-
-                                <div class="relative z-10">
-                                    <div class="text-xs text-purple-300 font-bold uppercase tracking-widest mb-2"
-                                        data-en="Your Cell ID" data-ar="رقم خانتك">Your Cell ID</div>
-                                    <div class="text-6xl font-black text-white tracking-tighter mb-6 font-mono">#<span
-                                            id="confirmedCellId">0</span></div>
-
-                                    <div class="flex justify-center gap-3">
-                                        <div
-                                            class="bg-green-500/10 border border-green-500/20 px-4 py-2 rounded-xl flex items-center gap-2">
-                                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                                            <span class="text-green-400 text-xs font-bold uppercase">Live</span>
-                                        </div>
-                                        <div
-                                            class="bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-xl flex items-center gap-2">
-                                            <span class="text-xl">🌍</span>
-                                            <span class="text-blue-400 text-xs font-bold uppercase">Public</span>
-                                        </div>
+                                <div class="flex justify-center gap-3">
+                                    <div
+                                        class="bg-green-500/10 border border-green-500/20 px-4 py-2 rounded-xl flex items-center gap-2">
+                                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                        <span class="text-green-400 text-xs font-bold uppercase">Live</span>
+                                    </div>
+                                    <div
+                                        class="bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-xl flex items-center gap-2">
+                                        <span class="text-xl">🌍</span>
+                                        <span class="text-blue-400 text-xs font-bold uppercase">Public</span>
                                     </div>
                                 </div>
                             </div>
-
-                            <button onclick="closeClaimModal()"
-                                class="w-full mt-8 glow-btn py-5 rounded-2xl font-bold text-lg shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:shadow-[0_0_50px_rgba(139,92,246,0.5)] transition-all transform hover:scale-[1.02]">
-                                <span data-en="Go To My Cell 🎯" data-ar="اذهب لخانتي 🎯">Go To My Cell 🎯</span>
-                            </button>
                         </div>
+
+                        <button onclick="closeClaimModal()"
+                            class="w-full mt-8 glow-btn py-5 rounded-2xl font-bold text-lg shadow-[0_0_30px_rgba(139,92,246,0.3)] hover:shadow-[0_0_50px_rgba(139,92,246,0.5)] transition-all transform hover:scale-[1.02]">
+                            <span data-en="Go To My Cell 🎯" data-ar="اذهب لخانتي 🎯">Go To My Cell 🎯</span>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- View Cell Modal (Imperial Record) -->
+    <!-- View Cell Modal -->
     <div id="viewModal" class="fixed inset-0 modal-overlay z-50 hidden items-center justify-center p-4">
-        <div
-            class="bg-black border border-[#D4AF37]/30 max-w-sm w-full p-1 relative rounded-none shadow-[0_0_100px_rgba(0,0,0,1)]">
-            <div class="border border-[#D4AF37]/10 p-6 bg-[#020205]">
-                <button onclick="closeViewModal()"
-                    class="absolute top-4 right-4 w-6 h-6 bg-black border border-white/10 flex items-center justify-center text-gray-500 hover:text-[#D4AF37] transition text-[10px]">✕</button>
-                <div id="viewContent"></div>
-            </div>
+        <div class="bg-[#0f0f24] border border-purple-500/30 max-w-md w-full p-6 relative rounded-3xl shadow-2xl">
+            <button onclick="closeViewModal()"
+                class="absolute top-4 right-4 w-8 h-8 bg-black/40 hover:bg-white/10 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition border border-white/5">✕</button>
+            <div id="viewContent"></div>
         </div>
     </div>
 
-    <!-- Toast HUD -->
+    <!-- Toast -->
     <div id="toast"
-        class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-black border border-[#00F5FF]/50 text-[#00F5FF] px-8 py-3 rounded-none shadow-[0_0_30px_rgba(0,245,255,0.2)] transform translate-y-24 opacity-0 transition-all duration-500 z-[100] text-[9px] font-black uppercase tracking-[0.3em]">
-        <span id="toastMessage">TRANSMISSION_COMPLETE</span>
+        class="fixed bottom-4 right-4 bg-purple-600 text-white px-6 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <span id="toastMessage">Copied!</span>
     </div>
 
     <script>
@@ -2114,89 +1834,6 @@
         let loadedImages = {};
         let hoveredCell = null;
 
-        // Comprehensive Country Dataset
-        const countries = [
-            { code: 'JO', nameEn: 'Jordan', nameAr: 'الأردن', flag: '🇯🇴' },
-            { code: 'SA', nameEn: 'Saudi Arabia', nameAr: 'السعودية', flag: '🇸🇦' },
-            { code: 'AE', nameEn: 'UAE', nameAr: 'الإمارات', flag: '🇦🇪' },
-            { code: 'KW', nameEn: 'Kuwait', nameAr: 'الكويت', flag: '🇰🇼' },
-            { code: 'QA', nameEn: 'Qatar', nameAr: 'قطر', flag: '🇶🇦' },
-            { code: 'BH', nameEn: 'Bahrain', nameAr: 'البحرين', flag: '🇧🇭' },
-            { code: 'OM', nameEn: 'Oman', nameAr: 'عمان', flag: '🇴🇲' },
-            { code: 'EG', nameEn: 'Egypt', nameAr: 'مصر', flag: '🇪🇬' },
-            { code: 'PS', nameEn: 'Palestine', nameAr: 'فلسطين', flag: '🇵🇸' },
-            { code: 'LB', nameEn: 'Lebanon', nameAr: 'لبنان', flag: '🇱🇧' },
-            { code: 'IQ', nameEn: 'Iraq', nameAr: 'العراق', flag: '🇮🇶' },
-            { code: 'SY', nameEn: 'Syria', nameAr: 'سوريا', flag: '🇸🇾' },
-            { code: 'LY', nameEn: 'Libya', nameAr: 'ليبيا', flag: '🇱🇾' },
-            { code: 'SD', nameEn: 'Sudan', nameAr: 'السودان', flag: '🇸🇩' },
-            { code: 'MA', nameEn: 'Morocco', nameAr: 'المغرب', flag: '🇲🇦' },
-            { code: 'DZ', nameEn: 'Algeria', nameAr: 'الجزائر', flag: '🇩🇿' },
-            { code: 'TN', nameEn: 'Tunisia', nameAr: 'تونس', flag: '🇹🇳' },
-            { code: 'YE', nameEn: 'Yemen', nameAr: 'اليمن', flag: '🇾🇪' },
-            { code: 'US', nameEn: 'USA', nameAr: 'أمريكا', flag: '🇺🇸' },
-            { code: 'GB', nameEn: 'UK', nameAr: 'بريطانيا', flag: '🇬🇧' },
-            { code: 'TR', nameEn: 'Turkey', nameAr: 'تركيا', flag: '🇹🇷' },
-            { code: 'DE', nameEn: 'Germany', nameAr: 'ألمانيا', flag: '🇩🇪' },
-            { code: 'FR', nameEn: 'France', nameAr: 'فرنسا', flag: '🇫🇷' },
-            { code: 'ES', nameEn: 'Spain', nameAr: 'إسبانيا', flag: '🇪🇸' },
-            { code: 'IT', nameEn: 'Italy', nameAr: 'إيطاليا', flag: '🇮🇹' },
-            { code: 'CA', nameEn: 'Canada', nameAr: 'كندا', flag: '🇨🇦' },
-            { code: 'AU', nameEn: 'Australia', nameAr: 'أستراليا', flag: '🇦🇺' },
-            { code: 'CN', nameEn: 'China', nameAr: 'الصين', flag: '🇨🇳' },
-            { code: 'JP', nameEn: 'Japan', nameAr: 'اليابان', flag: '🇯🇵' },
-            { code: 'KR', nameEn: 'South Korea', nameAr: 'كوريا الجنوبية', flag: '🇰🇷' },
-            { code: 'OTHER', nameEn: 'Other', nameAr: 'دولة أخرى', flag: '🌐' }
-            // More can be added as needed
-        ];
-
-        function openFlagSelector() {
-            document.getElementById('flagSelectorModal').classList.remove('hidden');
-            document.getElementById('flagSelectorModal').classList.add('flex');
-            renderCountryList(countries);
-            document.getElementById('flagSearchInput').value = '';
-            document.getElementById('flagSearchInput').focus();
-        }
-
-        function closeFlagSelector() {
-            document.getElementById('flagSelectorModal').classList.add('hidden');
-            document.getElementById('flagSelectorModal').classList.remove('flex');
-        }
-
-        function renderCountryList(list) {
-            const container = document.getElementById('countryList');
-            container.innerHTML = list.map(c => `
-                <div onclick="selectCountry('${c.code}')" class="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl cursor-pointer transition">
-                    <span class="text-2xl">${c.flag}</span>
-                    <div class="flex-1">
-                        <div class="text-white font-bold text-sm">${currentLang === 'ar' ? c.nameAr : c.nameEn}</div>
-                        <div class="text-gray-500 text-[10px] uppercase tracking-widest">${c.code}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function filterCountries() {
-            const query = document.getElementById('flagSearchInput').value.toLowerCase().trim();
-            const filtered = countries.filter(c =>
-                c.nameEn.toLowerCase().includes(query) ||
-                c.nameAr.includes(query) ||
-                c.code.toLowerCase().includes(query)
-            );
-            renderCountryList(filtered);
-        }
-
-        function selectCountry(code) {
-            const country = countries.find(c => c.code === code);
-            if (country) {
-                document.getElementById('userCountry').value = country.code;
-                document.getElementById('currentFlagDisplay').textContent = country.flag;
-                document.getElementById('currentCountryName').textContent = currentLang === 'ar' ? country.nameAr : country.nameEn;
-                updateLivePreview();
-                closeFlagSelector();
-            }
-        }
-
         async function loadCells() {
             if (!db) return;
 
@@ -2286,7 +1923,6 @@
             renderGrid();
             renderMiniMap();
             updateStats();
-            updateTicker();
         }
 
         function resizeCanvas() {
@@ -2336,7 +1972,7 @@
             loadVisibleImages();
 
             // Clear canvas
-            ctx.fillStyle = '#020205';
+            ctx.fillStyle = '#0f0f1a';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // Calculate visible area
@@ -2361,18 +1997,18 @@
                         } else {
                             // Gradient for cells without loaded images
                             const gradient = ctx.createLinearGradient(x, y, x + cellSize, y + cellSize);
-                            gradient.addColorStop(0, '#D4AF37');
-                            gradient.addColorStop(1, '#00F5FF');
+                            gradient.addColorStop(0, '#8b5cf6');
+                            gradient.addColorStop(1, '#ec4899');
                             ctx.fillStyle = gradient;
                             ctx.fillRect(x, y, cellSize - 1, cellSize - 1);
                         }
                     } else {
-                        // Available cell (Obsidian)
-                        ctx.fillStyle = '#0a0a1a';
+                        // Available cell
+                        ctx.fillStyle = '#1e1e3f';
                         ctx.fillRect(x, y, cellSize - 1, cellSize - 1);
 
-                        // Very subtle divider
-                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+                        // Subtle border
+                        ctx.strokeStyle = 'rgba(139, 92, 246, 0.1)';
                         ctx.strokeRect(x, y, cellSize - 1, cellSize - 1);
                     }
 
@@ -2468,46 +2104,21 @@
             animateValue("totalInvestment", currentTotal, targetTotal, 1500, true);
             animateValue("availableCount", currentAvailable, availableCount, 1500, false);
 
-            // Update progress bar HUD
+            // Update progress bar
             const percent = (soldCount / TOTAL_CELLS) * 100;
-            const progressText = document.getElementById('progressText');
-            const progressBarHero = document.getElementById('progressBarHero');
-            const soldCountDisplay = document.getElementById('soldCountDisplay');
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+            const soldCountSmall = document.getElementById('soldCountSmall');
 
-            if (progressText) progressText.textContent = (percent === 0 ? '0' : percent.toFixed(4)) + '%';
-            if (progressBarHero) progressBarHero.style.width = Math.max(percent, 0.0001) + '%';
-            if (soldCountDisplay) soldCountDisplay.textContent = soldCount.toLocaleString();
-
-            // Sync Leaderboard
-            updateLeaderboard();
-            updateTicker();
-        }
-
-        function updateTicker() {
-            const tickerContainer = document.getElementById('recentTicker');
-            if (!tickerContainer) return;
-
-            // Get last 20 active cells
-            const activeCells = Object.entries(cellsData)
-                .filter(([id, data]) => data.status === 'active')
-                .reverse()
-                .slice(0, 20);
-
-            if (activeCells.length === 0) return;
-
-            const items = activeCells.map(([id, data]) => {
-                const flag = getCountryFlag(data.country);
-                return `
-                    <div class="ticker-item" onclick="showCellDetails(cellsData['${id}'], ${id})" style="cursor:pointer">
-                        <span class="text-[#00F5FF]">#${id}</span>
-                        <span class="text-[#D4AF37]">${flag} ${data.name || 'Anonymous'}</span>
-                        <span class="text-gray-800 tracking-tighter">||</span>
-                    </div>
-                `;
-            }).join('');
-
-            // Duplicate items for seamless scrolling
-            tickerContainer.innerHTML = items + items;
+            if (progressBar) {
+                progressBar.style.width = Math.max(percent, 0.01) + '%';
+            }
+            if (progressPercent) {
+                progressPercent.textContent = percent.toFixed(4) + '%';
+            }
+            if (soldCountSmall) {
+                soldCountSmall.textContent = soldCount.toLocaleString();
+            }
         }
 
         function animateValue(id, start, end, duration, isCurrency) {
@@ -2825,11 +2436,6 @@
             }
 
             isDragging = false;
-        }
-
-        function getCountryFlag(code) {
-            const country = countries.find(c => c.code === code);
-            return country ? country.flag : '🌐';
         }
 
         let lastTappedCell = null;
@@ -3370,20 +2976,7 @@
             document.getElementById('uploadPreview').classList.add('hidden');
             document.getElementById('uploadZone').classList.remove('has-image');
             uploadedImageBase64 = null;
-
-            // Clear Live previews too
-            const previewCell = document.getElementById('previewGridCell');
-            if (previewCell) {
-                previewCell.innerHTML = '<span class="text-white text-xs font-bold">🎯</span>';
-                previewCell.classList.add('animate-pulse');
-            }
-            const avatar = document.getElementById('previewTooltipAvatar');
-            if (avatar) {
-                avatar.style.background = 'linear-gradient(135deg, #8b5cf6, #ec4899)';
-                avatar.innerHTML = '<span class="text-2xl opacity-50">✨</span>';
-            }
-
-            updateLivePreview(); // Clear preview text
+            updateLivePreview(); // Clear preview
         }
 
         function goToPayment() {
@@ -3659,15 +3252,9 @@
             const story = document.getElementById('userStory').value.trim();
             const date = document.getElementById('specialDate').value;
 
-            // Name & Flag
-            const previewName = document.getElementById('previewNameText');
-            const previewFlag = document.getElementById('previewFlag');
-
-            // Use the displayed flag instead of searching a hidden select's options
-            const currentFlag = document.getElementById('currentFlagDisplay')?.textContent || '🇯🇴';
-
+            // Name
+            const previewName = document.getElementById('previewName');
             previewName.textContent = name || (currentLang === 'ar' ? 'اسمك هنا' : 'Your Name');
-            previewFlag.textContent = currentFlag;
 
             // Date
             const previewDate = document.getElementById('previewDate');
@@ -3700,12 +3287,11 @@
 
         // Attach listeners for live preview
         document.addEventListener('DOMContentLoaded', () => {
-            const inputs = ['userName', 'userStory', 'specialDate', 'userCountry'];
+            const inputs = ['userName', 'userStory', 'specialDate'];
             inputs.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
                     el.addEventListener('input', updateLivePreview);
-                    if (id === 'userCountry') el.addEventListener('change', updateLivePreview);
                 }
             });
         });
@@ -3741,7 +3327,6 @@
                 const cellData = {
                     cellId: selectedCellId,
                     name: document.getElementById('userName').value.trim(),
-                    country: document.getElementById('userCountry').value,
                     specialDate: document.getElementById('specialDate').value,
                     story: document.getElementById('userStory').value.trim(),
                     imageUrl: imageUrl,
@@ -3805,7 +3390,7 @@
                     : `<div class="w-28 h-28 rounded-2xl mx-auto bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center text-4xl">🎯</div>`
                 }
                     
-                    <h3 class="text-xl font-bold mt-4 text-white">${getCountryFlag(data.country)} ${data.name || 'Anonymous'}</h3>
+                    <h3 class="text-xl font-bold mt-4 text-white">${data.name || 'Anonymous'}</h3>
                     <p class="text-gray-500 text-xs mt-1">Cell #${cellId.toLocaleString()}</p>
                 </div>
                 
@@ -4025,45 +3610,6 @@
         });
 
         // Load Founding Wall
-        function updateLeaderboard() {
-            const leaderboardList = document.getElementById('leaderboardList');
-            if (!leaderboardList) return;
-
-            const counts = {};
-            Object.values(cellsData).forEach(cell => {
-                if (cell.status === 'active' && cell.country) {
-                    counts[cell.country] = (counts[cell.country] || 0) + 1;
-                }
-            });
-
-            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 5);
-
-            if (sorted.length === 0) {
-                leaderboardList.innerHTML = `<div class="text-gray-500 text-center py-4">${currentLang === 'ar' ? 'بانتظار المبدعين الأوائل...' : 'Waiting for the first pioneers...'}</div>`;
-                return;
-            }
-
-            leaderboardList.innerHTML = sorted.map(([code, count], index) => {
-                const flag = getCountryFlag(code);
-                const percent = Math.min(100, (count / 10) * 100); // Scale for visual
-                return `
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center text-sm">
-                            <div class="flex items-center gap-3">
-                                <span class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[10px] font-bold text-purple-400 border border-white/10">${index + 1}</span>
-                                <span class="text-white font-bold">${flag} ${code}</span>
-                            </div>
-                            <span class="text-purple-400 font-black">${count} Cells</span>
-                        </div>
-                        <div class="h-1.5 bg-white/5 rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" style="width: ${percent}%"></div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-
         async function loadFoundingWall() {
             if (!db) return;
 
