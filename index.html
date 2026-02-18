@@ -6,11 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#050510">
+    <link rel="manifest" href="manifest.json">
     <title>The Million Logo Page - First Arabic Digital Advertising Museum</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+
+    <!-- AR Support -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
+            });
+        }
+    </script>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -1225,6 +1239,66 @@
             </div>
         </div>
     </section>
+    <!-- Regional Leaderboard (Global Reach) -->
+    <section class="py-20 bg-gradient-to-b from-transparent via-purple-500/5 to-transparent">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-5xl font-black mb-6 tracking-tight">
+                    🌐 <span class="gradient-text" data-en="Global Reach" data-ar="الانتشار العالمي">Global Reach</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base"
+                    data-en="See which cities and countries are leading the museum's expansion."
+                    data-ar="شاهد أي المدن والدول تتصدر توسع المتحف.">See which cities and countries are leading the
+                    museum's expansion.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-10">
+                <!-- Leaderboard Card -->
+                <div class="cyber-card p-8">
+                    <h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+                        🏆 <span data-en="Top Regions" data-ar="أكثر المناطق نشاطاً">Top Regions</span>
+                    </h3>
+                    <div id="leaderboardList" class="space-y-6">
+                        <!-- Loading State -->
+                        <div class="animate-pulse space-y-4">
+                            <div class="h-4 bg-white/5 rounded w-3/4"></div>
+                            <div class="h-4 bg-white/5 rounded w-1/2"></div>
+                            <div class="h-4 bg-white/5 rounded w-2/3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AR Promo Card -->
+                <div class="cyber-card p-8 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-transparent opacity-50"></div>
+                    <div class="relative z-10">
+                        <div
+                            class="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition duration-500">
+                            📱
+                        </div>
+                        <h3 class="text-2xl font-black text-white mb-4" data-en="Augmented Reality (AR)"
+                            data-ar="الواقع المعزز (AR)">Augmented Reality (AR)</h3>
+                        <p class="text-gray-400 mb-8 max-w-md"
+                            data-en="Scan the QR or click below to see the Million Logo Grid in your physical space. A museum on your desk!"
+                            data-ar="امسح الرمز أو اضغط بالأسفل لترى شبكة المليون في مساحتك الخاصة. متحف على مكتبك!">
+                            Scan the QR or click below to see the Million Logo Grid in your physical space. A museum on
+                            your desk!</p>
+
+                        <div class="flex items-center gap-8">
+                            <div
+                                class="p-3 bg-white rounded-xl shadow-2xl scale-100 group-hover:scale-105 transition duration-500">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://modasmadi.github.io/Ego-Mind/ar-viewer"
+                                    alt="AR QR Code" class="w-24 h-24">
+                            </div>
+                            <button onclick="openAR()" class="glow-btn px-6 py-3 rounded-xl font-bold text-sm">
+                                🚀 <span data-en="Launch AR" data-ar="ابدأ التجربة">Launch AR</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- FAQ Section -->
     <section class="py-20">
@@ -1490,8 +1564,10 @@
                                         <span class="text-2xl opacity-50">✨</span>
                                     </div>
                                     <div id="previewName"
-                                        class="text-sm font-black text-white text-center mb-1 truncate"
-                                        data-en="Your Name" data-ar="اسمك هنا">Your Name</div>
+                                        class="text-sm font-black text-white text-center mb-1 truncate flex items-center justify-center gap-2">
+                                        <span id="previewFlag">🇯🇴</span>
+                                        <span id="previewNameText">Your Name</span>
+                                    </div>
                                     <div
                                         class="text-[9px] text-purple-400 font-bold text-center mb-2 tracking-tighter uppercase">
                                         Cell #<span id="previewCellIdDisplay">0</span></div>
@@ -1534,6 +1610,37 @@
                             </div>
                         </div>
 
+                        <!-- Country Select -->
+                        <div class="group relative">
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl opacity-50 group-focus-within:opacity-100 transition duration-500 blur-[2px]">
+                            </div>
+                            <div class="relative bg-black/40 rounded-2xl p-4 h-full border border-white/5">
+                                <label
+                                    class="flex items-center gap-2 text-cyan-400 mb-2 text-xs font-bold uppercase tracking-widest">
+                                    <span class="text-lg">🌍</span>
+                                    <span data-en="Your Origin" data-ar="موطنك">Your Origin</span>
+                                </label>
+                                <select id="userCountry" onchange="updateLivePreview()"
+                                    class="w-full bg-transparent border-none p-0 text-white focus:ring-0 text-lg font-semibold tracking-wide cursor-pointer appearance-none">
+                                    <option value="JO" class="bg-[#0f0f24]">🇯🇴 Jordan</option>
+                                    <option value="SA" class="bg-[#0f0f24]">🇸🇦 Saudi Arabia</option>
+                                    <option value="AE" class="bg-[#0f0f24]">🇦🇪 UAE</option>
+                                    <option value="KW" class="bg-[#0f0f24]">🇰🇼 Kuwait</option>
+                                    <option value="QA" class="bg-[#0f0f24]">🇶🇦 Qatar</option>
+                                    <option value="EG" class="bg-[#0f0f24]">🇪🇬 Egypt</option>
+                                    <option value="IQ" class="bg-[#0f0f24]">🇮🇶 Iraq</option>
+                                    <option value="PS" class="bg-[#0f0f24]">🇵🇸 Palestine</option>
+                                    <option value="LB" class="bg-[#0f0f24]">🇱🇧 Lebanon</option>
+                                    <option value="US" class="bg-[#0f0f24]">🇺🇸 USA</option>
+                                    <option value="GB" class="bg-[#0f0f24]">🇬🇧 UK</option>
+                                    <option value="OTHER" class="bg-[#0f0f24]">🌐 Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-1 gap-5 mb-5">
                         <!-- Date Input -->
                         <div class="group relative">
                             <div
@@ -2119,6 +2226,9 @@
             if (soldCountSmall) {
                 soldCountSmall.textContent = soldCount.toLocaleString();
             }
+
+            // Sync Leaderboard
+            updateLeaderboard();
         }
 
         function animateValue(id, start, end, duration, isCurrency) {
@@ -2436,6 +2546,15 @@
             }
 
             isDragging = false;
+        }
+
+        function getCountryFlag(code) {
+            const flags = {
+                'JO': '🇯🇴', 'SA': '🇸🇦', 'AE': '🇦🇪', 'KW': '🇰🇼',
+                'QA': '🇶🇦', 'EG': '🇪🇬', 'IQ': '🇮🇶', 'PS': '🇵🇸',
+                'LB': '🇱🇧', 'US': '🇺🇸', 'GB': '🇬🇧', 'OTHER': '🌐'
+            };
+            return flags[code] || '🌐';
         }
 
         let lastTappedCell = null;
@@ -3252,9 +3371,15 @@
             const story = document.getElementById('userStory').value.trim();
             const date = document.getElementById('specialDate').value;
 
-            // Name
-            const previewName = document.getElementById('previewName');
+            // Name & Flag
+            const previewName = document.getElementById('previewNameText');
+            const previewFlag = document.getElementById('previewFlag');
+            const countrySelect = document.getElementById('userCountry');
+            const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+            const flag = selectedOption.text.split(' ')[0];
+
             previewName.textContent = name || (currentLang === 'ar' ? 'اسمك هنا' : 'Your Name');
+            previewFlag.textContent = flag;
 
             // Date
             const previewDate = document.getElementById('previewDate');
@@ -3287,11 +3412,12 @@
 
         // Attach listeners for live preview
         document.addEventListener('DOMContentLoaded', () => {
-            const inputs = ['userName', 'userStory', 'specialDate'];
+            const inputs = ['userName', 'userStory', 'specialDate', 'userCountry'];
             inputs.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
                     el.addEventListener('input', updateLivePreview);
+                    if (id === 'userCountry') el.addEventListener('change', updateLivePreview);
                 }
             });
         });
@@ -3327,6 +3453,7 @@
                 const cellData = {
                     cellId: selectedCellId,
                     name: document.getElementById('userName').value.trim(),
+                    country: document.getElementById('userCountry').value,
                     specialDate: document.getElementById('specialDate').value,
                     story: document.getElementById('userStory').value.trim(),
                     imageUrl: imageUrl,
@@ -3390,7 +3517,7 @@
                     : `<div class="w-28 h-28 rounded-2xl mx-auto bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center text-4xl">🎯</div>`
                 }
                     
-                    <h3 class="text-xl font-bold mt-4 text-white">${data.name || 'Anonymous'}</h3>
+                    <h3 class="text-xl font-bold mt-4 text-white">${getCountryFlag(data.country)} ${data.name || 'Anonymous'}</h3>
                     <p class="text-gray-500 text-xs mt-1">Cell #${cellId.toLocaleString()}</p>
                 </div>
                 
@@ -3610,6 +3737,50 @@
         });
 
         // Load Founding Wall
+        function updateLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboardList');
+            if (!leaderboardList) return;
+
+            const counts = {};
+            Object.values(cellsData).forEach(cell => {
+                if (cell.status === 'active' && cell.country) {
+                    counts[cell.country] = (counts[cell.country] || 0) + 1;
+                }
+            });
+
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+            if (sorted.length === 0) {
+                leaderboardList.innerHTML = `<div class="text-gray-500 text-center py-4">${currentLang === 'ar' ? 'بانتظار المبدعين الأوائل...' : 'Waiting for the first pioneers...'}</div>`;
+                return;
+            }
+
+            leaderboardList.innerHTML = sorted.map(([code, count], index) => {
+                const flag = getCountryFlag(code);
+                const percent = Math.min(100, (count / 10) * 100); // Scale for visual
+                return `
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <div class="flex items-center gap-3">
+                                <span class="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[10px] font-bold text-purple-400 border border-white/10">${index + 1}</span>
+                                <span class="text-white font-bold">${flag} ${code}</span>
+                            </div>
+                            <span class="text-purple-400 font-black">${count} Cells</span>
+                        </div>
+                        <div class="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAR() {
+            showToast(currentLang === 'ar' ? 'جاري تجهيز تجربة الواقع المعزز...' : 'Preparing AR Experience...');
+            // In a real scenario, this would link to a .reality or .glb file for Safari/Chrome
+            window.location.href = "https://modasmadi.github.io/Ego-Mind/ar-viewer";
+        }
+
         async function loadFoundingWall() {
             if (!db) return;
 
